@@ -114,7 +114,7 @@ export default function GeneralChart(props) {
         });
       }
     }
-  }, [parent_props_constant, parent_props_variable, update_graph_data, api_response, api_request, waiting_for_render_delay]);
+  }, [parent_props_constant, parent_props_variable, update_graph_data, api_response, api_request, waiting_for_render_delay, is_loading]);
 
     
   const on_chart_click = (event) => {

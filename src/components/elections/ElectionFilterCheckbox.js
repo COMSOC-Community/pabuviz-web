@@ -1,4 +1,3 @@
-import { Tooltip } from 'react-tooltip';
 import { capitalize_first_letter, clone } from '../../utils/utils';
 import styles from './ElectionFilterCheckbox.module.css'
 import { useState } from 'react';

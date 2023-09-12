@@ -6,7 +6,7 @@ import styles from './Main.module.css'
 import SideNavigation from '../components/SideNavigation';
 import { get_ballot_types, get_rules } from '../utils/database_api';
 import Selector from '../components/reusables/Selector';
-import { capitalize_first_letter, clone, get_ballot_type_color, transparentize } from '../utils/utils';
+import { capitalize_first_letter, clone, get_ballot_type_color } from '../utils/utils';
 import LegendItem from '../components/reusables/LegendItem';
 import { Tooltip } from 'react-tooltip';
 import RulePicker from '../components/reusables/RulePicker';

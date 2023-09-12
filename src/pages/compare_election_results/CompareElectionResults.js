@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './CompareElectionResults.module.css'
 import { get_rule_properties } from '../../utils/database_api';
 import ElectionList from '../../components/elections/ElectionList';

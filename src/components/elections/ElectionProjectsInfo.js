@@ -1,5 +1,5 @@
 import styles from './ElectionProjectsInfo.module.css'
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import NetworkError from "../reusables/NetworkError";
 import ActivityIndicator from "../reusables/ActivityIndicator";
 import { get_projects } from "../../utils/database_api";
@@ -56,7 +56,7 @@ export default function ElectionProjectsInfo(props) {
       ));
       set_projects(projects_sorted);
     }
-  }, [sorting])
+  }, [sorting, projects])
 
 
   const set_new_sorting = (field, default_ascending) => {

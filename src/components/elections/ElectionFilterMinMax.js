@@ -1,7 +1,6 @@
 import { capitalize_first_letter, clone } from '../../utils/utils';
 import styles from './ElectionFilterMinMax.module.css'
 import NumberTextInput from '../reusables/NumberTextInput';
-import { Tooltip } from 'react-tooltip';
 
 
 export default function ElectionFilterMinMax(props) { 

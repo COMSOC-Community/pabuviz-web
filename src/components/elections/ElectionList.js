@@ -3,8 +3,6 @@ import styles from './ElectionList.module.css'
 import { useState, useEffect, useRef } from 'react';
 import { get_elections, get_election_properties, get_election_details } from '../../utils/database_api';
 import ActivityIndicator from '../reusables/ActivityIndicator';
-import ElectionFilterMinMax from './ElectionFilterMinMax';
-import ElectionFilterCheckbox from './ElectionFilterCheckbox';
 import NetworkError from '../reusables/NetworkError';
 import HoverTooltip from '../reusables/HoverTooltip';
 import ElectionDetails from './ElectionDetails';

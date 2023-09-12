@@ -1,4 +1,3 @@
-import { Tooltip } from 'react-tooltip';
 import styles from './LegendItem.module.css'
 
 export default function LegendItem(props) { 

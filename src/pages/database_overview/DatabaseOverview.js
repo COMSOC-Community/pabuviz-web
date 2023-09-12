@@ -6,7 +6,6 @@ import { get_elections } from '../../utils/database_api';
 import ElectionPropertyHistogram from '../../components/charts/ElectionPropertyHistogram';
 import NetworkError from '../../components/reusables/NetworkError';
 import ToggleLegend from '../../components/reusables/ToggleLegend';
-import { useOutletContext } from 'react-router-dom';
 
 
 const election_property_short_names = [

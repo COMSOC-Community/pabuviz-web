@@ -1,11 +1,8 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './ElectionDetails.module.css'
 import ElectionList from '../../components/elections/ElectionList';
 import ElectionProjectsInfo from '../../components/elections/ElectionProjectsInfo';
-import RulePicker from '../../components/reusables/RulePicker';
 import {useLocation, useOutletContext} from 'react-router-dom';
-import { clone } from '../../utils/utils';
-import NetworkError from '../../components/reusables/NetworkError';
 
 
 export default function ElectionDetails(props) { 
@@ -18,7 +15,6 @@ export default function ElectionDetails(props) {
       [[location.state.election_selected.name, location.state.election_selected]] :
       []
   ));
-  const [error, set_error] = useState(false);
 
 
 
@@ -63,13 +59,11 @@ export default function ElectionDetails(props) {
         /> 
       </div>
       <div className={styles.election_info_box}>
-        {error ? 
-          <NetworkError/> :
-          rule_list && elections_selected.size > 0 ?
-            render_election_box() :
-            <pre className={styles.no_election_selected_text}>
-              {"↑  Select an election  ↑"}
-            </pre>
+        {rule_list && elections_selected.size > 0 ?
+          render_election_box() :
+          <pre className={styles.no_election_selected_text}>
+            {"↑  Select an election  ↑"}
+          </pre>
         }
       </div>
       {/* <button onClick={on_debug_button_click}>Click me!</button> */}

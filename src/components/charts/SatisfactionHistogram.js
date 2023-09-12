@@ -74,7 +74,7 @@ export const graph_options = (api_response, parent_props_constant, parent_props_
             let interval_string = "";
             if (tooltipItems[0].dataIndex > 0)
             interval_string += ((tooltipItems[0].dataIndex - 1) * 5).toString() + " - ";
-            interval_string += (tooltipItems[0].dataIndex * 5).toString() + "%" + " satisfaction";
+            interval_string += (tooltipItems[0].dataIndex * 5).toString() + "% satisfaction";
             return interval_string;
           },
           label: tooltipItem => (tooltipItem.dataset.data[tooltipItem.dataIndex].y).toFixed(2) + "% of voters"

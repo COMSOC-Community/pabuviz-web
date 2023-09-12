@@ -1,4 +1,4 @@
-import { get_ballot_type_color, transparentize } from "../../utils/utils";
+import { get_ballot_type_color } from "../../utils/utils";
 import LegendItem from "./LegendItem";
 import styles from './ToggleLegend.module.css'
 

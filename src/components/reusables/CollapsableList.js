@@ -1,5 +1,4 @@
 import { useRef, useState } from "react";
-import { get_rule_color, transparentize } from "../../utils/utils";
 import styles from './CollapsableList.module.css'
 import Collapsable from "./Collapsable";
 

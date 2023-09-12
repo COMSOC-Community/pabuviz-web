@@ -68,7 +68,7 @@ export const get_graph_options = (api_response) => {
 
 
 const compute_graph_data = (api_response, props_constant, old_graph_data) => {
-  
+  console.log(api_response)
   let datasets = []
   let labels = []
 
