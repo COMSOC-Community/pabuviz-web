@@ -125,14 +125,12 @@ function Main() {
         </div>
         <div className={styles.content_and_rule_picker_container}>
           <div className={styles.content_container}> 
-            {ballot_types &&
-              <Outlet context={{
-                ballot_type_selected: ballot_type_selected,
-                set_ballot_type_selected: set_ballot_type_selected,
-                rule_list: rule_list,
-                rule_visibility: rule_visibility
-              }}/>
-            }
+            <Outlet context={{
+              ballot_type_selected: ballot_type_selected,
+              set_ballot_type_selected: set_ballot_type_selected,
+              rule_list: rule_list,
+              rule_visibility: rule_visibility
+            }}/>
           </div>
           <div className={styles.rule_picker_container}>
             <div className={styles.rule_picker}>
