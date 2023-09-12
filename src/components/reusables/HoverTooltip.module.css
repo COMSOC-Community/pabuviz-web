@@ -1,0 +1,10 @@
+.container {
+    cursor: default;
+}
+
+
+.children_container {
+    white-space: pre-line;
+    padding: 0;
+    z-index: 10;
+}

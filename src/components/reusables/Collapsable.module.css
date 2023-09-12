@@ -1,0 +1,10 @@
+.collapsable {
+  height: 100%;
+  width: 100%;
+    overflow: hidden;
+    transition: 0.2s max-height ease-out;
+  }
+  
+.child_container {
+    overflow: auto;
+}

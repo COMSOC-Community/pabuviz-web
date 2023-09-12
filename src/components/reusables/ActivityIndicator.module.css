@@ -1,0 +1,36 @@
+
+@import '../../constants/constants.css';
+
+
+
+.center_box {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.spinner {
+    animation: spin 1500ms linear 0ms infinite, fadeIn 700ms ease-in 0ms;
+}
+
+
+@keyframes fadeIn {
+    0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
+
+@keyframes spin {
+    from {
+        transform:rotate(0deg);
+    }
+    to {
+        transform:rotate(360deg);
+    }
+}

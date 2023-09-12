@@ -1,0 +1,26 @@
+.items_container {
+    background-color: #ffffff44;
+    border-radius: 5pt;
+    margin-top: 2px;
+    overflow: hidden;
+    cursor: default;
+}
+
+.item_container {
+    height: 40px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.item_container:hover {
+    background-color: #dddddd88;
+}
+
+.indicator {
+    font-size: larger;
+    padding: 0 6pt 5pt 6pt;
+    transition: 0.1s rotate ease-in-out;
+    user-select: none;
+}

@@ -1,0 +1,40 @@
+
+
+.container {
+    flex: 1
+}
+
+.header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    background-color: transparent;
+    border-color: transparent;
+    border-radius: 7px;
+    cursor: default;
+    padding-right: 10px;
+}
+
+.header:hover {
+    background-color: #11111111;
+    border-color: transparent;
+}
+
+/* .indicator_container {
+    width: 15px;
+    height: 15px;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+} */
+
+.indicator {
+    transition: 0.2s rotate linear;
+    user-select: none;
+}
+
+.children_container {
+    margin-left: 10px;
+}

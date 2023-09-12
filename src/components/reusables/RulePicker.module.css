@@ -1,0 +1,28 @@
+.legend_header {
+    display: flex;
+    padding: 5pt 15pt;
+    flex-direction: row;
+    align-items: center;
+    border-radius: 7px;
+    cursor: default;
+}
+
+.legend_item {
+    display: flex;
+    padding: 5pt 15pt;
+    flex-direction: row;
+    align-items: center;
+    border-radius: 7px;
+    cursor: default;
+}
+
+.legend_item:hover {
+    background-color: #11111111;
+    border-color: transparent;
+}
+
+.legend_text {
+    font-size: large;
+    text-align: left;
+    flex: 1;
+}

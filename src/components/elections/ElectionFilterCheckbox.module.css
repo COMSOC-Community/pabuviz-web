@@ -1,0 +1,27 @@
+
+
+
+.filter {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.filter_title {
+  text-align: center;
+  /* font-size: large; */
+}
+
+/* .checkbox_container { */
+  /* width: 90px;
+  height: 28pt; */
+  /* background-color: red; */
+/* } */
+
+.checkbox {
+  width: 20px;
+  height: 20px;
+  /* background-color: red; */
+}
