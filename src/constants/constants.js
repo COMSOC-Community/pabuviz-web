@@ -1,7 +1,4 @@
 
-export const api_url = 'http://localhost:8000/api/';
-
-
 export const ballot_types = ["approval", "ordinal", "cumulative"];
 
 export const color_palette_general = [

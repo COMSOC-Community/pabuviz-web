@@ -1,5 +1,5 @@
 
-import { api_url } from '../constants/constants';
+
 import { get_rule_color } from './utils';
 
 
@@ -11,7 +11,7 @@ const api_post = (url_suffix, parameters = {}) => {
       let data;
       try { // TODO: proper error handling
         data = await fetch(
-          api_url + url_suffix + '/',
+          process.env.REACT_APP_API_URL + url_suffix + '/',
           {
             method: "POST",
             body: JSON.stringify(parameters),
