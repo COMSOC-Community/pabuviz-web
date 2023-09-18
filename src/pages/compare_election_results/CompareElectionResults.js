@@ -12,7 +12,7 @@ import ElectionData from '../../components/elections/ElectionData';
 const rule_properties_short_names = [
   "avg_card_sat",
   "avg_relcard_sat",
-  "avg_cost_satisfaction",
+  "avg_cost_sat",
   "avg_relcost_sat",
   // "category_prop",
   "equality",
