@@ -10,11 +10,11 @@ import ToggleLegend from '../../components/reusables/ToggleLegend';
 
 const election_property_short_names = [
   "budget",
-  "avg_ballot_length",
+  "avg_ballot_len",
   "num_votes",
   "num_projects",
-	"funding_scarcity",
-  "avg_project_cost",
+	"fund_scarc",
+  "avg_proj_cost",
   "avg_ballot_cost"
 ]
 

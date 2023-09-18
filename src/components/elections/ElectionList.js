@@ -5,7 +5,7 @@ import { get_elections, get_election_properties, get_election_details } from '..
 import ActivityIndicator from '../reusables/ActivityIndicator';
 import NetworkError from '../reusables/NetworkError';
 import HoverTooltip from '../reusables/HoverTooltip';
-import ElectionDetails from './ElectionDetails';
+import ElectionData from './ElectionData';
 import ElectionFilterList from './ElectionFilterList';
 
 
@@ -13,10 +13,10 @@ const election_filter_properties_short_names = [
   'num_projects',
   'num_votes',
   'budget',
-  'avg_ballot_length',
+  'avg_ballot_len',
   'avg_ballot_cost',
-  'funding_scarcity',
-  'avg_project_cost',
+  'fund_scarc',
+  'avg_proj_cost',
   'has_categories',
   'has_targets',
   'has_neighborhoods',
@@ -277,10 +277,11 @@ export default function ElectionList(props) {
           text={"ⓘ"}
           className={styles.election_info_symbol}
           disabled={false}
+          no_padding
         >
           {!election_filter_properties || !election_details ?
             <ActivityIndicator/> :
-            <ElectionDetails
+            <ElectionData
               election={election}
               election_filter_properties={election_filter_properties}
               election_details={election_details[election.id]}

@@ -13,12 +13,49 @@
   width: 100%;
 }
 
-.table thead tr {
-  height: 210px;
+.election_data_container {
+  /* position: absolute; */
+  bottom: 0;
+  width: 100%;
   display: flex;
+  justify-content: flex-start;
+  /* height: 00px; */
+}
+
+.table_header_row {
+  bottom: 0;
+  height: 210px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
   justify-content: flex-end;
   align-items: flex-end;
-  padding-bottom: 10px;
+  padding: 1px 10px;
+  padding-bottom: 5px;
+
+}
+
+.table_header_row th{
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 0;
+}
+
+.table_headers_with_details{
+  flex: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.table_headers_non_rule{
+  width: 100%;
+  display: flex;
+  flex-direction: row;
 }
 
 .center_header {
@@ -53,9 +90,28 @@
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  padding: 1px 10px;
+}
+/* 
+.project_row:nth-child(even){
+  background-color: #ffffff11;
 }
 
-.project_item {
+.project_row:nth-child(odd){
+  background-color: #ffffff29;
+} */
+
+.project_name_column {
+  flex: 1;
+}
+
+.project_cost_column {
+  text-align: right;
+  width: 90px;
+  margin-right: 10px;
+}
+
+.project_name {
   overflow: hidden;
 
   word-wrap: break-word;

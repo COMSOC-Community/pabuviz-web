@@ -6,6 +6,20 @@ import { get_projects } from "../../utils/database_api";
 import LegendItem from "../reusables/LegendItem";
 import { clone, format_number_string } from '../../utils/utils';
 import Boolean from '../reusables/Boolean';
+import ElectionData from './ElectionData';
+
+
+const election_filter_properties_short_names = [
+  "name",
+  "budget",
+  "num_projects",
+  // "has_categories",
+  // "has_targets",
+  "sum_proj_cost",
+  "avg_proj_cost",
+  "med_proj_cost",
+  "sd_proj_cost"
+]
 
 
 export default function ElectionProjectsInfo(props) {
@@ -47,16 +61,20 @@ export default function ElectionProjectsInfo(props) {
 
 
   useEffect(() => {
-    if (projects){
-      let projects_sorted = clone(projects);
-      projects_sorted = projects_sorted.sort((p1, p2) => (
-        sorting.ascending ?
-          p1[sorting.field] > p2[sorting.field] :
-          p1[sorting.field] < p2[sorting.field]
-      ));
-      set_projects(projects_sorted);
-    }
-  }, [sorting, projects])
+    set_projects(old_projects => {
+      if (old_projects){
+        let projects_sorted = clone(old_projects);
+        projects_sorted = projects_sorted.sort((p1, p2) => (
+          sorting.ascending ?
+            p1[sorting.field] > p2[sorting.field] :
+            p1[sorting.field] < p2[sorting.field]
+        ));
+        return projects_sorted;
+      } else {
+        return null;
+      }
+    });
+  }, [sorting])
 
 
   const set_new_sorting = (field, default_ascending) => {
@@ -76,7 +94,7 @@ export default function ElectionProjectsInfo(props) {
   const render_project_rule_selected = (project, rule) => {
     const selected = project[rule.abbreviation];
     return (
-      <td key={rule.abbreviation} style={{textAlign: 'center', width: "60px", flexShrink: 0, fontSize: "x-large"}}> 
+      <td key={rule.abbreviation} style={{textAlign: 'center', width: "60px", boxSizing: "border-box", flexShrink: 0, fontSize: "x-large"}}> 
         <Boolean
           boolean_value={selected}
         />
@@ -99,59 +117,81 @@ export default function ElectionProjectsInfo(props) {
     <NetworkError/> :
     ( !projects ?
       <ActivityIndicator/> :
-      <table className={styles.table}>
-        <thead>
-          <tr>
-            <th
-              onClick={() => set_new_sorting("name", true)}
-              style={{flex: 1}}
-            >
-              {render_project_header_text("Project Name", "name")}
-            </th>
-            <th
-              onClick={() => set_new_sorting("cost", true)}
-              style={{width: "90px"}}
-            >
-              {render_project_header_text("Cost", "cost")}
-            </th>
-            <>
-              {rules_visible.map(rule => (
-                <th className={styles.rule_header} key={rule.abbreviation} style={{width: "60px"}}>
-                  <div className={styles.center_header}>
-                    <div className={styles.center_header_zero_width}>
-                      <div className={styles.header_rotator} style={{rotate: "-45deg", translate: "-2px 10px"}}>
-                        <div 
-                          className={styles.legend_item_container}
-                          onClick={() => set_new_sorting(rule.abbreviation, false)}
-                        >
-                          <LegendItem color={rule.color}>
-                            {render_project_header_text(rule.name, rule.abbreviation)}
-                          </LegendItem>
+      <div>
+        <table className={styles.table}>
+          <thead>
+            <tr className={styles.table_header_row}>
+              <th style={{flex: 1}}>
+                <div className={styles.table_headers_with_details}>
+                  <div className={styles.election_data_container}>
+                    <ElectionData
+                      election={election}
+                      election_filter_properties_short_names={election_filter_properties_short_names}
+                    />
+                  </div>
+                  <div className={styles.table_headers_non_rule}>
+                    <div 
+                      className={styles.project_name_column}
+                      style={{textAlign: "center"}} 
+                      onClick={() => set_new_sorting("name", true)}
+                    > 
+                      {render_project_header_text("Project Name", "name")}
+                    </div>
+                    <div
+                      className={styles.project_cost_column}
+                      style={{textAlign: "center"}} 
+                      onClick={() => set_new_sorting("cost", true)}
+                    >
+                      {render_project_header_text("Cost", "cost")}
+                    </div>
+                  </div>
+                </div>
+              </th>
+              <>
+                {rules_visible.map(rule => (
+                  <th key={rule.abbreviation} style={{width: "60px", flexShrink: 0, boxSizing: "border-box"}}>
+                    <div className={styles.center_header}>
+                      <div className={styles.center_header_zero_width}>
+                        <div className={styles.header_rotator} style={{rotate: "-45deg", translate: "-2px 10px"}}>
+                          <div 
+                            className={styles.legend_item_container}
+                            onClick={() => set_new_sorting(rule.abbreviation, false)}
+                          >
+                            <LegendItem color={rule.color}>
+                              {render_project_header_text(rule.name, rule.abbreviation)}
+                            </LegendItem>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                </th>
-              ))}
-            </>
-          </tr>
-        </thead>
-        <tbody>
-          {projects.map(project => (
-            <tr key={project.name} className={styles.project_row}>
-              <td className={styles.project_item} style={{textAlign: "left", flex: 1}}>
-                {project.name}
-              </td>
-              <td className={styles.project_item} style={{textAlign: "right", width: "90px", marginRight: "10px"}}>
-                {format_number_string(project.cost.toFixed(2))}
-              </td>
-              {rules_visible.map(rule => (
-                render_project_rule_selected(project, rule)
-              ))}
+                  </th>
+                ))}
+              </>
             </tr>
-          ))}
-        </tbody>
-      </table> 
+          </thead>
+          <tbody>
+            {projects.map(project => (
+              <tr key={project.name} className={styles.project_row}>
+                <td className={styles.project_name_column} style={{display: "flex"}}>
+                  <div
+                    className={styles.project_name}
+                    data-tooltip-id={"main_tooltip"}
+                    data-tooltip-content={project.name}
+                  >
+                    {project.name}
+                  </div>
+                </td>
+                <td className={styles.project_cost_column}>
+                  {format_number_string(project.cost.toFixed(2))}
+                </td>
+                {rules_visible.map(rule => (
+                  render_project_rule_selected(project, rule)
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table> 
+      </div>
     )
   )
 }

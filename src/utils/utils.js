@@ -1,6 +1,6 @@
 import { color_palette_general, color_palette_rules, color_palette_ballot_types } from "../constants/constants";
 
-// TODO: should be replaced by proper deep clone function
+// TODO: replace by proper deep clone function
 export function clone(obj){
   return JSON.parse(JSON.stringify(obj));
 } 
@@ -59,22 +59,3 @@ export function shorten_high_magnitude_number(number, decimal_places=1, min=1000
   }
   return number.toFixed(decimal_places);
 }
-
-
-// export const array_to_object = (array, key) => {
-//   return array.reduce((obj, item) => {
-//     return {
-//       ...obj,
-//       [item[key]]: item,
-//     };
-//   }, {});
-// };
-
-
-// export const useInitialRender = () => {
-//   const ref = useRef();
-//   useEffect(() => {
-//     ref.current = true;
-//   }, []);
-//   return ref.current;
-// };

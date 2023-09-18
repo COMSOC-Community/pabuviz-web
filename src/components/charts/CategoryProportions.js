@@ -21,8 +21,11 @@ export const get_graph_options = (api_response) => {
         stacked: true,
         ticks: {
           autoSkip: false,
-        }
+        },
       }
+    },
+    animation: {     
+      duration: 0
     },
     plugins: {
       title: {

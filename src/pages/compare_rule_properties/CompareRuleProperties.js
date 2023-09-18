@@ -9,11 +9,11 @@ import ElectionFilterList from '../../components/elections/ElectionFilterList';
 
 
 const rule_properties_short_names = [
-  "avg_norm_card_satisfaction",
-  "avg_norm_cost_satisfaction",
-  "avg_rel_card_satisfaction",
-  "avg_rel_cost_satisfaction",
-  "category_proportionality",
+  "avg_nrmcard_sat",
+  "avg_nrmcost_sat",
+  "avg_relcard_sat",
+  "avg_relcost_sat",
+  "category_prop",
   "equality",
   // "fairness",
   "happiness",
@@ -23,7 +23,7 @@ const rule_properties_short_names = [
 const election_filter_properties_short_names = [
   'num_projects',
   'num_votes',
-  'avg_ballot_length',
+  'avg_ballot_len',
   // 'has_categories'
 ]
 

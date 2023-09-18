@@ -1,0 +1,55 @@
+
+.property_title {
+    font-weight: normal;
+}
+
+.table {
+    width: 100%; 
+    border-collapse: collapse;
+}
+
+.tbody {
+    border-collapse: collapse;
+
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    padding: 2px 10px;
+
+}
+
+.row:nth-child(even){
+    background-color: #ffffff18;
+}
+
+.row:nth-child(odd){
+    background-color: #ffffff25;
+}
+
+
+
+.title_column {
+    padding-right: 20px;
+}
+
+.value_column {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+.value_container {
+    width: fit-content;
+    align-self: flex-end;
+    text-align: right;
+    font-weight: normal;
+
+    word-wrap: break-word;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;  
+    overflow: hidden;
+}

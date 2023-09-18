@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import styles from './CompareElectionResults.module.css'
 import { get_rule_properties } from '../../utils/database_api';
 import ElectionList from '../../components/elections/ElectionList';
@@ -7,13 +7,14 @@ import RulePropertyRadarChart from '../../components/charts/RulePropertyRadarCha
 import {useLocation, useOutletContext} from 'react-router-dom';
 import CategoryProportion from '../../components/charts/CategoryProportions';
 import NetworkError from '../../components/reusables/NetworkError';
-import ElectionDetails from '../../components/elections/ElectionDetails';
+import ElectionData from '../../components/elections/ElectionData';
 
 const rule_properties_short_names = [
-  "avg_card_satisfaction",
+  "avg_card_sat",
+  "avg_relcard_sat",
   "avg_cost_satisfaction",
-  "avg_rel_cost_satisfaction",
-  // "category_proportionality",
+  "avg_relcost_sat",
+  // "category_prop",
   "equality",
   // "fairness",
   "happiness",
@@ -22,6 +23,11 @@ const rule_properties_short_names = [
 
 function ElectionGraphs(props) {
   const { election_id, rules, rule_visibility, rule_properties } = props;
+  
+  const election_filters = useMemo(() => (
+    {id_list: [election_id]}
+  ), [election_id] )
+
   return (
     <>
       <div className={styles.graph_container}>
@@ -35,7 +41,7 @@ function ElectionGraphs(props) {
         <RulePropertyRadarChart
           rules={rules}
           rule_properties={rule_properties}
-          election_filters={{id_list: [election_id]}}
+          election_filters={election_filters}
           rule_visibility={rule_visibility}
           hide_num_elections={true}
         />
@@ -43,7 +49,7 @@ function ElectionGraphs(props) {
       <div className={styles.graph_container}>
         <SatisfactionHistogram
           rules={rules}
-          election_filters={{id_list: [election_id]}}
+          election_filters={election_filters}
           rule_visibility={rule_visibility}
           hide_num_elections={true}
         />
@@ -92,7 +98,9 @@ export default function CompareElectionResults(props) {
             {election.unit + (election.subunit ? ", " + election.subunit : "") + ". " + new Date(election.date_begin).getFullYear()}
           </p>
         </div>
-        <ElectionDetails election={election}/>
+        <div className={styles.election_data_container}>
+          <ElectionData election={election}/>
+        </div>
         <ElectionGraphs
           election_id={election.id}
           rules={rule_list}

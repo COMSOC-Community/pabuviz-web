@@ -1,4 +1,4 @@
-import styles from './ElectionDetails.module.css'
+import styles from './ElectionData.module.css'
 import { useEffect, useState } from "react";
 import NetworkError from "../reusables/NetworkError";
 import ActivityIndicator from "../reusables/ActivityIndicator";
@@ -7,9 +7,9 @@ import { capitalize_first_letter, format_number_string } from '../../utils/utils
 import Boolean from '../reusables/Boolean';
 
 
-export default function ElectionDetails(props) {
+export default function ElectionData(props) {
 
-  const {election, election_filter_properties, election_details} = props;
+  const {election, election_filter_properties, election_filter_properties_short_names, election_details} = props;
 
   const [state, set_state] = useState({
     election_details: election_details,
@@ -26,7 +26,7 @@ export default function ElectionDetails(props) {
     if (!election_details || !election_filter_properties){
 
       let [election_details_promise, election_details_abort_controller] = get_election_details(
-        election_filter_properties ? election_filter_properties.map(p => p.short_name) : null,
+        election_filter_properties_short_names,
         election.ballot_type,
         {id_list: [election.id]},
       );
@@ -51,8 +51,8 @@ export default function ElectionDetails(props) {
     <NetworkError/> :
     ( !state.election_details || !state.election_filter_properties ?
       <ActivityIndicator/> :
-      <table>
-        <tbody>
+      <table className={styles.table}>
+        <tbody className={styles.tbody}>
           {state.election_filter_properties.map(property => {
             const property_value = state.election_details[property.short_name];
             let property_value_render;
@@ -80,7 +80,7 @@ export default function ElectionDetails(props) {
                   <div
                     className={styles.value_container}
                     data-tooltip-id={"main_tooltip"}
-                    data-tooltip-content={property_value_render}
+                    data-tooltip-content={typeof(property_value) === "string" ? property_value : null}
                   >
                     {property_value_render}
                   </div>  

@@ -34,7 +34,6 @@ const api_post = (url_suffix, parameters = {}) => {
         if (error.name === "AbortError"){
           resolve(undefined);
         } else {
-          // resolve(undefined);
           reject(error);
         }
       }
