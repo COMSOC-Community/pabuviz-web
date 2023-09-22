@@ -68,7 +68,7 @@ function Main() {
             <div key={ballot_type_name} className={styles.ballot_type_option_container}>
               <LegendItem
                 color={get_ballot_type_color(index)}
-                tooltip_text={ballot_type.description}
+                tooltip_text={capitalize_first_letter(ballot_type.description)}
                 tooltip_id={"main_tooltip"}
               >
                 <div className={styles.ballot_type_option_text}>

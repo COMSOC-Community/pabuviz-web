@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { Radar } from 'react-chartjs-2';
-import { format_number_string, transparentize } from '../../utils/utils';
+import { capitalize_first_letter, format_number_string, transparentize } from '../../utils/utils';
 import { get_rule_result_properties } from '../../utils/database_api';
 import GeneralChart from './GeneralChart';
 import { rule_property_radar_chart_explanation } from '../../constants/chart_explanations';
@@ -40,7 +40,7 @@ const initial_graph_data = (props_constant) => {
   let initial_graph_data;
   if (props_constant && props_constant.rule_properties){
     initial_graph_data = {
-      labels: props_constant.rule_properties.map(property => property.name),
+      labels: props_constant.rule_properties.map(property => capitalize_first_letter(property.name)),
       datasets: []
     };
   } else {
@@ -100,7 +100,7 @@ const update_graph_data = (api_response, props_constant, props_variable, old_gra
   
   
   let data = {
-    labels: props_constant.rule_properties.map(property => property.name),
+    labels: props_constant.rule_properties.map(property => capitalize_first_letter(property.name)),
     datasets: datasets
   };
   

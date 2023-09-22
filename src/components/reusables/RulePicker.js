@@ -1,6 +1,7 @@
 import CollapsableList from "./CollapsableList";
 import styles from './RulePicker.module.css'
 import LegendItem from "./LegendItem";
+import { capitalize_first_letter } from "../../utils/utils";
 
 
 export default function RulePicker(props) { 
@@ -28,7 +29,7 @@ export default function RulePicker(props) {
         >
           <LegendItem color={rule_family.color_from} color_secondary={rule_family.color_to} tooltip_text={rule_family.description}>
             <div className={styles.legend_text}>
-              {rule_family.name}
+              {capitalize_first_letter(rule_family.name)}
             </div>
           </LegendItem>
         </div>
@@ -49,7 +50,7 @@ export default function RulePicker(props) {
         >
           <LegendItem color={rule.color} tooltip_text={rule.description}>
             <div className={styles.legend_text}>
-              {rule.name}
+              {capitalize_first_letter(rule.name)}
             </div>
           </LegendItem>
         </div>
