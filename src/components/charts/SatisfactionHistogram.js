@@ -88,7 +88,7 @@ export const graph_options = (api_response, parent_props_constant, parent_props_
 };
 
 
-const compute_graph_data = (api_response, props_constant, old_graph_data) => {
+const compute_graph_data = (api_response, props_constant, old_graph_data, set_error) => {
   let x_data = []
   for (let interval_start = 0; interval_start <= 100; interval_start+=5) {
     x_data.push(interval_start);
@@ -114,12 +114,34 @@ const compute_graph_data = (api_response, props_constant, old_graph_data) => {
 }
 
 
-const update_graph_data = (api_response, props_constant, props_variable, old_graph_data) => {
+const update_graph_data = (api_response, props_constant, props_variable, old_graph_data, set_error) => {
   let new_graph_data = clone(old_graph_data)
   for (let index = 0; index < new_graph_data.datasets.length; index++) {
     new_graph_data.datasets[index].hidden = !props_variable.rule_visibility[props_constant.rules[index].abbreviation];
   }
   return new_graph_data;
+}
+
+
+const generate_export_data = (api_response, parent_props_constant, parent_props_variable, graph_data) => {
+  let bins = [[0, 0]]
+  for (let interval_start = 0; interval_start < 100; interval_start+=5) {
+    bins.push([interval_start, interval_start + 5]);
+  }
+  let voter_percentages = {};
+  let avg_satisfactions = {};
+  parent_props_constant.rules.forEach(rule => {
+    voter_percentages[rule.name] = api_response.data[rule.abbreviation].hist_data;
+    avg_satisfactions[rule.name] = api_response.data[rule.abbreviation].avg;
+  });
+
+  return {
+    voter_satisfaction_bins: bins,
+    voter_percentages: voter_percentages,
+    avg_satisfactions: avg_satisfactions,
+    num_elections: api_response.meta_data.num_elections
+  };
+ 
 }
 
 
@@ -173,6 +195,7 @@ export default function SatisfactionHistogram(props) {
       api_request={api_request}
       parent_props_constant={props_constant}
       parent_props_variable={props_variable}
+      generate_export_data={generate_export_data}
       get_graph_options={graph_options}
       chart_component={Line}
     />

@@ -1,10 +1,7 @@
 .collapsable {
   height: 100%;
   width: 100%;
-    overflow: hidden;
-    transition: 0.2s max-height ease-out;
-  }
-  
-.child_container {
-    overflow: auto;
+  transition-property: height;
+  transition-timing-function: ease-in-out;
+  transition-duration: 200ms;
 }

@@ -64,10 +64,6 @@ export default function DatabaseOverview(props) {
     )
   }
 
-  
-  // const on_debug_button_click = () => {
-  //   // console.log(dict_data_for_graph)
-  // }
 
   const render_title = () => {
 

@@ -17,7 +17,6 @@ export default function ToggleLegend(props) {
 
 
   let item_renders = items.map((item, index) => {
-    console.log(item)
     return (
       <div
         className={styles.legend_item}

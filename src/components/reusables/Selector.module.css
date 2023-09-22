@@ -1,5 +1,12 @@
+@import '../../constants/constants.css';
+
+.container {
+    position: relative;
+}
+
 .items_container {
-    background-color: #ffffff44;
+    width: 100%;
+    background-color: var(--background-color-box-second-level);
     border-radius: 5pt;
     margin-top: 2px;
     overflow: hidden;
@@ -8,6 +15,7 @@
 
 .item_container {
     height: 40px;
+    width: 100%;
     display: flex;
     flex-direction: row;
     justify-content: space-between;

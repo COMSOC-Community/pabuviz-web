@@ -42,7 +42,7 @@ export const graph_options = {
 };
 
 
-const compute_graph_data = (api_response, props_constant, old_graph_data) => {
+const compute_graph_data = (api_response, props_constant, old_graph_data, set_error) => {
   let datasets = {};
   for (const [index, ballot_type] of props_constant.ballot_types.entries()){
     datasets[ballot_type.name] = {
@@ -76,7 +76,7 @@ const compute_graph_data = (api_response, props_constant, old_graph_data) => {
 }
 
 
-const update_graph_data = (api_response, props_constant, props_variable, old_graph_data) => {
+const update_graph_data = (api_response, props_constant, props_variable, old_graph_data, set_error) => {
   let new_graph_data = clone(old_graph_data)
   for (let index = 0; index < new_graph_data.datasets.length; index++) {
     new_graph_data.datasets[index].hidden = !props_variable.ballot_type_visibility[index];
@@ -85,6 +85,14 @@ const update_graph_data = (api_response, props_constant, props_variable, old_gra
 }
 
 
+const generate_export_data = (api_response, parent_props_constant, parent_props_variable, graph_data) => {
+  let data = []
+  for (let election of parent_props_constant.elections){
+    const {num_votes, num_projects, ballot_type, name} = election;
+    data.push({num_votes, num_projects, ballot_type, name});
+  }
+  return data;
+}
 
 
 export default function ElectionSizePlot(props) { 
@@ -110,7 +118,7 @@ export default function ElectionSizePlot(props) {
   const on_click = (element, api_response, parent_props_constant, parent_props_variable, graph_data) => {
     let election = graph_data.datasets[element.datasetIndex].data[element.index].election;
     set_ballot_type_selected(election.ballot_type)
-    navigate('election', {state: {election_selected: election}});
+    navigate('compare_elections', {state: {election_selected: election}});
   }
 
 
@@ -123,6 +131,7 @@ export default function ElectionSizePlot(props) {
       parent_props_constant={props_constant}
       parent_props_variable={props_variable}
       get_graph_options={() => graph_options}
+      generate_export_data={generate_export_data}
       on_click={on_click}
       chart_component={Scatter}
     />

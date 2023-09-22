@@ -28,13 +28,6 @@ export default function SideNavigation(props) {
             </NavLink>
           </li>
           <li>
-            <NavLink to={"election"} className={({isActive}) => isActive ? styles.nav_link_active : styles.nav_link}>
-              <p className={styles.nav_link_text}>
-                {"Election Details"}
-              </p>
-            </NavLink>
-          </li>
-          <li>
             <NavLink to={"rules"} className={({isActive}) => isActive ? styles.nav_link_active : styles.nav_link}>
               <p className={styles.nav_link_text}>
                 {"Compare Rules"}

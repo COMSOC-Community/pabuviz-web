@@ -29,6 +29,7 @@ export default function GeneralChart(props) {
     get_graph_options,
     generate_tooltip_info,
     generate_corner_info_text,
+    generate_export_data,
     render_delay,
     on_click
   } = props;
@@ -41,7 +42,7 @@ export default function GeneralChart(props) {
   const [is_loading, set_is_loading] = useState(true)
 
   const initial_parent_props = useRef(true);
-  const [has_error, set_has_error] = useState(false)
+  const [error, set_error] = useState(null)
   const [waiting_for_render_delay, set_waiting_for_render_delay] = useState(render_delay ? true : false)
 
   // initial api request and computation
@@ -54,7 +55,7 @@ export default function GeneralChart(props) {
     } else {
       // api request depends on parent props, only execute if they are loaded
       if (parent_props_constant !== null){
-        set_has_error(false);
+        set_error(null);
 
         // if this is the first time then set the initial (empty) data for the graph 
         if (initial_parent_props.current){
@@ -80,11 +81,12 @@ export default function GeneralChart(props) {
                     api_response_data,
                     parent_props_constant,
                     old_graph_data,
+                    set_error
                   );
                 });
               }
             }
-          }).catch(e => {set_has_error(true)});
+          }).catch(e => {set_error(e)});
     
           // abort last api request, when new one is started
           return request.abort_func;
@@ -95,6 +97,7 @@ export default function GeneralChart(props) {
                 null,
                 parent_props_constant,
                 old_graph_data,
+                set_error
               )
             );
           }
@@ -110,7 +113,7 @@ export default function GeneralChart(props) {
     if (!waiting_for_render_delay && !is_loading){
       if (update_graph_data && (api_response || !api_request) && parent_props_constant !== null && parent_props_variable !== null){
         set_graph_data((prev_graph_data) => {
-          return update_graph_data(api_response, parent_props_constant, parent_props_variable, prev_graph_data);
+          return update_graph_data(api_response, parent_props_constant, parent_props_variable, prev_graph_data, set_error);
         });
       }
     }
@@ -137,11 +140,17 @@ export default function GeneralChart(props) {
   }
 
   const on_export_data_click = (event) => {
-    if (graph_data){
-      const data = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(graph_data));
+    if (api_response && parent_props_constant && parent_props_variable && graph_data){
+      let export_data;
+      if (generate_export_data){
+        export_data = generate_export_data(api_response, parent_props_constant, parent_props_variable, graph_data);
+      } else {
+        export_data = graph_data;
+      }
+      const export_data_str = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(export_data));
       const a = document.createElement('a')
       a.download = 'chart.json'
-      a.href = data;
+      a.href = export_data_str;
       a.click()
     }
   }
@@ -169,7 +178,7 @@ export default function GeneralChart(props) {
           id={chart_id+"info"}
           text={"ⓘ"}
           className={styles.info_symbol}
-          disabled={is_loading || has_error}
+          disabled={is_loading || error}
         >
           {tooltip_info}
         </HoverTooltip>
@@ -178,7 +187,7 @@ export default function GeneralChart(props) {
         id={chart_id+"menu"}
         text={"☰"}
         className={styles.menu_symbol}
-        disabled={is_loading || has_error}
+        disabled={is_loading || error}
         clickable
         no_padding
       >
@@ -207,14 +216,14 @@ export default function GeneralChart(props) {
         {render_corner_menu()}
       {/* <button onClick={on_debug_button_click}>Click me!</button> */}
       </div>
-      {(is_loading || waiting_for_render_delay) && !has_error &&
+      {(is_loading || waiting_for_render_delay) && !error &&
         <div className={styles.overlay_container}>
           <ActivityIndicator/> 
         </div>
       }
-      {has_error &&
+      {error &&
         <div className={styles.overlay_container}>
-          <NetworkError error_text={"API request error"}/>
+          <NetworkError error_text={error}/>
         </div>
       }
       {/* <button onClick={on_debug_button_click}>Click me!</button> */}

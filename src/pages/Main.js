@@ -62,17 +62,17 @@ function Main() {
         items_map={ballot_types}
         item_selected_key={ballot_type_selected}
         set_item_selected_key={set_ballot_type_selected}
-        render_item={(ballot_type, index) => {
-          console.log(ballot_type, index)
+        invert={true}
+        render_item={(ballot_type_name, ballot_type, index) => {
           return (
-            <div key={ballot_type.name} className={styles.ballot_type_option_container}>
+            <div key={ballot_type_name} className={styles.ballot_type_option_container}>
               <LegendItem
                 color={get_ballot_type_color(index)}
                 tooltip_text={ballot_type.description}
                 tooltip_id={"main_tooltip"}
               >
                 <div className={styles.ballot_type_option_text}>
-                  {capitalize_first_letter(ballot_type.name) + " ballots"}
+                  {capitalize_first_letter(ballot_type_name) + " ballots"}
                 </div>
               </LegendItem>
             </div>
@@ -125,12 +125,14 @@ function Main() {
         </div>
         <div className={styles.content_and_rule_picker_container}>
           <div className={styles.content_container}> 
-            <Outlet context={{
-              ballot_type_selected: ballot_type_selected,
-              set_ballot_type_selected: set_ballot_type_selected,
-              rule_list: rule_list,
-              rule_visibility: rule_visibility
-            }}/>
+            { ballot_type_selected && rule_list && rule_visibility &&
+              <Outlet context={{
+                ballot_type_selected: ballot_type_selected,
+                set_ballot_type_selected: set_ballot_type_selected,
+                rule_list: rule_list,
+                rule_visibility: rule_visibility
+              }}/>
+            }
           </div>
           <div className={styles.rule_picker_container}>
             <div className={styles.rule_picker}>

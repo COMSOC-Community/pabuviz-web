@@ -53,7 +53,7 @@ const initial_graph_data = (props_constant) => {
 }
 
 
-const update_graph_data = (api_response, props_constant, props_variable, old_graph_data) => {
+const update_graph_data = (api_response, props_constant, props_variable, old_graph_data, set_error) => {
 
   if (api_response.meta_data.num_elections === 0){
     return initial_graph_data(props_constant)
@@ -109,6 +109,31 @@ const update_graph_data = (api_response, props_constant, props_variable, old_gra
 }
 
 
+const generate_export_data = (api_response, parent_props_constant, parent_props_variable, graph_data) => {
+  const property_values = {}
+
+  parent_props_constant.rules.forEach(rule => {
+    const rule_property_values = []
+    parent_props_constant.rule_properties.forEach(rule_property => {
+      rule_property_values.push(api_response.data[rule.abbreviation][rule_property.short_name]);
+    });
+    property_values[rule.name] = rule_property_values;
+  });
+
+  const data = {
+    properties: parent_props_constant.rule_properties.map(property => property.name),
+    avg_values: property_values,
+    num_elections: api_response.meta_data.num_elections
+  };
+
+  if (api_response.meta_data.num_elections !== 1){
+    data['filters'] = parent_props_constant.election_filters;
+  }
+
+  return data;
+}
+
+
 const generate_corner_info_text = (api_response, props_constant, props_variable, graph_data) => {
   if (api_response){
     return "Number of elections: " + api_response.meta_data.num_elections.toString();
@@ -160,6 +185,7 @@ export default function RulePropertyRadarChart(props) {
         update_graph_data={update_graph_data}
         generate_corner_info_text={hide_num_elections ? null : generate_corner_info_text}
         generate_tooltip_info={() => rule_property_radar_chart_explanation}
+        generate_export_data={generate_export_data}
         api_request={api_request}
         parent_props_constant={props_constant}
         parent_props_variable={props_variable}

@@ -44,27 +44,32 @@ export const get_graph_options = (api_response) => {
 };
 
 
-const update_graph_data = (api_response, props_constant, props_variable, old_graph_data) => {
+const update_graph_data = (api_response, props_constant, props_variable, old_graph_data, set_error) => {
   let rules = props_constant.rules.filter((rule, index) => props_variable.rule_visibility[rule.abbreviation])
 
-  let datasets = []
-  let labels = ["Vote share"].concat(rules.map(rule => rule.name))
+  if (api_response.category_names.length === 0){
+    set_error("No categories");
+    return old_graph_data;
+  }
+
+  let datasets = [];
+  let labels = ["Vote share"].concat(rules.map(rule => rule.name));
 
   api_response.category_names.forEach((category_name, index) => {
     let data = [
       api_response.vote_cost_shares[index] * 100,
-    ]
+    ];
    
     rules.forEach((rule) => {
-      data.push(api_response.result_cost_shares[rule.abbreviation][index] * 100)
-    })
+      data.push(api_response.result_cost_shares[rule.abbreviation][index] * 100);
+    });
 
     datasets.push({
       label: category_name,
       data: data,
       inflateAmount: 0,
       backgroundColor: transparentize(get_chart_color(index), 0.6),
-    })
+    });
   });
   
   let graph_data = {
@@ -77,7 +82,7 @@ const update_graph_data = (api_response, props_constant, props_variable, old_gra
 
 const api_request = (props_constant) => {
   let [category_proportions_promise, abort_controller] = get_category_proportions(
-    props_constant.election_id,
+    props_constant.election_name,
     props_constant.rules.map(rule => rule.abbreviation),
   );
   
@@ -88,17 +93,32 @@ const api_request = (props_constant) => {
 }
 
 
+const generate_export_data = (api_response, parent_props_constant, parent_props_variable, graph_data) => {
+  
+  let data = {
+    categories: api_response.category_names,
+    vote_cost_shares: api_response.vote_cost_shares,
+    allocation_cost_shares: {}
+  };
+
+  parent_props_constant.rules.forEach((rule) => {
+    data.allocation_cost_shares[rule.name] = api_response.result_cost_shares[rule.abbreviation]
+  });
+  
+  return data;
+}
+
 
 
 export default function CategoryProportion(props) { 
   // const navigate = useNavigate(); 
-  const {election_id, rules, rule_visibility, render_delay} = props;
+  const {election_name, rules, rule_visibility, render_delay} = props;
   
   const props_constant = useMemo(
     () => {
-      return election_id && rules ? {election_id, rules} : null;
+      return election_name && rules ? {election_name, rules} : null;
     },
-    [election_id, rules]
+    [election_name, rules]
   );  
 
   const props_variable = useMemo(
@@ -121,7 +141,7 @@ export default function CategoryProportion(props) {
         chart_component={Bar}
         render_delay={render_delay}
         generate_tooltip_info={() => category_proportions_explanation}
-        // on_click={on_click}
+        generate_export_data={generate_export_data}
     />
   );
 }

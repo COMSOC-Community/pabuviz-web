@@ -2,6 +2,7 @@ import styles from './ElectionFilterList.module.css'
 import ElectionFilterCheckbox from "./ElectionFilterCheckbox"
 import ElectionFilterMinMax from "./ElectionFilterMinMax"
 import ActivityIndicator from '../reusables/ActivityIndicator';
+import ElectionFilterSelector from './ElectionFilterSelector';
 
 
 export default function ElectionFilterList(props) {
@@ -24,8 +25,19 @@ export default function ElectionFilterList(props) {
         <div className={styles.filter_container} key={election_property.short_name}>
           <ElectionFilterCheckbox
             election_property={election_property}
-            initial_values={election_filters[election_property.short_name]}
+            initial_value={election_filters[election_property.short_name]}
             set_election_filters={set_election_filters}
+          />
+        </div>
+      )
+    } else if (election_property.inner_type === 'reference'){
+      return (
+        <div className={styles.filter_container} key={election_property.short_name}>
+          <ElectionFilterSelector
+            election_property={election_property}
+            initial_value={election_filters[election_property.short_name]}
+            set_election_filters={set_election_filters}
+            possible_values_map={new Map(Object.entries(election_property.referencable_objects))}
           />
         </div>
       )

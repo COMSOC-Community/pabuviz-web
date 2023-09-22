@@ -51,7 +51,6 @@ export default function CompareRuleProperties(props) {
       
         rule_properties_promise.then(response => {
           if (response){
-            console.log(response)
             set_rule_properties(response.data);
           }
         }).catch(() => {set_error(true)});

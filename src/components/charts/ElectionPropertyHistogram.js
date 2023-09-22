@@ -67,8 +67,7 @@ export const get_graph_options = (api_response) => {
 };
 
 
-const compute_graph_data = (api_response, props_constant, old_graph_data) => {
-  console.log(api_response)
+const compute_graph_data = (api_response, props_constant, old_graph_data, set_error) => {
   let datasets = []
   let labels = []
 
@@ -103,7 +102,7 @@ const compute_graph_data = (api_response, props_constant, old_graph_data) => {
 }
 
 
-const update_graph_data = (api_response, props_constant, props_variable, old_graph_data) => {
+const update_graph_data = (api_response, props_constant, props_variable, old_graph_data, set_error) => {
   let new_graph_data = clone(old_graph_data)
   for (let index = 0; index < new_graph_data.datasets.length; index++) {
     new_graph_data.datasets[index].hidden = !props_variable.ballot_type_visibility[index];
@@ -122,6 +121,26 @@ const api_request = (props_constant) => {
   return {
     promise: election_property_histogram_promise,
     abort_func: () => {abort_controller.abort()}
+  }
+}
+
+
+const generate_export_data = (api_response, parent_props_constant, parent_props_variable, graph_data) => {
+  const bins = []
+  const num_elections = []
+  for (let i = 0; i < api_response.data.bins.length-1; i++) {
+    bins.push([[api_response.data.bins[i], api_response.data.bins[i+1]]])
+    const bin_num_elections = {}
+    parent_props_constant.ballot_types.forEach((ballot_type) => {
+      bin_num_elections[ballot_type.name] = api_response.data.values[ballot_type.name][i];
+    });
+    num_elections.push(bin_num_elections)
+  }
+
+  return {
+    property: api_response.meta_data.election_property.name,
+    bins: bins,
+    num_elections: num_elections
   }
 }
 
@@ -201,6 +220,7 @@ export default function ElectionPropertyHistogram(props) {
         parent_props_constant={props_constant}
         parent_props_variable={props_variable}
         get_graph_options={get_graph_options}
+        generate_export_data={generate_export_data}
         chart_component={Bar}
         render_delay={render_delay}
         on_click={on_click}

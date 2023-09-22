@@ -1,5 +1,5 @@
 import styles from './ElectionProjectsInfo.module.css'
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import NetworkError from "../reusables/NetworkError";
 import ActivityIndicator from "../reusables/ActivityIndicator";
 import { get_projects } from "../../utils/database_api";
@@ -10,7 +10,7 @@ import ElectionData from './ElectionData';
 
 
 const election_filter_properties_short_names = [
-  "name",
+  // "name",
   "budget",
   "num_projects",
   // "has_categories",
@@ -24,7 +24,7 @@ const election_filter_properties_short_names = [
 
 export default function ElectionProjectsInfo(props) {
 
-  const {election, rules, visibility} = props;
+  const {election, rules, visibility, top} = props;
 
   const [projects, set_projects] = useState(null);
 
@@ -36,14 +36,14 @@ export default function ElectionProjectsInfo(props) {
   useEffect(() => {
     set_error(false);
     let [projects_promise, projects_abort_controller] = get_projects(
-      election.id,
+      election.name,
     );
+    
     
     projects_promise.then(response => {
       if (response){
         const project_data = response.data;
         const rule_results_existing = response.metadata.rule_results_existing;
-        
         project_data.forEach(project => {
           rule_results_existing.forEach(rule => {
             project[rule.abbreviation] = project.rules_selected_by.includes(rule.abbreviation);
@@ -52,7 +52,7 @@ export default function ElectionProjectsInfo(props) {
         set_projects(project_data);
         
       }
-    }).catch((e) => console.log(e))
+    }).catch((e) => console.warn(e))
 
 
     return () => {projects_abort_controller.abort()}
@@ -77,6 +77,21 @@ export default function ElectionProjectsInfo(props) {
   }, [sorting])
 
 
+  const rules_reordered = useMemo(() => {
+    if (rules && election){
+      const new_rules = clone(rules);
+      if (election.rule){
+        let index = new_rules.findIndex(rule => rule.abbreviation === election.rule);
+        if (index !== -1){
+          new_rules.unshift(new_rules.splice(index, 1)[0]);
+        }
+      }
+      return new_rules;
+    }
+  }, [rules, election])
+
+
+
   const set_new_sorting = (field, default_ascending) => {
     const ascending = sorting.field === field ? !sorting.ascending : default_ascending;
     set_sorting({field, ascending})
@@ -93,8 +108,15 @@ export default function ElectionProjectsInfo(props) {
 
   const render_project_rule_selected = (project, rule) => {
     const selected = project[rule.abbreviation];
+    const is_election_rule = rule.abbreviation === election.rule;
     return (
-      <td key={rule.abbreviation} style={{textAlign: 'center', width: "60px", boxSizing: "border-box", flexShrink: 0, fontSize: "x-large"}}> 
+      <td
+        key={rule.abbreviation}
+        className={styles.boolean_container}
+        style={{backgroundColor: is_election_rule ? "#ffffff22" : "none"}}
+        data-tooltip-id={'main_tooltip'}
+        data-tooltip-content={is_election_rule ? "This is the rule used in the actual election" : ""}
+      > 
         <Boolean
           boolean_value={selected}
         />
@@ -103,13 +125,10 @@ export default function ElectionProjectsInfo(props) {
     
   }
 
-
   let rules_visible;
-  if (rules && visibility){
-    rules_visible = rules.filter(rule => visibility[rule.abbreviation]);
+  if (rules_reordered && visibility){
+    rules_visible = rules_reordered.filter(rule => visibility[rule.abbreviation]);
   }
-
-
 
 
   return (
@@ -117,9 +136,9 @@ export default function ElectionProjectsInfo(props) {
     <NetworkError/> :
     ( !projects ?
       <ActivityIndicator/> :
-      <div>
+      <div className={styles.table_wrapper}>
         <table className={styles.table}>
-          <thead>
+          <thead style={{top: top}}>
             <tr className={styles.table_header_row}>
               <th style={{flex: 1}}>
                 <div className={styles.table_headers_with_details}>
@@ -169,8 +188,9 @@ export default function ElectionProjectsInfo(props) {
               </>
             </tr>
           </thead>
-          <tbody>
-            {projects.map(project => (
+          <tbody className={styles.tbody}>
+            {projects.map(project => {
+              return (
               <tr key={project.name} className={styles.project_row}>
                 <td className={styles.project_name_column} style={{display: "flex"}}>
                   <div
@@ -188,7 +208,7 @@ export default function ElectionProjectsInfo(props) {
                   render_project_rule_selected(project, rule)
                 ))}
               </tr>
-            ))}
+            )})}
           </tbody>
         </table> 
       </div>

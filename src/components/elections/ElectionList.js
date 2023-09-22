@@ -21,6 +21,7 @@ const election_filter_properties_short_names = [
   'has_targets',
   'has_neighborhoods',
   'has_voting_methods',
+  'rule',
 ]
 
 const filter_elections_by_search_text = (elections, search_text) => {
@@ -114,7 +115,7 @@ export default function ElectionList(props) {
   useEffect(() => {
     reset_scroll();
     set_error(false);
-    let [election_promise, election_abort_controller] = get_elections({...election_filters, ballot_types: [ballot_type]});
+    let [election_promise, election_abort_controller] = get_elections({...election_filters, ballot_type: ballot_type});
 
     election_promise.then(elections_response => {
       if (elections_response){
@@ -284,7 +285,7 @@ export default function ElectionList(props) {
             <ElectionData
               election={election}
               election_filter_properties={election_filter_properties}
-              election_details={election_details[election.id]}
+              election_details={election_details[election.name]}
             />
           }
         </HoverTooltip>

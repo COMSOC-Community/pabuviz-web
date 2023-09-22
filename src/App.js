@@ -8,7 +8,6 @@ import ErrorPage from './pages/ErrorPage';
 import CompareRuleProperties from './pages/compare_rule_properties/CompareRuleProperties';
 import DatabaseOverview from './pages/database_overview/DatabaseOverview';
 import CompareElectionResults from './pages/compare_election_results/CompareElectionResults';
-import ElectionDetails from './pages/election_details/ElectionDetails';
 
 // here we need to import and register all elements implicitly used by any of our charts
 import {
@@ -57,10 +56,6 @@ function App() {
         {
           path: "compare_elections",
           element: <CompareElectionResults />,
-        },
-        {
-          path: "election",
-          element: <ElectionDetails />,
         },
         {
           path: "rules",

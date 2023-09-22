@@ -5,7 +5,7 @@ import Collapsable from './Collapsable';
 
 export default function Selector(props) { 
 
-  const {items_map, item_selected_key, set_item_selected_key, render_item} = props;
+  const {items_map, item_selected_key, set_item_selected_key, render_item, allow_deselect, invert} = props;
 
 
   const [open, set_open] = useState(false);
@@ -28,19 +28,32 @@ export default function Selector(props) {
   }, [ref]);
   
 
-  const render_list_item = ([key, item], index) => {
-    return (
-      <div
-        key={key}
-        className={styles.item_container}
-        onClick={() => {
-          set_item_selected_key(key);
-          set_open(false)
-        }}
-      >
-        {render_item(item, index)}
-      </div>
-    )
+  const render_list_item = (list_item, index) => {
+    if (list_item){
+      const [key, item] = list_item;
+      return (
+        <div
+          key={key}
+          className={styles.item_container}
+          onClick={() => {
+            set_item_selected_key(key);
+            set_open(false)
+          }}
+        >
+          {render_item(key, item, index)}
+        </div>
+      )
+    } else {
+      return (
+        <div
+          className={styles.item_container}
+          onClick={() => {
+            set_item_selected_key(undefined);
+            set_open(false)
+          }}
+        />
+      )
+    }
   }
 
     
@@ -57,16 +70,21 @@ export default function Selector(props) {
 
   return (
     <div className={styles.container} ref={ref}>
-      <div className={styles.items_container}>
-        <Collapsable collapsed={!open} animation_duration={".1s"}>
-          {items_map && 
-            Array.from(items_map.entries()).map(render_list_item)}
+      <div
+        className={styles.items_container}
+        style={{position: 'absolute', bottom: invert ? "100%" : null, top: invert ? null : "100%"}}
+      >
+        <Collapsable collapsed={!open} animation_duration={200}>
+          {invert && items_map && Array.from(items_map.entries()).map(render_list_item)}
+          {allow_deselect && render_list_item(undefined)}
+          {!invert && items_map && Array.from(items_map.entries()).map(render_list_item)}
         </Collapsable>
       </div>
       <div className={styles.items_container}>
         <div className={styles.item_container}  onClick={() => set_open(!open)}>
-          {items_map && item_selected_key && 
-            render_item(items_map.get(item_selected_key), item_indices_by_key[item_selected_key])
+          {items_map && item_selected_key ? 
+            render_item(item_selected_key, items_map.get(item_selected_key), item_indices_by_key[item_selected_key]) :
+            <div/>
           }
           <div className={styles.indicator} style={{rotate: open ? "180deg" : "0deg"}}>
             {'⌄'}
