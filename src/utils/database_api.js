@@ -1,5 +1,3 @@
-import { get_rule_color } from './utils';
-
 
 const api_get = (url_suffix, parameters = {}) => {
   const abort_controller = new AbortController();
@@ -61,21 +59,7 @@ export const get_election_details = (property_short_names, ballot_type = null, f
 
 // get the rules and add their colors. This way we don't always need to pass the families as well 
 export const get_rules = () => {
-  const [rules_promise, abort_controller] = api_get('rules');
-  return [new Promise((resolve, reject) => {
-    rules_promise.then(rules_response => {
-      if(rules_response){
-        rules_response.data.forEach((rule_family, family_index) => {
-          rule_family.elements.forEach((rule, index) => {
-            rule.color = get_rule_color(family_index, index);
-          });
-          rule_family.color_from = get_rule_color(family_index, 0);
-          rule_family.color_to = get_rule_color(family_index, rule_family.elements.length-1);
-        });
-      }
-      resolve(rules_response);
-    }).catch(reject)
-  }), abort_controller]
+  return api_get('rules'); 
 }
 
 export const get_ballot_types = () => {

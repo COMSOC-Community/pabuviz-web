@@ -6,7 +6,7 @@ import styles from './Main.module.css'
 import SideNavigation from '../components/SideNavigation';
 import { get_ballot_types, get_rules } from '../utils/database_api';
 import Selector from '../components/reusables/Selector';
-import { capitalize_first_letter, clone, get_ballot_type_color } from '../utils/utils';
+import { capitalize_first_letter, clone, get_ballot_type_color, get_rule_color } from '../utils/utils';
 import LegendItem from '../components/reusables/LegendItem';
 import { Tooltip } from 'react-tooltip';
 import RulePicker from '../components/reusables/RulePicker';
@@ -21,31 +21,36 @@ function Main() {
   const [ballot_type_selected, set_ballot_type_selected] =  useState(null)
 
   const [rule_families, set_rule_families] =  useState(undefined);
-  const [rule_visibility, set_rule_visibility] = useState(() => {
-    let initial_visibility = {}; 
-    default_rules_visible.forEach(rule_abbr => {
-      initial_visibility[rule_abbr] = true;
-    })
-    return initial_visibility;
-  });
+  const [rule_visibility, set_rule_visibility] = useState(undefined);
   
 
   useEffect(() => {
     const [ballot_type_promise, ballot_type_abort_controller] = get_ballot_types();
     let [rule_promise, rule_abort_controller] = get_rules();
 
-    ballot_type_promise.then(response => {
-      const ballot_type_array = response.data;
+    Promise.all([ballot_type_promise, rule_promise]).then(([ballot_type_response, rule_response]) => {
+      const ballot_type_array = ballot_type_response.data;
       const ballot_type_map = new Map(ballot_type_array.map(ballot_type => [ballot_type.name, ballot_type]));
       set_ballot_types(ballot_type_map);
-      set_ballot_type_selected(response.data[0].name)
+      set_ballot_type_selected(ballot_type_response.data[0].name)
+
+      // assign a color to each rule
+      if(rule_response){
+        rule_response.data.forEach((rule_family, family_index) => {
+          ballot_type_map.forEach(ballot_type => {
+            rule_family.elements.filter(rule => rule.applies_to.includes(ballot_type.name)).forEach((rule, index) => {
+              rule.color = get_rule_color(family_index, index);
+            });
+            rule_family.color_from = get_rule_color(family_index, 0);
+            rule_family.color_to = get_rule_color(family_index, rule_family.elements.length-1);
+          })
+        });
+      }
+
+      set_rule_families(rule_response.data);
+
     }).catch(() => {
       set_ballot_types(undefined);
-    })
-
-    rule_promise.then(response => {
-      set_rule_families(response.data);
-    }).catch(() => {
       set_rule_families(undefined);
     })
 
@@ -56,6 +61,17 @@ function Main() {
   }, []);
 
 
+  useEffect(() => {
+    if (ballot_type_selected){
+      let new_rule_visibility = {}; 
+        default_rules_visible[ballot_type_selected].forEach(rule_abbr => {
+          new_rule_visibility[rule_abbr] = true;
+        })
+        set_rule_visibility(new_rule_visibility);
+    }
+  }, [ballot_type_selected]);
+  
+  
   const render_ballot_type_picker = () => {
     return ballot_types && (
       <Selector
@@ -80,6 +96,7 @@ function Main() {
       />
     )
   }
+
 
   const rule_families_filtered = useMemo(() => {
     if (rule_families && ballot_type_selected){

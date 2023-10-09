@@ -25,16 +25,16 @@ export const color_palette_rules = [
 ]
 
 
+// export const color_palette_rules = [
+//   ["#000d81", "#0a1cc2", "#1a2ff0", "#4154fa", "#7986ff"],
+//   ["#0da50d", "#0da50d", "#0da50d", "#0da50d", "#0da50d"],
+//   ["#b40000", "#d41818", "#ee3333", "#ff5959", "#ff8585"],
+//   ["#db8413", "#db8413", "#db8413", "#db8413", "#db8413"],
+//   ["#eb44dd", "#eb44dd", "#eb44dd", "#eb44dd", "#eb44dd"],
+//   ["#00b2c2", "#00b2c2", "#00b2c2", "#00b2c2", "#00b2c2"],
+//   ["#754c00", "#754c00", "#754c00", "#754c00", "#754c00"],
+// ]
 
-export const color_palette_rules_backup = [
-  ["#000d81", "#0a1cc2", "#1a2ff0", "#4154fa", "#7986ff"],
-  ["#0da50d", "#0da50d", "#0da50d", "#0da50d", "#0da50d"],
-  ["#b40000", "#d41818", "#ee3333", "#ff5959", "#ff8585"],
-  ["#db8413", "#db8413", "#db8413", "#db8413", "#db8413"],
-  ["#eb44dd", "#eb44dd", "#eb44dd", "#eb44dd", "#eb44dd"],
-  ["#00b2c2", "#00b2c2", "#00b2c2", "#00b2c2", "#00b2c2"],
-  ["#754c00", "#754c00", "#754c00", "#754c00", "#754c00"],
-]
 
 export const color_palette_ballot_types = [
   "#0a6d2b",
@@ -44,4 +44,9 @@ export const color_palette_ballot_types = [
 ]
 
 
-export const default_rules_visible = ["greedy_cost", "mes", "seq_phragmen"]
+export const default_rules_visible = {
+  approval: ["greedy_cost", "mes", "seq_phragmen"],
+  ordinal: ["greedy_borda", "mes_borda"],
+  cumulative: ["greedy_cardbal", "mes_cardbal"],
+  cardinal: ["greedy_cardbal", "mes_cardbal"],
+}

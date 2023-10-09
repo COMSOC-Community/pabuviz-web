@@ -216,7 +216,7 @@ export default function CompareElectionResults(props) {
           initial_election_filters={location.state && location.state.election_filters ? location.state.election_filters : {}}
         /> 
       </div>
-      <div className={styles.graphs_box}>
+      <div key={ballot_type_selected} className={styles.graphs_box}>
         {error ? 
           <NetworkError/> :
           rule_list && elections_selected.size > 0 ?
