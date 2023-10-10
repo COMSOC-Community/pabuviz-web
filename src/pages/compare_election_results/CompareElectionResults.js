@@ -18,7 +18,7 @@ const rule_properties_short_names = [
   "avg_cost_sat",
   "avg_relcost_sat",
   // "category_prop",
-  "equality",
+  "inverted_cost_gini",
   // "fairness",
   "prop_pos_sat",
 ]
