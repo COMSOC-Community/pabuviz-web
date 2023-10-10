@@ -7,7 +7,7 @@ import GeneralChart from './GeneralChart';
 import { satisfaction_histogram_explanation } from '../../constants/chart_explanations';
 
 
-export const graph_options = (api_response, parent_props_constant, parent_props_variable, graph_data) => {
+export const get_graph_options = (api_response, parent_props_constant, parent_props_variable, graph_data) => {
   const annotations = {}
   if (api_response && parent_props_constant && parent_props_variable) {
     parent_props_constant.rules.forEach((rule, index) => {
@@ -157,7 +157,7 @@ const api_request = (props_constant) => {
 }
 
 
-const generate_corner_info_text = (api_response, props_constant, props_variable, graph_data) => {
+const generate_corner_info = (api_response, props_constant, props_variable, graph_data) => {
   if (api_response){
     return "Number of elections: " + api_response.meta_data.num_elections.toString();
   } else {
@@ -190,13 +190,13 @@ export default function SatisfactionHistogram(props) {
       chart_id={"satisfaction_histogram"}
       compute_graph_data={compute_graph_data}
       update_graph_data={update_graph_data}
-      generate_corner_info_text={hide_num_elections ? null : generate_corner_info_text}
+      generate_corner_info={hide_num_elections ? null : generate_corner_info}
       generate_tooltip_info={() => satisfaction_histogram_explanation}
       api_request={api_request}
       parent_props_constant={props_constant}
       parent_props_variable={props_variable}
       generate_export_data={generate_export_data}
-      get_graph_options={graph_options}
+      get_graph_options={get_graph_options}
       chart_component={Line}
     />
   );

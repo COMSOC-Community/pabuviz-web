@@ -19,6 +19,7 @@ import {
   defaults
 } from 'chart.js';
 import annotationPlugin from 'chartjs-plugin-annotation';
+import FileUpload from './components/reusables/FileUpload';
 
 Chart.register(
   LinearScale, LogarithmicScale, CategoryScale, RadialLinearScale,
@@ -63,7 +64,7 @@ function App() {
         },
         {
           path: "upload_election",
-          element: "Coming soon...",
+          element: <FileUpload />,
         },
       ],
     },

@@ -4,7 +4,7 @@ import NetworkError from "../reusables/NetworkError";
 import ActivityIndicator from "../reusables/ActivityIndicator";
 import { get_projects } from "../../utils/database_api";
 import LegendItem from "../reusables/LegendItem";
-import { clone, format_number_string } from '../../utils/utils';
+import { capitalize_first_letter, clone, format_number_string } from '../../utils/utils';
 import Boolean from '../reusables/Boolean';
 import ElectionData from './ElectionData';
 
@@ -151,14 +151,14 @@ export default function ElectionProjectsInfo(props) {
                   <div className={styles.table_headers_non_rule}>
                     <div 
                       className={styles.project_name_column}
-                      style={{textAlign: "center"}} 
+                      style={{textAlign: "center", cursor: "default"}} 
                       onClick={() => set_new_sorting("name", true)}
                     > 
                       {render_project_header_text("Project Name", "name")}
                     </div>
                     <div
                       className={styles.project_cost_column}
-                      style={{textAlign: "center"}} 
+                      style={{textAlign: "center", cursor: "default"}} 
                       onClick={() => set_new_sorting("cost", true)}
                     >
                       {render_project_header_text("Cost", "cost")}
@@ -172,12 +172,12 @@ export default function ElectionProjectsInfo(props) {
                     <div className={styles.center_header}>
                       <div className={styles.center_header_zero_width}>
                         <div className={styles.header_rotator} style={{rotate: "-45deg", translate: "-2px 10px"}}>
-                          <div 
+                          <div
                             className={styles.legend_item_container}
                             onClick={() => set_new_sorting(rule.abbreviation, false)}
                           >
                             <LegendItem color={rule.color}>
-                              {render_project_header_text(rule.name, rule.abbreviation)}
+                              {render_project_header_text(capitalize_first_letter(rule.name), rule.abbreviation)}
                             </LegendItem>
                           </div>
                         </div>

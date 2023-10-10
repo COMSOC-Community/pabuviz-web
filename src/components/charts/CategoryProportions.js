@@ -3,7 +3,7 @@ import { Bar } from 'react-chartjs-2';
 
 import { get_category_proportions } from '../../utils/database_api';
 import GeneralChart from './GeneralChart';
-import { get_chart_color, transparentize } from '../../utils/utils';
+import { capitalize_first_letter, get_chart_color, transparentize } from '../../utils/utils';
 import { category_proportions_explanation } from '../../constants/chart_explanations';
 
 
@@ -53,7 +53,7 @@ const update_graph_data = (api_response, props_constant, props_variable, old_gra
   }
 
   let datasets = [];
-  let labels = ["Vote share"].concat(rules.map(rule => rule.name));
+  let labels = ["Vote share"].concat(rules.map(rule => capitalize_first_letter(rule.name)));
 
   api_response.category_names.forEach((category_name, index) => {
     let data = [

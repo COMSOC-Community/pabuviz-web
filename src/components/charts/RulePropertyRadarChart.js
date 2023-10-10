@@ -6,7 +6,7 @@ import GeneralChart from './GeneralChart';
 import { rule_property_radar_chart_explanation } from '../../constants/chart_explanations';
 
 
-export const graph_options = (api_response, parent_props_constant, parent_props_variable, graph_data) => ({
+export const get_graph_options = (api_response, parent_props_constant, parent_props_variable, graph_data) => ({
   scales: {
     r: {
       min: -0.3,
@@ -37,19 +37,12 @@ export const graph_options = (api_response, parent_props_constant, parent_props_
 
 
 const initial_graph_data = (props_constant) => {
-  let initial_graph_data;
   if (props_constant && props_constant.rule_properties){
-    initial_graph_data = {
+    return {
       labels: props_constant.rule_properties.map(property => capitalize_first_letter(property.name)),
       datasets: []
-    };
-  } else {
-    initial_graph_data = {
-      labels: [],
-      datasets: []
-    }
+    };;
   }
-  return initial_graph_data;
 }
 
 
@@ -134,7 +127,7 @@ const generate_export_data = (api_response, parent_props_constant, parent_props_
 }
 
 
-const generate_corner_info_text = (api_response, props_constant, props_variable, graph_data) => {
+const generate_corner_info = (api_response, props_constant, props_variable, graph_data) => {
   if (api_response){
     return "Number of elections: " + api_response.meta_data.num_elections.toString();
   } else {
@@ -142,6 +135,26 @@ const generate_corner_info_text = (api_response, props_constant, props_variable,
   }
 }
 
+
+const generate_tooltip_info = (api_response, props_constant, props_variable, graph_data) => {
+  if (props_constant){
+    return (
+      <div>
+        {rule_property_radar_chart_explanation}
+        {props_constant.rule_properties.map(property => (
+          <div key={property.name}>
+            <br/>
+            <span style={{fontWeight: "bold"}}>{capitalize_first_letter(property.name) + ": "}</span>
+            <br/>
+            {capitalize_first_letter(property.description)}
+          </div>
+        
+        ))}
+        
+      </div>
+    );
+  }
+}
 
 const api_request = (props_constant) => {
   let [rule_result_property_promise, abort_controller] = get_rule_result_properties(
@@ -183,13 +196,13 @@ export default function RulePropertyRadarChart(props) {
         initial_graph_data={initial_graph_data}
         // compute_graph_data={compute_graph_data}
         update_graph_data={update_graph_data}
-        generate_corner_info_text={hide_num_elections ? null : generate_corner_info_text}
-        generate_tooltip_info={() => rule_property_radar_chart_explanation}
+        generate_corner_info={hide_num_elections ? null : generate_corner_info}
+        generate_tooltip_info={generate_tooltip_info}
         generate_export_data={generate_export_data}
         api_request={api_request}
         parent_props_constant={props_constant}
         parent_props_variable={props_variable}
-        get_graph_options={graph_options}
+        get_graph_options={get_graph_options}
         chart_component={Radar}
       />
     </>

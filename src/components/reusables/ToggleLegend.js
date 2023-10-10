@@ -1,4 +1,4 @@
-import { get_ballot_type_color } from "../../utils/utils";
+import { capitalize_first_letter, get_ballot_type_color } from "../../utils/utils";
 import LegendItem from "./LegendItem";
 import styles from './ToggleLegend.module.css'
 
@@ -26,10 +26,10 @@ export default function ToggleLegend(props) {
       >
         <LegendItem
           color={get_ballot_type_color(index)}
-          tooltip_text={item.description}
+          tooltip_text={capitalize_first_letter(item.description)}
         >
           <div className={styles.legend_text}>
-            {item.name}
+            {capitalize_first_letter(item.name)}
           </div>
         </LegendItem>
       </div>

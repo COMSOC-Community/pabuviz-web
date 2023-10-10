@@ -48,7 +48,7 @@ export default function RulePicker(props) {
           style={{opacity: visibility[rule.abbreviation] ? 1 : 0.4}}
           onClick={() => on_rule_click(rule.abbreviation)}
         >
-          <LegendItem color={rule.color} tooltip_text={rule.description}>
+          <LegendItem color={rule.color} tooltip_text={capitalize_first_letter(rule.description)}>
             <div className={styles.legend_text}>
               {capitalize_first_letter(rule.name)}
             </div>

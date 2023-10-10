@@ -34,19 +34,6 @@ function Main() {
       set_ballot_types(ballot_type_map);
       set_ballot_type_selected(ballot_type_response.data[0].name)
 
-      // assign a color to each rule
-      if(rule_response){
-        rule_response.data.forEach((rule_family, family_index) => {
-          ballot_type_map.forEach(ballot_type => {
-            rule_family.elements.filter(rule => rule.applies_to.includes(ballot_type.name)).forEach((rule, index) => {
-              rule.color = get_rule_color(family_index, index);
-            });
-            rule_family.color_from = get_rule_color(family_index, 0);
-            rule_family.color_to = get_rule_color(family_index, rule_family.elements.length-1);
-          })
-        });
-      }
-
       set_rule_families(rule_response.data);
 
     }).catch(() => {
@@ -101,8 +88,14 @@ function Main() {
   const rule_families_filtered = useMemo(() => {
     if (rule_families && ballot_type_selected){
       let new_rule_families = clone(rule_families);
-      new_rule_families.forEach((rule_family, index) => {
+      new_rule_families.forEach((rule_family, family_index) => {
         rule_family.elements = rule_family.elements.filter(rule => rule.applies_to.includes(ballot_type_selected))
+        // assign colors here
+        rule_family.elements.forEach((rule, index) => {
+          rule.color = get_rule_color(family_index, index);
+        });
+        rule_family.color_from = get_rule_color(family_index, 0);
+        rule_family.color_to = get_rule_color(family_index, rule_family.elements.length-1);
       })
       return new_rule_families;
     }

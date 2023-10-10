@@ -20,7 +20,7 @@ const rule_properties_short_names = [
   // "category_prop",
   "equality",
   // "fairness",
-  "happiness",
+  "prop_pos_sat",
 ]
 
 const election_sections = [

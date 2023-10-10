@@ -121,13 +121,12 @@ export default function ElectionSizePlot(props) {
     navigate('compare_elections', {state: {election_selected: election}});
   }
 
-
   return (
     <GeneralChart 
       chart_id={"election_size_plot"}
       compute_graph_data={compute_graph_data}
       update_graph_data={update_graph_data}
-      // generate_corner_info_text={generate_corner_info_text}
+      // generate_corner_info={generate_corner_info}
       parent_props_constant={props_constant}
       parent_props_variable={props_variable}
       get_graph_options={() => graph_options}
