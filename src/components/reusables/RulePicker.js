@@ -66,9 +66,9 @@ export default function RulePicker(props) {
 
   let children_list = rule_families.map(rule_family => {
     let children_renders = []
-    console.log(rule_family)
     children_renders.push(
       <RulePicker
+        key={rule_family.name}
         rule_families={rule_family.sub_families}
         visibility={visibility}
         set_visibility={set_visibility}
