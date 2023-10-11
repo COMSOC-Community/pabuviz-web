@@ -6,18 +6,7 @@ import { get_rule_properties, get_election_properties } from '../../utils/databa
 import NetworkError from '../../components/reusables/NetworkError';
 import { useOutletContext } from 'react-router-dom';
 import ElectionFilterList from '../../components/elections/ElectionFilterList';
-
-
-const rule_properties_short_names = [
-  "avg_nrmcard_sat",
-  "avg_nrmcost_sat",
-  "avg_relcard_sat",
-  "avg_relcost_sat",
-  "category_prop",
-  "inverted_cost_gini",
-  // "fairness",
-  "inverted_cost_gini",
-]
+import { radar_chart_multiple_elections_property_short_names } from '../../constants/constants';
 
 
 const election_filter_properties_short_names = [
@@ -45,7 +34,7 @@ export default function CompareRuleProperties(props) {
   useEffect(() => {
     if (ballot_type_selected){
       let [rule_properties_promise, rule_properties_abort_controller]
-        = get_rule_properties(rule_properties_short_names);
+        = get_rule_properties(radar_chart_multiple_elections_property_short_names[ballot_type_selected]);
       let [election_filter_properties_promise, election_filter_properties_abort_controller]
         = get_election_properties(election_filter_properties_short_names, ballot_type_selected);
       

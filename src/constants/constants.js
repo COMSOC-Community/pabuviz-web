@@ -15,13 +15,12 @@ export const color_palette_general = [
 
 
 export const color_palette_rules = [
-  ["#00630d", "#009100", "#20c000", "#8dda00", "#c9f700"],
-  ["#000d81", "#0037cf", "#005fec", "#1990ff", "#52abff"],
   ["#c06600", "#df8600", "#f0b000", "#f7d200", "#fffb00"],
-  ["#860000", "#c70d0d", "#fd2554", "#ff378a", "#ff45d0"],
-  ["#eb44dd", "#eb44dd", "#eb44dd", "#eb44dd", "#eb44dd"],
-  ["#00b2c2", "#00b2c2", "#00b2c2", "#00b2c2", "#00b2c2"],
+  ["#00630d", "#009100", "#20c000", "#8dda00", "#c9f700"],
+  ["#860000", "#c70d0d", "#fd2554", "#ff378a", "#ff45d0", "#bd4cda", "#8c3eb9", "#632999", "#4c189e"],
   ["#754c00", "#754c00", "#754c00", "#754c00", "#754c00"],
+  ["#000d81", "#0037cf", "#005fec", "#1990ff", "#52abff"],
+  ["#00b2c2", "#00b2c2", "#00b2c2", "#00b2c2", "#00b2c2"],
 ]
 
 
@@ -45,8 +44,67 @@ export const color_palette_ballot_types = [
 
 
 export const default_rules_visible = {
-  approval: ["greedy_cost", "mes", "seq_phragmen"],
-  ordinal: ["greedy_borda", "mes_borda"],
-  cumulative: ["greedy_cardbal", "mes_cardbal"],
-  cardinal: ["greedy_cardbal", "mes_cardbal"],
+  approval: ["greedy_cost", "max_cost", "mes_cost", "seq_phragmen"],
+  ordinal: ["greedy_borda", "max_borda", "mes_borda"],
+  cumulative: ["greedy_cardbal", "max_add_card", "mes_cardbal"],
+  cardinal: ["greedy_cardbal", "max_add_card", "mes_cardbal"],
+}
+
+
+export const radar_chart_single_election_property_short_names = {
+  approval: [
+    "avg_card_sat",
+    "avg_relcard_sat",
+    "avg_cost_sat",
+    "avg_relcost_sat",
+    "inverted_cost_gini",
+    "prop_pos_sat",
+  ],
+  ordinal: [
+    "avg_borda_sat",
+    "inverted_borda_gini",
+    "prop_pos_sat_ord",
+  ],
+  cumulative: [
+    "avg_sat_cardbal",
+    "avg_relsat_cardbal",
+    "inverted_cardbal_gini",
+    "prop_pos_sat",
+  ],
+  cardinal: [
+    "avg_sat_cardbal",
+    "avg_relsat_cardbal",
+    "inverted_cardbal_gini",
+    "prop_pos_sat",
+  ],  
+}
+
+
+export const radar_chart_multiple_elections_property_short_names = {
+  approval: [
+    "avg_nrmcard_sat",
+    "avg_nrmcost_sat",
+    "avg_relcard_sat",
+    "avg_relcost_sat",
+    "category_prop",
+    "inverted_cost_gini",
+    "prop_pos_sat",
+  ],
+  ordinal: [
+    // "avg_borda_sat",
+    "inverted_borda_gini",
+    "prop_pos_sat_ord",
+  ],
+  cumulative: [
+    // "avg_sat_cardbal",
+    "avg_relsat_cardbal",
+    "inverted_cardbal_gini",
+    "prop_pos_sat",
+  ],
+  cardinal: [
+    // "avg_sat_cardbal",
+    "avg_relsat_cardbal",
+    "inverted_cardbal_gini",
+    "prop_pos_sat",
+  ],  
 }

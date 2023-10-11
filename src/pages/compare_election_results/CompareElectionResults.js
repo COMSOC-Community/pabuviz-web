@@ -11,17 +11,8 @@ import ElectionData from '../../components/elections/ElectionData';
 import ElectionProjectsInfo from '../../components/elections/ElectionProjectsInfo';
 import Collapsable from '../../components/reusables/Collapsable';
 import { clone } from '../../utils/utils';
+import { radar_chart_single_election_property_short_names } from '../../constants/constants';
 
-const rule_properties_short_names = [
-  "avg_card_sat",
-  "avg_relcard_sat",
-  "avg_cost_sat",
-  "avg_relcost_sat",
-  // "category_prop",
-  "inverted_cost_gini",
-  // "fairness",
-  "prop_pos_sat",
-]
 
 const election_sections = [
   { 
@@ -194,7 +185,7 @@ export default function CompareElectionResults(props) {
 
 
   useEffect(() => {
-    let [rule_properties_promise, abort_controller] = get_rule_properties(rule_properties_short_names);
+    let [rule_properties_promise, abort_controller] = get_rule_properties(radar_chart_single_election_property_short_names[ballot_type_selected]);
     rule_properties_promise.then((response) => {
       if (response){
         set_rule_properties(response.data)    
@@ -202,7 +193,7 @@ export default function CompareElectionResults(props) {
     }).catch(() => set_error(true));
 
     return () => abort_controller.abort();
-  }, []);
+  }, [ballot_type_selected]);
 
 
   return (

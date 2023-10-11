@@ -342,7 +342,7 @@ export default function GeneralChart(props) {
       }
       {error &&
         <div className={styles.overlay_container}>
-          <NetworkError error_text={error}/>
+          <NetworkError error_text={"error"}/>
         </div>
       }
     </div>

@@ -17,7 +17,8 @@ export default function RulePicker(props) {
 
 
   const render_header = (rule_family) => {
-    const active = rule_family.elements.some(rule => visibility[rule.abbreviation])
+    const active = rule_family.elements.some(rule => visibility[rule.abbreviation]) ||
+                    rule_family.sub_families.some(rule_sub_family => rule_sub_family.elements.some(rule => visibility[rule.abbreviation]))
     return (
       <div
         key={rule_family.name}
@@ -27,7 +28,7 @@ export default function RulePicker(props) {
           style={{opacity: active ? 1 : 0.4}}
           key={rule_family.name}
         >
-          <LegendItem color={rule_family.color_from} color_secondary={rule_family.color_to} tooltip_text={rule_family.description}>
+          <LegendItem color={rule_family.color_from} color_secondary={rule_family.color_to} tooltip_text={capitalize_first_letter(rule_family.description)}>
             <div className={styles.legend_text}>
               {capitalize_first_letter(rule_family.name)}
             </div>
@@ -38,7 +39,7 @@ export default function RulePicker(props) {
   }
 
 
-  const render_item = (rule) => {
+  const render_rule = (rule) => {
     return (
       <div
         key={rule.name}
@@ -64,20 +65,24 @@ export default function RulePicker(props) {
   })
 
   let children_list = rule_families.map(rule_family => {
-    return rule_family.elements.map(rule => {
-      return render_item(rule);
+    let children_renders = []
+    console.log(rule_family)
+    children_renders.push(
+      <RulePicker
+        rule_families={rule_family.sub_families}
+        visibility={visibility}
+        set_visibility={set_visibility}
+        auto_collapse
+      />
+    )
+
+    rule_family.elements.forEach(rule => {
+      children_renders.push(render_rule(rule));
     })
+
+    return children_renders;
   });
 
-  rules.forEach(rule => {
-    if (!rule.rule_family){
-      header_list.push(
-        render_item(rule)
-      );
-      children_list.push(null);
-    }
-  });
-  
 
   return (
     <>

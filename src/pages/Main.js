@@ -86,17 +86,50 @@ function Main() {
 
 
   const rule_families_filtered = useMemo(() => {
+    const filter_by_ballot_type_selected = array => array.filter(item => item.applies_to.includes(ballot_type_selected))
+    const filter_non_empty = rule_families => rule_families.filter(rule_family => rule_family.elements.length > 0 || rule_family.sub_families.length > 0)
+
+
     if (rule_families && ballot_type_selected){
+      
       let new_rule_families = clone(rule_families);
+
+      new_rule_families = filter_by_ballot_type_selected(new_rule_families);
+
       new_rule_families.forEach((rule_family, family_index) => {
-        rule_family.elements = rule_family.elements.filter(rule => rule.applies_to.includes(ballot_type_selected))
-        // assign colors here
-        rule_family.elements.forEach((rule, index) => {
-          rule.color = get_rule_color(family_index, index);
+        rule_family.elements = filter_by_ballot_type_selected(rule_family.elements)
+        rule_family.sub_families = filter_by_ballot_type_selected(rule_family.sub_families)
+
+        // assign colors here, this is still messy
+        let rule_index = 0;
+
+        rule_family.sub_families.forEach((rule_sub_family) => {
+          rule_sub_family.elements = filter_by_ballot_type_selected(rule_sub_family.elements)
+
+          rule_sub_family.color_from = get_rule_color(family_index, rule_index);
+          
+          rule_sub_family.elements.forEach((rule) => {
+            rule.color = get_rule_color(family_index, rule_index);
+            rule_index += 1;
+          });
+
+          rule_sub_family.color_to = get_rule_color(family_index, rule_index-1);
+        });
+        
+        rule_family.sub_families = filter_non_empty(rule_family.sub_families)
+
+
+        rule_family.elements.forEach((rule) => {
+          rule.color = get_rule_color(family_index, rule_index);
+          rule_index += 1;
         });
         rule_family.color_from = get_rule_color(family_index, 0);
-        rule_family.color_to = get_rule_color(family_index, rule_family.elements.length-1);
+        rule_family.color_to = get_rule_color(family_index, rule_index-1);
+        
       })
+
+      new_rule_families = filter_non_empty(new_rule_families);
+
       return new_rule_families;
     }
     return null;
@@ -107,6 +140,11 @@ function Main() {
     if (rule_families_filtered){
       let new_rule_list = []
       rule_families_filtered.forEach(rule_family => {
+        rule_family.sub_families.forEach(rule_sub_family => {
+          rule_sub_family.elements.forEach(rule => {
+            new_rule_list.push(rule);
+          });
+        });
         rule_family.elements.forEach(rule => {
           new_rule_list.push(rule);
         });
