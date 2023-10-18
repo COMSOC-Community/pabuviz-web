@@ -1,10 +1,10 @@
+import { useEffect, useRef } from "react";
 import { color_palette_general, color_palette_rules, color_palette_ballot_types } from "../constants/constants";
 
 // TODO: replace by proper deep clone function
 export function clone(obj){
   return JSON.parse(JSON.stringify(obj));
 } 
-
 
 
 export function get_chart_color(index){
@@ -59,3 +59,26 @@ export function shorten_high_magnitude_number(number, decimal_places=1, min=1000
   }
   return number.toFixed(decimal_places);
 }
+
+
+export function useEffectSkipInitialExecution(func, dependencies, condition=true){
+  
+  const condotion_ref = useRef(condition);
+
+  const initial_execution = useRef(condotion_ref.current);
+  
+  useEffect(() => {
+    initial_execution.current = condotion_ref.current;
+  }, [condition]);
+  
+  useEffect(() => {
+    if (initial_execution.current){
+      initial_execution.current = false;
+    } else {
+      return func();
+    }
+  // disabled false positive eslint warning here:
+  }, dependencies); // eslint-disable-line react-hooks/exhaustive-deps
+}
+
+

@@ -333,7 +333,7 @@ export default function ElectionList(props) {
           </div>
           {elections_selected.size === 0 || <div className={styles.horizontal_separator}/>}
           <div className={styles.selected_list_container}>
-            {Array.from(elections_selected).map(([name, election], index) => render_election(election, index))}
+            {Array.from(elections_selected).map(([name, election], index) => election && render_election(election, index))}
           </div>
         </div>
       </div>

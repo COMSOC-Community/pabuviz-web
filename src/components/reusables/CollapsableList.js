@@ -3,6 +3,8 @@ import styles from './CollapsableList.module.css'
 import Collapsable from "./Collapsable";
 
 
+const animation_duration = 300;
+
 export default function CollapsableList(props) { 
 
   const children_refs = useRef(undefined)
@@ -13,6 +15,7 @@ export default function CollapsableList(props) {
     header_list.map((header, index) => !(initially_uncollapsed_indices && initially_uncollapsed_indices.includes(index)))
   );
 
+  const [animate, set_animate] = useState(false)
 
   const get_ref_map = () => {
     if (!children_refs.current) {
@@ -32,7 +35,9 @@ export default function CollapsableList(props) {
       new_collapsed = [...collapsed];
       new_collapsed[header_index] = !new_collapsed[header_index];
     }
+    set_animate(true);
     set_collapsed(new_collapsed);
+    setTimeout(() => set_animate(false), animation_duration);
   }
   
   
@@ -41,14 +46,6 @@ export default function CollapsableList(props) {
       {header_list.map((header, index) => (
         <div className={styles.container} key={index}>  
           <div className={styles.header} onClick={() => on_click(index)}>
-            {/* <div 
-              className={styles.indicator_container}
-              style={{rotate: collapsed[index] ? '0deg' : '90deg'}}
-            >
-              <div className={styles.indicator} style={{paddingLeft: collapsed[index] ? '3pt' : '0'}}>
-                
-              </div>
-            </div> */}
             {header}
             <div className={styles.indicator} style={{rotate: collapsed[index] ? "0deg" : "180deg"}}>
               {children_list[index] ? '▾' : ''}
@@ -65,7 +62,10 @@ export default function CollapsableList(props) {
               }
             }}
           >
-            <Collapsable collapsed={collapsed[index]}>
+            <Collapsable
+              collapsed={collapsed[index]}
+              animation_duration={animate ? animation_duration : 0}
+            >
               {children_list[index]}
             </Collapsable>
           </div>

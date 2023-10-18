@@ -1,17 +1,18 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import styles from './CompareElectionResults.module.css'
-import { get_rule_properties } from '../../utils/database_api';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import ElectionList from '../../components/elections/ElectionList';
 import SatisfactionHistogram from '../../components/charts/SatisfactionHistogram';
 import RulePropertyRadarChart from '../../components/charts/RulePropertyRadarChart';
-import {useLocation, useOutletContext} from 'react-router-dom';
 import CategoryProportion from '../../components/charts/CategoryProportions';
-import NetworkError from '../../components/reusables/NetworkError';
-import ElectionData from '../../components/elections/ElectionData';
 import ElectionProjectsInfo from '../../components/elections/ElectionProjectsInfo';
+import ElectionData from '../../components/elections/ElectionData';
 import Collapsable from '../../components/reusables/Collapsable';
-import { clone } from '../../utils/utils';
+import NetworkError from '../../components/reusables/NetworkError';
+import { get_rule_properties } from '../../utils/database_api';
+import {useLocation, useOutletContext} from 'react-router-dom';
+import { clone, useEffectSkipInitialExecution } from '../../utils/utils';
 import { radar_chart_single_election_property_short_names } from '../../constants/constants';
+import { UrlStateContext, useNamedUrlState } from '../../UrlParamsContextProvider';
+import styles from './CompareElectionResults.module.css'
 
 
 const election_sections = [
@@ -109,83 +110,87 @@ function ElectionGraphs(props) {
   const only_one_selected = elections_selected.size === 1;
 
   const election_filters = useMemo(() => (
-    Array.from(elections_selected).map(([name, election]) => ({name: {equals: election.name}}))
+    Array.from(elections_selected).map(([name, election]) => ({name: {equals: name}}))
   ), [elections_selected] )
 
   return Array.from(elections_selected).map(([name, election], election_index) => (
-    <div className={styles.election_container} key={name}>
-      <div className={styles.election_title}>
-        <p>
-          {election.unit + (election.subunit ? ", " + election.subunit : "") + ". " + new Date(election.date_begin).getFullYear()}
-        </p>
-      </div>
-      <div className={styles.election_body}>
-        {election_sections.map((section, section_index) => (
-          <div key={section.name} className={styles.section_container}>
-            <div
-              className={styles.section_title}
-              style={{}}
-              onClick={() => toggle_section_visibility(section_index)}
-            >
-              {election_index === 0 ? 
-                <>
-                  <div className={styles.indicator} style={{rotate: !section_visibility[section_index] ? "-90deg" : "0deg"}}>
-                    {'▾'}
+    election && (
+      <div className={styles.election_container} key={name}>
+        <div className={styles.election_title}>
+          <p>
+            {election.unit + (election.subunit ? ", " + election.subunit : "") + ". " + new Date(election.date_begin).getFullYear()}
+          </p>
+        </div>
+        <div className={styles.election_body}>
+          {election_sections.map((section, section_index) => (
+            <div key={section.name} className={styles.section_container}>
+              <div
+                className={styles.section_title}
+                style={{}}
+                onClick={() => toggle_section_visibility(section_index)}
+              >
+                {election_index === 0 ? 
+                  <>
+                    <div className={styles.indicator} style={{rotate: !section_visibility[section_index] ? "-90deg" : "0deg"}}>
+                      {'▾'}
+                    </div>
+                    <div className={styles.section_title_text}>
+                      {section.name}
+                    </div>
+                  </> :
+                  <></>                
+                }
+              </div>  
+              <Collapsable
+                collapsed={!section_visibility[section_index]}
+                animation_duration={400}
+                initial_height={section.height}
+              >
+                <div className={styles.section_content_wrapper}>
+                  <div
+                    key={section.name}
+                    className={styles.section_content_container}
+                    style={{
+                      width: only_one_selected ? section.width : "100%",
+                      height: section.height
+                    }}>
+                    {section.render(election, rules, rule_visibility, rule_properties, election_filters[election_index], only_one_selected)}
                   </div>
-                  <div className={styles.section_title_text}>
-                    {section.name}
-                  </div>
-                </> :
-                <></>                
-              }
-            </div>  
-            <Collapsable
-              collapsed={!section_visibility[section_index]}
-              animation_duration={400}
-              initial_height={section.height}
-            >
-              <div className={styles.section_content_wrapper}>
-                <div
-                  key={section.name}
-                  className={styles.section_content_container}
-                  style={{
-                    width: only_one_selected ? section.width : "100%",
-                    height: section.height
-                  }}>
-                  {section.render(election, rules, rule_visibility, rule_properties, election_filters[election_index], only_one_selected)}
                 </div>
-              </div>
-            </Collapsable>
-          </div>
+              </Collapsable>
+            </div>
         ))}
+        </div>
       </div>
-    </div>
+    )
   ))
 }
 
 export default function CompareElectionResults(props) { 
+  const url_state_context = useContext(UrlStateContext)
   
   const location = useLocation();
   const {ballot_type_selected, rule_list, rule_visibility} = useOutletContext();
-  const [elections_selected, set_elections_selected] =  useState(new Map());
+  const [elections_selected, set_elections_selected] =  useNamedUrlState(
+    "elections",
+    new Map(),
+    url_state_context,
+    es => es.size > 0 ? JSON.stringify(Array.from(es.keys())) : null,
+    es_string => new Map(JSON.parse(es_string).map(e_name => [e_name, null]))
+  );
   const [rule_properties, set_rule_properties] =  useState(undefined);
   
   const [error, set_error] = useState(false);
 
-  useEffect(() => {
+  useEffectSkipInitialExecution(() => {
     set_elections_selected(new Map([]))
-  }, [ballot_type_selected]);
-
-  
-  useEffect(() => {
-    if (location.state && location.state.election_selected){
-      set_elections_selected(new Map([[location.state.election_selected.name, location.state.election_selected]]));
-    }
-  }, [location]);
+  }, [ballot_type_selected], );
 
 
   useEffect(() => {
-    let [rule_properties_promise, abort_controller] = get_rule_properties(radar_chart_single_election_property_short_names[ballot_type_selected]);
+    let [rule_properties_promise, abort_controller] = get_rule_properties(
+      radar_chart_single_election_property_short_names[ballot_type_selected]
+    );
     rule_properties_promise.then((response) => {
       if (response){
         set_rule_properties(response.data)    

@@ -1,4 +1,4 @@
-import React from 'react';
+
 import {
   createBrowserRouter,
   RouterProvider
@@ -20,6 +20,7 @@ import {
 } from 'chart.js';
 import annotationPlugin from 'chartjs-plugin-annotation';
 import FileUpload from './components/reusables/FileUpload';
+import UrlParamsContextProvider from './UrlParamsContextProvider';
 
 Chart.register(
   LinearScale, LogarithmicScale, CategoryScale, RadialLinearScale,
@@ -31,11 +32,13 @@ Chart.register(
 
 // set the global defaults for our charts, can be overwritten with the options object
 // for each chart individually
-defaults.font.size = 14;
-defaults.scales.radialLinear.pointLabels.font.size = 14;
+defaults.font.size = 16;
+defaults.color = "#555555";
+defaults.scales.radialLinear.pointLabels.font.size = 16;
 defaults.plugins.title.display = true;
 defaults.plugins.title.font.weight = 'normal';
 defaults.plugins.title.font.size = 16;
+defaults.plugins.title.font.weight = 'bold';
 defaults.plugins.legend.display = false;
 defaults.maintainAspectRatio = false;
 defaults.scales.linear.title = {display: true};
@@ -43,11 +46,16 @@ defaults.scales.logarithmic.title = {display: true};
 
 
 function App() {
+
   // create the browser routes, they can be plugged in using <Outlet/> (see Main.js)
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <Main/>,
+      element: (
+        <UrlParamsContextProvider>
+          <Main/>
+        </UrlParamsContextProvider>
+      ),
       errorElement: <ErrorPage />,
       children: [
         {
@@ -64,16 +72,14 @@ function App() {
         },
         {
           path: "upload_election",
-          element: <FileUpload />,
+          element: <FileUpload/>,
         },
       ],
     },
   ]);
 
   return (
-    <RouterProvider router={router}>
-      <Main/>
-    </RouterProvider>
+    <RouterProvider router={router}/>
     );
   }
   

@@ -41,9 +41,6 @@ export const get_graph_options = (api_response) => {
     plugins: {
       title: {
         text: api_response ? capitalize_first_letter(api_response.meta_data.election_property.name) : "",
-        font: {
-          weight: 'normal'
-        }
       },
       tooltip:{
         mode: 'index',

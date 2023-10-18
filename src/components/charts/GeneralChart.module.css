@@ -28,14 +28,14 @@
 }
 
 .corner_info_text {
-  font-size: small;
+  font-size: 11pt;
   color: #555;
   padding-right: 3pt;
 }
 
 .info_symbol {
   font-weight: bold;
-  font-size: small;
+  font-size: 11pt;
   color: #555;
   margin-bottom: 1pt;
   padding: 0 3pt;
@@ -44,7 +44,7 @@
 
 .menu_symbol {
   font-weight: bold;
-  font-size: small;
+  font-size: 11pt;
   color: #555;
   margin-top: 1pt;
   padding: 0 3pt;

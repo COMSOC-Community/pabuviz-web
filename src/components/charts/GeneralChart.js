@@ -6,8 +6,7 @@ import NetworkError from '../reusables/NetworkError';
 import HoverTooltip from '../reusables/HoverTooltip';
 
 
-
-export const initial_graph_data_default = (props_constant) => {
+export const initial_graph_data_default = () => {
   return {
     labels: [],
     datasets: []

@@ -6,8 +6,7 @@ import { capitalize_first_letter } from "../../utils/utils";
 
 export default function RulePicker(props) { 
 
- 
-  const {rules, rule_families, visibility, set_visibility, auto_collapse} = props;
+  const {rule_families, visibility, set_visibility, auto_collapse} = props;
 
   const on_rule_click = (rule_abbr) => {
     let visibility_updated = {...visibility};

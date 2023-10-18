@@ -70,10 +70,10 @@ export default function DatabaseOverview(props) {
     return (
       <>
         <div className={styles.title_text}>
-          This is a welcoming text
+          Welcome to PB-viz
         </div>
         <div className={styles.info_text}>
-          This is a text giving some explanations of the web page. This text is very long, potentially even a lot longer than this.
+          PB-viz is an interactive computation and visualization tool for participatory budgeting.
         </div>
       </>
     )

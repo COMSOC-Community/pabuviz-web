@@ -111,7 +111,6 @@ const generate_export_data = (api_response, parent_props_constant, parent_props_
 
 
 export default function CategoryProportion(props) { 
-  // const navigate = useNavigate(); 
   const {election_name, rules, rule_visibility, render_delay} = props;
   
   const props_constant = useMemo(
