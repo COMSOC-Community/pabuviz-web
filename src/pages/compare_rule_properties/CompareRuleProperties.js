@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styles from './CompareRuleProperties.module.css'
 import RulePropertyRadarChart from '../../components/charts/RulePropertyRadarChart'
 import SatisfactionHistogram from '../../components/charts/SatisfactionHistogram';
@@ -7,6 +7,7 @@ import NetworkError from '../../components/reusables/NetworkError';
 import { useOutletContext } from 'react-router-dom';
 import ElectionFilterList from '../../components/elections/ElectionFilterList';
 import { radar_chart_multiple_elections_property_short_names } from '../../constants/constants';
+import { UrlStateContext } from '../../UrlParamsContextProvider';
 
 
 const election_filter_properties_short_names = [
@@ -23,7 +24,8 @@ const election_filters_defaults = {
 
 
 export default function CompareRuleProperties(props) { 
-  const {ballot_type_selected, rule_list, rule_visibility} = useOutletContext();
+  const {ballot_type_selected, rule_visibility} = useContext(UrlStateContext);
+  const {rule_list} = useOutletContext();
 
   const [rule_properties, set_rule_properties] =  useState(undefined);
   const [election_filter_properties, set_election_filter_properties] =  useState(undefined);

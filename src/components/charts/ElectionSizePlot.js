@@ -2,7 +2,7 @@ import React, { useContext, useMemo } from 'react';
 import { Scatter } from 'react-chartjs-2';
 import { transparentize, clone, get_ballot_type_color } from '../../utils/utils';
 import GeneralChart from './GeneralChart';
-import { useNavigate, useOutletContext } from 'react-router-dom';
+import { createSearchParams, useNavigate, useOutletContext } from 'react-router-dom';
 import { UrlStateContext } from '../../UrlParamsContextProvider';
 
 
@@ -100,7 +100,6 @@ export default function ElectionSizePlot(props) {
   
   const navigate = useNavigate(); 
   const {update_search_params_state} = useContext(UrlStateContext);
-  const {set_ballot_type_selected} = useOutletContext();
   const {elections, ballot_types, ballot_type_visibility} = props;
 
 
@@ -120,9 +119,13 @@ export default function ElectionSizePlot(props) {
 
   const on_click = (element, api_response, parent_props_constant, parent_props_variable, graph_data) => {
     let election = graph_data.datasets[element.datasetIndex].data[element.index].election;
-    set_ballot_type_selected(election.ballot_type)
-    update_search_params_state("elections", JSON.stringify([election.name]))
-    navigate('compare_elections');
+    navigate({
+      pathname: 'compare_elections',
+      search: createSearchParams({
+          ballot_type_selected: election.ballot_type,
+          elections_selected: JSON.stringify([election.name])
+        }).toString()
+    });
   }
 
   return (

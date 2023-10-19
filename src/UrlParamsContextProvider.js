@@ -1,6 +1,29 @@
-import React, { createContext, useCallback, useEffect, useRef, useState } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 import { useSearchParams } from "react-router-dom";
-import { clone } from './utils/utils';
+import { default_rules_visible } from './constants/constants';
+
+
+
+export const search_param_states_options = new Map([
+  ["ballot_type_selected", {
+    default: "approval",
+    global: true
+  }],
+  ["rule_visibility", {
+    default: deps => default_rules_visible[deps[0]].reduce((acc,curr) => {acc[curr] = true; return acc}, {}),
+    to_string: rv => JSON.stringify(Object.keys(rv).filter(key => rv[key])),
+    from_string: rv_string => JSON.parse(rv_string).reduce((acc,curr) => {acc[curr] = true; return acc}, {}),
+    dependencies: ["ballot_type_selected"],
+    global: true
+  }],
+  ["elections_selected", {
+    default: [],
+    dependencies: ["ballot_type_selected"],
+    to_string: JSON.stringify,
+    from_string: JSON.parse,
+    global: false
+  }]
+]);
 
 export const UrlStateContext = createContext();
 
@@ -14,76 +37,67 @@ export const UrlStateContext = createContext();
  * const {search_params_state, update_search_params_state} = useContext(UrlStateContext);
  * @returns {React.JSX.Element}
  */
-export default function UrlParamsContextProvider(props) {
-  const [search_params, set_search_params] = useSearchParams();
-  const initial_search_params_state = Object.fromEntries([...search_params]);
-
-  /** State that saves the url search params as a js object */
-  const [search_params_state, set_search_params_state] = useState(initial_search_params_state);
+export default function UrlParamsContextProvider(props) {  
   
+  const [search_params, set_search_params] = useSearchParams();
+  
+  const [search_param_states, set_search_param_states] = useState({});
+
   useEffect(() => {
-    const new_search_params = new URLSearchParams();
-    Object.entries(search_params_state).forEach(([key,value]) => {
-      if (value){
-        new_search_params.set(key, value);
+    const new_search_param_states = {}
+    search_param_states_options.forEach((options, key) => {
+      const from_string = options.from_string || (x=>x);
+      if (search_params.get(key)){
+        new_search_param_states[key] = from_string(search_params.get(key));
+      } else {
+        const default_value = typeof(options.default) === 'function' ? 
+          options.default(options.dependencies.map(dep_key => new_search_param_states[dep_key])) :
+          options.default
+        new_search_param_states[key] = default_value;
+      }
+    })
+    set_search_param_states(new_search_param_states);
+  }, [search_params, set_search_param_states]);
+  
+
+  const set_search_params_with_object = (new_search_params_obj) => {
+    search_param_states_options.forEach((options, key) => {
+      if(new_search_params_obj[key] !== undefined){
+        const to_string = options.to_string || (x=>x);
+        const new_value = to_string(new_search_params_obj[key]);
+        if (new_value){
+          search_params.set(key, new_value);
+        } else {
+          search_params.delete(key);
+        }
+        search_param_states_options.forEach((opt, k) => {
+          if (opt.dependencies && opt.dependencies.includes(key)){
+            search_params.delete(k);
+          }
+        }); 
       }
     });
-    set_search_params(new_search_params);
-  }, [search_params_state, set_search_params]);
+    set_search_params(search_params);
+  }
 
-  /** 
-   * Updater function for 'search_params_state'
-   * @param {string} key name of the url search parameter
-   * @param {string} value value of the url search parameter
-   */
-  const update_search_params_state = useCallback((key, value) => {
-    set_search_params_state(old_search_params_state => {
-      const new_search_params_state = clone(old_search_params_state)
-      new_search_params_state[key] = value;
-      return new_search_params_state;
-    })
-  }, [set_search_params_state])
-
+  const ballot_type_selected = search_param_states["ballot_type_selected"];
+  const set_ballot_type_selected = (ballot_type) => set_search_params_with_object({"ballot_type_selected": ballot_type});
+  const elections_selected = search_param_states["elections_selected"];
+  const set_elections_selected = (elections_selected) => set_search_params_with_object({"elections_selected": elections_selected});
+  const rule_visibility = search_param_states["rule_visibility"];
+  const set_rule_visibility = (rule_visibility) => set_search_params_with_object({"rule_visibility": rule_visibility});
+  
   return (
-    <UrlStateContext.Provider value={{search_params_state, update_search_params_state}}>
+    <UrlStateContext.Provider value={{
+      ballot_type_selected,
+      set_ballot_type_selected,
+      elections_selected,
+      set_elections_selected,
+      rule_visibility,
+      set_rule_visibility,
+      set_search_params_with_object
+    }}>
       {props.children}
     </UrlStateContext.Provider>
   )
 }
-
-
-/**
-  * Custom hook for states that should be synchonized with the url.
-  * Any state defined through this hook corresponds to a URL search parameter with the name 'name'
-  * and will be initialized by checking the URL and if no match was found using the 'default_value'. 
-  * @param {string} name name of the url search parameter
-  * @param {*} default_value default value for the state if search parameter of that name is not present
-  * @param {Object} context the UrlStateContext provided by the UrlParamsContextProvider
-  * @param {function} [to_string] function mapping the state to a string to be used in the URL, default: JSON.stringify
-  * @param {function} [from_string] function mapping the URL parameter string to the state, default: JSON.parse
- * @returns {React.JSX.Element}
- */
-export function useNamedUrlState(name, default_value, context, to_string=JSON.stringify, from_string=JSON.parse) {
-  const {search_params_state, update_search_params_state} = context;
-
-  const to_string_ref = useRef(to_string)
-  const from_string_ref = useRef(from_string)
-
-  
-  // define the state variable, check URL parameters, fallback to default_value
-  const [state, set_state] = useState(() => {
-    const param_value = search_params_state[name];
-    return param_value ? from_string_ref.current(param_value) : default_value;
-  });
-  
-
-  // update the url_search_params_state, whenever the state changes
-  useEffect(() => {
-    update_search_params_state(name, state && to_string_ref.current(state));
-  }, [state, name, update_search_params_state]);
-
-
-
-  // return the state and its set function 
-  return [state, set_state];
-} 

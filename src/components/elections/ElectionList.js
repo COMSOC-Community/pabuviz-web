@@ -1,6 +1,6 @@
 import { clone, format_number_string } from '../../utils/utils';
 import styles from './ElectionList.module.css'
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { get_elections, get_election_properties, get_election_details } from '../../utils/database_api';
 import ActivityIndicator from '../reusables/ActivityIndicator';
 import NetworkError from '../reusables/NetworkError';
@@ -64,7 +64,15 @@ const sort_elections = (elections, sorting) => {
 
 
 export default function ElectionList(props) { 
-  const {ballot_type, elections_selected, set_elections_selected, max_selected, initial_election_filters} = props;
+  const {
+    ballot_type,
+    elections_selected,
+    set_elections_selected,
+    elections_selected_data,
+    set_elections_selected_data,
+    max_selected,
+    initial_election_filters
+  } = props;
 
   const [elections, set_elections] =  useState(undefined);
   const [election_details, set_election_details] =  useState(undefined);
@@ -150,18 +158,37 @@ export default function ElectionList(props) {
   }, [elections, search_text, sorting]);
 
 
+  useEffect(() => {
+    set_elections_selected_data(old_elections_selected_data => {
+      const new_elections_selected_data = new Map();
+      elections_selected.forEach(name => {
+        if (old_elections_selected_data.has(name)){
+          new_elections_selected_data.set(name, old_elections_selected_data.get(name));
+        } else {
+          if (elections){
+            const election = elections.find(election => election.name === name)
+            if (election){
+              new_elections_selected_data.set(name, election);
+            }
+          }
+        }
+      });
+      return new_elections_selected_data;
+    })
+  }, [elections, elections_selected, set_elections_selected_data])
+
+
   const on_search_text_change = (new_search_text) => {
     set_search_text(new_search_text);
   }
 
-  const on_election_click = (election) => {
-    let new_elections_selected = new Map(elections_selected);
-
-    if (new_elections_selected.has(election.name)){
-      new_elections_selected.delete(election.name);
+  const on_election_click = (election_name) => {
+    let new_elections_selected = clone(elections_selected);
+    if (new_elections_selected.includes(election_name)){
+      new_elections_selected = new_elections_selected.filter(name => name !== election_name);
     } else {
-      if (!max_selected || new_elections_selected.size < max_selected){
-        new_elections_selected.set(election.name, election);
+      if (!max_selected || new_elections_selected.length < max_selected){
+        new_elections_selected.push(election_name);
       } else {
         return;
       }
@@ -258,12 +285,12 @@ export default function ElectionList(props) {
       <div 
         className={styles.election_container}
         key={election.name}
-        onClick={() => on_election_click(election)}
+        onClick={() => on_election_click(election.name)}
         style={{borderTopWidth: index && "1px"}}
       >
         <input 
           type="checkbox"
-          checked={elections_selected.has(election.name)}
+          checked={elections_selected.includes(election.name)}
           readOnly={true}
           className={styles.check_box}
         />
@@ -331,9 +358,9 @@ export default function ElectionList(props) {
               )
             }
           </div>
-          {elections_selected.size === 0 || <div className={styles.horizontal_separator}/>}
+          {elections_selected.length === 0 || <div className={styles.horizontal_separator}/>}
           <div className={styles.selected_list_container}>
-            {Array.from(elections_selected).map(([name, election], index) => election && render_election(election, index))}
+            {Array.from(elections_selected_data).map(([name, election], index) => election && render_election(election, index))}
           </div>
         </div>
       </div>

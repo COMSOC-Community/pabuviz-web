@@ -1,12 +1,23 @@
+import { search_param_states_options } from '../UrlParamsContextProvider';
 import styles from './SideNavigation.module.css'
 import {
-  NavLink, useLocation
+  NavLink, createSearchParams, useLocation, useSearchParams
 } from "react-router-dom";
 
 
 export default function SideNavigation(props) { 
 
-  const { search } = useLocation();
+  const [search_params, set_search_params] = useSearchParams();
+
+  const get_new_search_params_string = (old_search_params) => {
+    search_param_states_options.forEach((options, key) => {
+      if (!options.global){
+        old_search_params.delete(key);
+      }
+    });
+    return "?" + createSearchParams(old_search_params);
+  }
+
 
   return (
     <>
@@ -16,28 +27,40 @@ export default function SideNavigation(props) {
       <nav>
         <ul className={styles.nav_list}>
           <li>
-            <NavLink to={`/${search}`} className={({isActive}) => isActive ? styles.nav_link_active : styles.nav_link}>
+            <NavLink
+              to={`/${get_new_search_params_string(search_params)}`}
+              className={({isActive}) => isActive ? styles.nav_link_active : styles.nav_link}
+            >
               <p className={styles.nav_link_text}>
                 {"Main"}
               </p>
             </NavLink>
           </li>
           <li>
-            <NavLink to={`/compare_elections${search}`} className={({isActive}) => isActive ? styles.nav_link_active : styles.nav_link}>
+            <NavLink
+              to={`/compare_elections${get_new_search_params_string(search_params)}`}
+              className={({isActive}) => isActive ? styles.nav_link_active : styles.nav_link}
+            >
               <p className={styles.nav_link_text}>
                 {"Compare Elections"}
               </p>
             </NavLink>
           </li>
           <li>
-            <NavLink to={`/rules${search}`} className={({isActive}) => isActive ? styles.nav_link_active : styles.nav_link}>
+            <NavLink
+              to={`/rules${get_new_search_params_string(search_params)}`}
+              className={({isActive}) => isActive ? styles.nav_link_active : styles.nav_link}
+            >
               <p className={styles.nav_link_text}>
                 {"Compare Rules"}
               </p>
             </NavLink>
           </li>
           <li>
-            <NavLink to={`/upload_election${search}`} className={({isActive}) => isActive ? styles.nav_link_active : styles.nav_link}>
+            <NavLink
+              to={`/upload_election${get_new_search_params_string(search_params)}`}
+              className={({isActive}) => isActive ? styles.nav_link_active : styles.nav_link}
+            >
               <p className={styles.nav_link_text}>
                 {"Upload Election"}
               </p>

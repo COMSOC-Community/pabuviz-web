@@ -4,7 +4,7 @@ import { Bar } from 'react-chartjs-2';
 import { get_election_property_histogram } from '../../utils/database_api';
 import { capitalize_first_letter, shorten_high_magnitude_number, transparentize, clone, get_ballot_type_color } from '../../utils/utils';
 import GeneralChart from './GeneralChart';
-import { useNavigate, useOutletContext } from "react-router-dom";
+import { createSearchParams, useNavigate } from "react-router-dom";
 
 
 export const get_graph_options = (api_response) => {
@@ -167,7 +167,6 @@ const generate_tooltip_info = (api_response, parent_props_constant, parent_props
 
 export default function ElectionPropertyHistogram(props) { 
   const navigate = useNavigate(); 
-  const {set_ballot_type_selected} = useOutletContext();
 
   const {election_property_short_name, ballot_types, ballot_type_visibility, render_delay} = props;
   
@@ -202,8 +201,15 @@ export default function ElectionPropertyHistogram(props) {
       }
       
       let election_filters = {[parent_props_constant.election_property_short_name]: property_filter};
-      set_ballot_type_selected(parent_props_constant.ballot_types[element.datasetIndex].name);
-      navigate('compare_elections', {state: {election_filters: election_filters}});
+      navigate({
+        pathname: 'compare_elections',
+        search: createSearchParams({
+            ballot_type_selected: parent_props_constant.ballot_types[element.datasetIndex].name
+          }).toString(),
+      }, {
+        state: {election_filters: election_filters}
+      }
+      );
     }
 
 

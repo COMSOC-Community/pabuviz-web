@@ -8,34 +8,18 @@ import Selector from '../components/reusables/Selector';
 import RulePicker from '../components/reusables/RulePicker';
 import ActivityIndicator from '../components/reusables/ActivityIndicator';
 import { get_ballot_types, get_rules } from '../utils/database_api';
-import { capitalize_first_letter, clone, get_ballot_type_color, get_rule_color, useEffectSkipInitialExecution } from '../utils/utils';
+import { capitalize_first_letter, clone, get_ballot_type_color, get_rule_color } from '../utils/utils';
 import { Tooltip } from 'react-tooltip';
-import { default_rules_visible } from '../constants/constants';
-import { UrlStateContext, useNamedUrlState } from '../UrlParamsContextProvider';
+import { UrlStateContext } from '../UrlParamsContextProvider';
 import styles from './Main.module.css'
 
 // this is the page that will always be shown with the router navigation and the outlet showing
 // different pages depending on the route
 function Main() {
-  const url_state_context = useContext(UrlStateContext)
-
   const [ballot_types, set_ballot_types] =  useState(undefined)
   const [rule_families, set_rule_families] =  useState(undefined);
     
-  const [rule_visibility, set_rule_visibility] = useNamedUrlState(
-    "rule_visibility",
-    undefined,
-    url_state_context,
-    rv => JSON.stringify(Object.keys(rv).filter(key => rv[key])),
-    rv_string => JSON.parse(rv_string).reduce((acc,curr) => {acc[curr] = true; return acc}, {})
-  );
-  
-  const [ballot_type_selected, set_ballot_type_selected] = useNamedUrlState(
-    "ballot_type",
-    null,
-    url_state_context,
-  );
-
+  const {rule_visibility, set_rule_visibility, ballot_type_selected, set_ballot_type_selected} = useContext(UrlStateContext);
 
   useEffect(() => {
     const [ballot_type_promise, ballot_type_abort_controller] = get_ballot_types();
@@ -45,15 +29,6 @@ function Main() {
       const ballot_type_array = ballot_type_response.data;
       const ballot_type_map = new Map(ballot_type_array.map(ballot_type => [ballot_type.name, ballot_type]));
       set_ballot_types(ballot_type_map);
-  
-      
-      set_ballot_type_selected(old_ballot_type_selected => {
-        if (!old_ballot_type_selected){
-          return ballot_type_response.data[0].name
-        } else {
-          return old_ballot_type_selected;
-        }
-      });
   
       set_rule_families(rule_response.data);
 
@@ -66,15 +41,7 @@ function Main() {
       ballot_type_abort_controller.abort()
       rule_abort_controller.abort()
     }
-  }, [set_ballot_type_selected]);
-
-
-  useEffectSkipInitialExecution(() => {
-    if (ballot_type_selected){
-      let new_rule_visibility = default_rules_visible[ballot_type_selected].reduce((acc,curr) => {acc[curr] = true; return acc}, {})
-      set_rule_visibility(new_rule_visibility);
-    }
-  }, [ballot_type_selected, set_rule_visibility], rule_visibility != null);
+  }, []);
 
   
   const render_ballot_type_picker = () => {
@@ -193,10 +160,7 @@ function Main() {
           <div className={styles.content_container}> 
             { ballot_type_selected && rule_list && rule_visibility ?
               <Outlet context={{
-                ballot_type_selected: ballot_type_selected,
-                set_ballot_type_selected: set_ballot_type_selected,
                 rule_list: rule_list,
-                rule_visibility: rule_visibility
               }}/> :
               <ActivityIndicator/>
             }
@@ -206,8 +170,6 @@ function Main() {
               {rule_families_filtered && rule_visibility ? 
                 <RulePicker
                   rule_families={rule_families_filtered}
-                  visibility={rule_visibility}
-                  set_visibility={set_rule_visibility}
                   horizontal
                 /> :
                 <ActivityIndicator/>

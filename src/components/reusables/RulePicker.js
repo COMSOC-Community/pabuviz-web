@@ -2,22 +2,25 @@ import CollapsableList from "./CollapsableList";
 import styles from './RulePicker.module.css'
 import LegendItem from "./LegendItem";
 import { capitalize_first_letter } from "../../utils/utils";
+import { useContext } from "react";
+import { UrlStateContext } from "../../UrlParamsContextProvider";
 
 
 export default function RulePicker(props) { 
 
-  const {rule_families, visibility, set_visibility, auto_collapse} = props;
+  const {rule_families, visibility, auto_collapse} = props;
+  const {rule_visibility, set_rule_visibility} = useContext(UrlStateContext);
 
   const on_rule_click = (rule_abbr) => {
-    let visibility_updated = {...visibility};
+    let visibility_updated = {...rule_visibility};
     visibility_updated[rule_abbr] = !visibility_updated[rule_abbr]
-    set_visibility(visibility_updated)
+    set_rule_visibility(visibility_updated)
   }
 
 
   const render_header = (rule_family) => {
-    const active = rule_family.elements.some(rule => visibility[rule.abbreviation]) ||
-                    rule_family.sub_families.some(rule_sub_family => rule_sub_family.elements.some(rule => visibility[rule.abbreviation]))
+    const active = rule_family.elements.some(rule => rule_visibility[rule.abbreviation]) ||
+                    rule_family.sub_families.some(rule_sub_family => rule_sub_family.elements.some(rule => rule_visibility[rule.abbreviation]))
     return (
       <div
         key={rule_family.name}
@@ -45,7 +48,7 @@ export default function RulePicker(props) {
       >
         <div
           className={styles.legend_item}
-          style={{opacity: visibility[rule.abbreviation] ? 1 : 0.4}}
+          style={{opacity: rule_visibility[rule.abbreviation] ? 1 : 0.4}}
           onClick={() => on_rule_click(rule.abbreviation)}
         >
           <LegendItem color={rule.color} tooltip_text={capitalize_first_letter(rule.description)}>
@@ -69,8 +72,6 @@ export default function RulePicker(props) {
       <RulePicker
         key={rule_family.name}
         rule_families={rule_family.sub_families}
-        visibility={visibility}
-        set_visibility={set_visibility}
         auto_collapse
       />
     )
