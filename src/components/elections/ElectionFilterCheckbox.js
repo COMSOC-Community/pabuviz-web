@@ -1,8 +1,22 @@
+import { useState } from 'react';
 import { capitalize_first_letter, clone } from '../../utils/utils';
 import styles from './ElectionFilterCheckbox.module.css'
-import { useState } from 'react';
 
 
+/**
+ * React Component displaying a checkbox election filter, do not use directly, use ElectionFilterList component
+ * Careful: right now only supports 'positive' filters,
+ * i.e. it will set the filter to true if selected, but to undefined (no filter) if not selected 
+ * @param {object} props
+ * @param {object} props.election_property
+ * the election property (serialized ElectionDataproperty object of the django db)
+ * expected to have entries for 'name', 'short_name', 'description'
+ * @param {(object)=>void} props.set_election_filters
+ * the setter function of the election filter state of the parent
+ * @param {boolean} [props.initial_value]
+ * the initial value of the filter, default: false
+ * @returns {React.JSX.Element}
+ */
 export default function ElectionFilterCheckbox(props) { 
 
   const { initial_value, set_election_filters, election_property } = props;
@@ -19,7 +33,6 @@ export default function ElectionFilterCheckbox(props) {
 
     set_checked(!checked)
   }
-
 
   return (
     <div className={styles.filter} onClick={toggle_filter_state}>

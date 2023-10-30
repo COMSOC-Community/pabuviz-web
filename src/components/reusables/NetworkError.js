@@ -1,5 +1,11 @@
 import styles from './NetworkError.module.css'
 
+/**
+ * React Component for displaying an error text in the center of the parent element
+ * @param {object} props
+ * @param {string} [props.error_text] error message, defaults to "Network Error"
+ * @returns {React.JSX.Element}
+ */
 export default function NetworkError(props) { 
 
   return (

@@ -1,8 +1,19 @@
-import styles from './Selector.module.css'
 import { useEffect, useMemo, useRef, useState } from 'react';
 import Collapsable from './Collapsable';
+import styles from './Selector.module.css'
 
-
+/**
+ * React Component for displaying a dropdown selection
+ * @param {object} props
+ * @param {Map} props.items_map
+ * js Map object containing the items that can be selected
+ * @param {string} props.item_selected_key key of the item currently selected
+ * @param {(string)=>void} props.set_item_selected_key setter function for 'item_selected_key'
+ * @param {(any)=>React.JSX.Element} props.render_item render function for an item in items_map
+ * @param {boolean} [props.allow_deselect] whether an empty selection should be part of the selectable values, default: false
+ * @param {boolean} [props.invert] whether the dropdown should go upwards instead, default: false
+ * @returns {React.JSX.Element}
+ */
 export default function Selector(props) { 
 
   const {items_map, item_selected_key, set_item_selected_key, render_item, allow_deselect, invert} = props;

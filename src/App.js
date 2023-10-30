@@ -1,13 +1,16 @@
-
+import { useState } from "react";
 import {
   createBrowserRouter,
   RouterProvider
 } from "react-router-dom";
-import Main from './pages/Main';
+import UrlParamsContextProvider from './UrlParamsContextProvider';
+import Main from './pages/main/Main';
 import ErrorPage from './pages/ErrorPage';
 import CompareRuleProperties from './pages/compare_rule_properties/CompareRuleProperties';
 import DatabaseOverview from './pages/database_overview/DatabaseOverview';
 import CompareElectionResults from './pages/compare_election_results/CompareElectionResults';
+import FileUpload from './components/reusables/FileUpload';
+import { submit_pb_file } from "./utils/database_api";
 
 // here we need to import and register all elements implicitly used by any of our charts
 import {
@@ -19,8 +22,6 @@ import {
   defaults
 } from 'chart.js';
 import annotationPlugin from 'chartjs-plugin-annotation';
-import FileUpload from './components/reusables/FileUpload';
-import UrlParamsContextProvider from './UrlParamsContextProvider';
 
 Chart.register(
   LinearScale, LogarithmicScale, CategoryScale, RadialLinearScale,
@@ -43,6 +44,25 @@ defaults.plugins.legend.display = false;
 defaults.maintainAspectRatio = false;
 defaults.scales.linear.title = {display: true};
 defaults.scales.logarithmic.title = {display: true};
+
+
+function UploadElection() {
+
+  const [election, set_election] = useState(null);
+
+  return (
+    <div>
+      <FileUpload
+        file_type={".pb"}
+        api_request={submit_pb_file}
+        on_successful_upload={set_election}
+      />
+      {election && console.log(election) &&
+        <></>
+      }
+    </div>
+  )
+}
 
 
 function App() {
@@ -72,7 +92,7 @@ function App() {
         },
         {
           path: "upload_election",
-          element: <FileUpload/>,
+          element: <UploadElection/>,
         },
       ],
     },

@@ -22,14 +22,29 @@ const election_filter_properties_short_names = [
 ]
 
 
+/**
+ * React Component displaying a table of projects and whether they were selected by a rule of an election
+ * The rules will be displayed on top and will stick to the top end of the screen when scrolled down
+ * @param {object} props
+ * @param {object} props.election
+ * the election object (serialized Election object of the django db)
+ * all that is needed for this component to work is election.name
+ * if election.rule is present, then the rules are reordered to put that one first
+ * @param {object[]} props.rules
+ * array of rules (serialized Rule object of the django db)
+ * Each is expected to have entries for 'name', 'abbreviation' and additionally 'color'
+ * @param {object} props.visibility 
+ * object containing rule abbreviations as keys and whether they should be displayed as a value
+ * @param {int} props.top
+ * the top position for the sticky header
+ * @returns {React.JSX.Element}
+ */
 export default function ElectionProjectsInfo(props) {
 
   const {election, rules, visibility, top} = props;
 
   const [projects, set_projects] = useState(null);
-
   const [sorting, set_sorting] = useState({field: "name", ascending: true});
-
   const [error, set_error] = useState(false);
 
 
@@ -176,7 +191,7 @@ export default function ElectionProjectsInfo(props) {
                             className={styles.legend_item_container}
                             onClick={() => set_new_sorting(rule.abbreviation, false)}
                           >
-                            <LegendItem color={rule.color}>
+                            <LegendItem color={rule.color} tooltip_id={"main_tooltip"}>
                               {render_project_header_text(capitalize_first_letter(rule.name), rule.abbreviation)}
                             </LegendItem>
                           </div>

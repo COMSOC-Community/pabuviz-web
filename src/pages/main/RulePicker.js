@@ -1,14 +1,14 @@
-import CollapsableList from "./CollapsableList";
-import styles from './RulePicker.module.css'
-import LegendItem from "./LegendItem";
-import { capitalize_first_letter } from "../../utils/utils";
 import { useContext } from "react";
+import CollapsableList from "../../components/reusables/CollapsableList";
+import LegendItem from "../../components/reusables/LegendItem";
 import { UrlStateContext } from "../../UrlParamsContextProvider";
+import { capitalize_first_letter } from "../../utils/utils";
+import styles from './RulePicker.module.css'
 
 
 export default function RulePicker(props) { 
 
-  const {rule_families, visibility, auto_collapse} = props;
+  const {rule_families, auto_collapse} = props;
   const {rule_visibility, set_rule_visibility} = useContext(UrlStateContext);
 
   const on_rule_click = (rule_abbr) => {
@@ -30,7 +30,12 @@ export default function RulePicker(props) {
           style={{opacity: active ? 1 : 0.4}}
           key={rule_family.name}
         >
-          <LegendItem color={rule_family.color_from} color_secondary={rule_family.color_to} tooltip_text={capitalize_first_letter(rule_family.description)}>
+          <LegendItem
+            color={rule_family.color_from}
+            color_secondary={rule_family.color_to}
+            tooltip_text={capitalize_first_letter(rule_family.description)}
+            tooltip_id={"main_tooltip"}
+          >
             <div className={styles.legend_text}>
               {capitalize_first_letter(rule_family.name)}
             </div>
@@ -51,7 +56,11 @@ export default function RulePicker(props) {
           style={{opacity: rule_visibility[rule.abbreviation] ? 1 : 0.4}}
           onClick={() => on_rule_click(rule.abbreviation)}
         >
-          <LegendItem color={rule.color} tooltip_text={capitalize_first_letter(rule.description)}>
+          <LegendItem
+            color={rule.color}
+            tooltip_text={capitalize_first_letter(rule.description)}
+            tooltip_id={"main_tooltip"}
+          >
             <div className={styles.legend_text}>
               {capitalize_first_letter(rule.name)}
             </div>

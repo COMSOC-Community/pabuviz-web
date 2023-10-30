@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import styles from './DatabaseOverview.module.css'
-import ActivityIndicator from '../../components/reusables/ActivityIndicator'
-import ElectionSizePlot from '../../components/charts/ElectionSizePlot'
-import { get_elections } from '../../utils/database_api';
-import ElectionPropertyHistogram from '../../components/charts/ElectionPropertyHistogram';
-import NetworkError from '../../components/reusables/NetworkError';
 import ToggleLegend from '../../components/reusables/ToggleLegend';
+import ElectionSizePlot from '../../components/charts/ElectionSizePlot'
+import ElectionPropertyHistogram from '../../components/charts/ElectionPropertyHistogram';
+import ActivityIndicator from '../../components/reusables/ActivityIndicator'
+import NetworkError from '../../components/reusables/NetworkError';
+import { get_elections } from '../../utils/database_api';
+import styles from './DatabaseOverview.module.css'
 
 
 const election_property_short_names = [
@@ -99,6 +99,7 @@ export default function DatabaseOverview(props) {
                 visibility={ballot_type_visibility}
                 set_visibility={set_ballot_type_visibility}
                 horizontal={true}
+                tooltip_id="main_tooltip"
               />
               <div className={styles.graphs_container}>
                 <div className={styles.graph_container}>

@@ -2,11 +2,11 @@ import { clone, format_number_string } from '../../utils/utils';
 import styles from './ElectionList.module.css'
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { get_elections, get_election_properties, get_election_details } from '../../utils/database_api';
-import ActivityIndicator from '../reusables/ActivityIndicator';
-import NetworkError from '../reusables/NetworkError';
-import HoverTooltip from '../reusables/HoverTooltip';
-import ElectionData from './ElectionData';
-import ElectionFilterList from './ElectionFilterList';
+import ActivityIndicator from '../../components/reusables/ActivityIndicator';
+import NetworkError from '../../components/reusables/NetworkError';
+import HoverTooltip from '../../components/reusables/HoverTooltip';
+import ElectionData from '../../components/elections/ElectionData';
+import ElectionFilterList from '../../components/elections/ElectionFilterList';
 
 
 const election_filter_properties_short_names = [
@@ -61,7 +61,6 @@ const sort_elections = (elections, sorting) => {
     return (primary.ascending ? comp_prim : -comp_prim) || (secondary.ascending ? comp_sec : -comp_sec);
   });
 }
-
 
 export default function ElectionList(props) { 
   const {

@@ -1,6 +1,17 @@
 import { useState } from 'react';
 import styles from './NumberTextInput.module.css'
 
+/**
+ * React Component that shows a text input for only numbers. It controls a state that is passed from the parent via set_value
+ * @param {object} props
+ * @param {string} props.type either "int" or "float", will allow a decimal point if float
+ * @param {(number)=>void} props.set_value
+ * function to be called, whenever the value of the input changes
+ * this will usually be a setter function of a parent state
+ * @param {string} [props.placeholder] placeholder text to be displayed if input is empty
+ * @param {number} [props.initial_value] initial value
+ * @returns {React.JSX.Element}
+ */
 export default function NumberTextInput(props) { 
 
 

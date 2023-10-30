@@ -1,5 +1,18 @@
 import styles from './LegendItem.module.css'
 
+/**
+ * React Component for displaying a text with a colored box next to it (as part of a legend)
+ * Requires a react-tooltip Tooltip with tooltip_id to be defined somewhere up in the component tree
+ * @param {object} props
+ * @param {string} props.color hex string, color of the colored box
+ * @param {string} [props.color_secondary]
+ * hex string, secondary color of the box
+ * if given the box will have a linear gradient from color to secondary_color
+ * @param {React.JSX.Element[]} props.children elements to be contained next to the colored box
+ * @param {string} props.tooltip_text text content of the tooltip
+ * @param {string} props.tooltip_id id of the react tooltip Tooltip component
+ * @returns {React.JSX.Element}
+ */
 export default function LegendItem(props) { 
 
   const {color, color_secondary, children, tooltip_text, tooltip_id} = props;
@@ -9,7 +22,7 @@ export default function LegendItem(props) {
     <>
       <div
         className={styles.container}
-        data-tooltip-id={tooltip_id || "main_tooltip"}
+        data-tooltip-id={tooltip_id}
         data-tooltip-content={tooltip_text}
       >
         <div

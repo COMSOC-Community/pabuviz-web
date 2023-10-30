@@ -1,13 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react';
-import styles from './CompareRuleProperties.module.css'
+import ElectionFilterList from '../../components/elections/ElectionFilterList';
 import RulePropertyRadarChart from '../../components/charts/RulePropertyRadarChart'
 import SatisfactionHistogram from '../../components/charts/SatisfactionHistogram';
-import { get_rule_properties, get_election_properties } from '../../utils/database_api';
 import NetworkError from '../../components/reusables/NetworkError';
 import { useOutletContext } from 'react-router-dom';
-import ElectionFilterList from '../../components/elections/ElectionFilterList';
-import { radar_chart_multiple_elections_property_short_names } from '../../constants/constants';
 import { UrlStateContext } from '../../UrlParamsContextProvider';
+import { get_rule_properties, get_election_properties } from '../../utils/database_api';
+import { radar_chart_multiple_elections_property_short_names } from '../../constants/constants';
+import styles from './CompareRuleProperties.module.css'
 
 
 const election_filter_properties_short_names = [

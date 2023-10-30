@@ -1,12 +1,32 @@
-import styles from './ElectionData.module.css'
 import { useEffect, useState } from "react";
-import NetworkError from "../reusables/NetworkError";
+import Boolean from '../reusables/Boolean';
 import ActivityIndicator from "../reusables/ActivityIndicator";
+import NetworkError from "../reusables/NetworkError";
 import { get_election_details } from "../../utils/database_api";
 import { capitalize_first_letter, format_number_string } from '../../utils/utils';
-import Boolean from '../reusables/Boolean';
+import styles from './ElectionData.module.css'
 
 
+/**
+ * React Component displaying a table of details of an election
+ * Requires either props.election_details and props.election_filter_properties or props.election_filter_properties_short_names
+ * In the second case it will fetch the other two from the db
+ * @param {object} props
+ * @param {object} props.election
+ * the election object (serialized Election object of the django db)
+ * all that is needed for this component to work is election.name and election.ballot_type
+ * @param {object[]} [props.election_filter_properties]
+ * array of election properties (serialized ElectionDataproperty object of the django db)
+ * Each is expected to have entries for 'name', 'short_name', 'description',
+ * 'inner_type', and 'referencable_objects' if 'inner_type' is set to "refernece"
+ * @param {object} [props.election_details] 
+ * object containing a value for each properties short_name in props.election_filter_properties
+ * @param {string[]} [props.election_filter_properties_short_names]
+ * array of election property short names
+ * if this is given and election_filter_properties or election_details is missing
+ * the component will query the database for the given election and these election properties 
+ * @returns {React.JSX.Element}
+ */
 export default function ElectionData(props) {
 
   const {
@@ -22,7 +42,6 @@ export default function ElectionData(props) {
   });
 
   const [error, set_error] = useState(false);
-
 
 
   useEffect(() => {

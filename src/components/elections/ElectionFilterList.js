@@ -1,10 +1,23 @@
-import styles from './ElectionFilterList.module.css'
 import ElectionFilterCheckbox from "./ElectionFilterCheckbox"
 import ElectionFilterMinMax from "./ElectionFilterMinMax"
-import ActivityIndicator from '../reusables/ActivityIndicator';
 import ElectionFilterSelector from './ElectionFilterSelector';
+import ActivityIndicator from '../reusables/ActivityIndicator';
+import styles from './ElectionFilterList.module.css'
 
 
+/**
+ * React Component displaying a list of election filters, given a list of election properties
+ * @param {object} props
+ * @param {object} props.election_filter_properties
+ * the election properties (serialized ElectionDataproperty objects of the django db)
+ * Each is expected to have entries for 'name', 'short_name', 'description',
+ * 'inner_type', and 'referencable_objects' if 'inner_type' is set to "refernece"
+ * @param {object} props.election_filters
+ * the state object in which the current filters are stored
+ * @param {(object)=>void} props.set_election_filters
+ * the setter function of the election_filters
+ * @returns {React.JSX.Element}
+ */
 export default function ElectionFilterList(props) {
 
   const {election_filter_properties, election_filters, set_election_filters} = props;

@@ -1,10 +1,19 @@
 import { useRef, useState } from "react";
-import styles from './CollapsableList.module.css'
 import Collapsable from "./Collapsable";
-
+import styles from './CollapsableList.module.css'
 
 const animation_duration = 300;
 
+/**
+ * React Component for displaying a list of collapsables, each with a clickable header as a toggle
+ * @param {object} props
+ * @param {React.JSX.Element[]} props.header_list array of headers to be displayed
+ * @param {React.JSX.Element[]} props.children_list array of elements that should be displayed in a collapsable each
+ * @param {int[]} [props.initially_uncollapsed_indices] array of indices that should be expanded by default, default: none
+ * @param {boolean} [props.auto_collapse] whether on expansion of one collapsable, all the others should collapse, default: false
+ * @param {boolean} [props.global_toggle] whether expansion and collapsing of the collabsables should be synchronized, default: false
+ * @returns {React.JSX.Element}
+ */
 export default function CollapsableList(props) { 
 
   const children_refs = useRef(undefined)

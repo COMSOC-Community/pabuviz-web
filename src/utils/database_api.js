@@ -53,8 +53,8 @@ export const get_elections = (filters = {}) => {
   return api_get('elections', {filters});
 }
 
-export const get_election_details = (property_short_names, ballot_type = null, filters = {}) => {
-  return api_get('election_details', {property_short_names, ballot_type, filters});
+export const get_election_details = (property_short_names, ballot_type = null, filters = {}, user_submitted = false) => {
+  return api_get('election_details', {property_short_names, ballot_type, filters, user_submitted});
 }
 
 // get the rules and add their colors. This way we don't always need to pass the families as well 
@@ -74,31 +74,29 @@ export const get_election_properties = (property_short_names, ballot_type) => {
   return api_get('election_properties', {property_short_names, ballot_type});
 }
 
-export const get_election = (election_name) => {
-  return api_get('elections/' + election_name);
+export const get_projects = (election_name, user_submitted = false) => {
+  return api_get('projects', {election_name, user_submitted});
 }
 
-export const get_projects = (election_name) => {
-  return api_get('projects', {election_name});
-}
-
-export const get_rule_result_properties = (rule_abbr_list, property_short_names, election_filters = {}) => {
+export const get_rule_result_properties = (rule_abbr_list, property_short_names, election_filters = {}, user_submitted = false) => {
   return api_get(
     'avg_rule_property',
     {
       rule_abbr_list,
       property_short_names,
-      election_filters
+      election_filters,
+      user_submitted
     }
   );
 }
 
-export const get_rule_satisfaction_histogram = (rule_abbr_list, election_filters = {}) => {
+export const get_rule_satisfaction_histogram = (rule_abbr_list, election_filters = {}, user_submitted = false) => {
   return api_get(
     'rule_voter_satisfaction_histogram',
     {
       rule_abbr_list,
-      election_filters
+      election_filters,
+      user_submitted
     }
   );
 }
@@ -116,12 +114,35 @@ export const get_election_property_histogram = (election_property_short_name, nu
   );
 }
 
-export const get_category_proportions = (election_name, rule_abbreviation_list) => {
+export const get_category_proportions = (election_name, rule_abbreviation_list, user_submitted = false) => {
   return api_get(
     'category_proportions',
     {
       election_name,
-      rule_abbreviation_list
+      rule_abbreviation_list,
+      user_submitted
     }
   );
+}
+
+
+export const submit_pb_file = async (pb_file) => {
+  const formData = new FormData();
+  formData.append("pb_file", pb_file);
+
+  try {
+    const response = await fetch(
+      process.env.REACT_APP_API_URL + "submit_pb_file/",
+      {
+        method: "POST",
+        body: formData,
+      }
+    );
+
+    const data = await response.json();
+
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
 }

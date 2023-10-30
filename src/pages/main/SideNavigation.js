@@ -1,11 +1,9 @@
-import { search_param_states_options } from '../UrlParamsContextProvider';
+import { NavLink, createSearchParams, useSearchParams } from "react-router-dom";
+import { search_param_states_options } from '../../UrlParamsContextProvider';
 import styles from './SideNavigation.module.css'
-import {
-  NavLink, createSearchParams, useLocation, useSearchParams
-} from "react-router-dom";
 
 
-export default function SideNavigation(props) { 
+export default function SideNavigation() { 
 
   const [search_params, set_search_params] = useSearchParams();
 

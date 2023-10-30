@@ -1,16 +1,14 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
-import {
-  Outlet
-} from "react-router-dom";
-import SideNavigation from '../components/SideNavigation';
-import LegendItem from '../components/reusables/LegendItem';
-import Selector from '../components/reusables/Selector';
-import RulePicker from '../components/reusables/RulePicker';
-import ActivityIndicator from '../components/reusables/ActivityIndicator';
-import { get_ballot_types, get_rules } from '../utils/database_api';
-import { capitalize_first_letter, clone, get_ballot_type_color, get_rule_color } from '../utils/utils';
+import { Outlet } from "react-router-dom";
+import SideNavigation from './SideNavigation';
+import RulePicker from './RulePicker';
+import Selector from '../../components/reusables/Selector';
+import LegendItem from '../../components/reusables/LegendItem';
+import ActivityIndicator from '../../components/reusables/ActivityIndicator';
 import { Tooltip } from 'react-tooltip';
-import { UrlStateContext } from '../UrlParamsContextProvider';
+import { UrlStateContext } from '../../UrlParamsContextProvider';
+import { get_ballot_types, get_rules } from '../../utils/database_api';
+import { capitalize_first_letter, clone, get_ballot_type_color, get_rule_color } from '../../utils/utils';
 import styles from './Main.module.css'
 
 // this is the page that will always be shown with the router navigation and the outlet showing
@@ -19,7 +17,7 @@ function Main() {
   const [ballot_types, set_ballot_types] =  useState(undefined)
   const [rule_families, set_rule_families] =  useState(undefined);
     
-  const {rule_visibility, set_rule_visibility, ballot_type_selected, set_ballot_type_selected} = useContext(UrlStateContext);
+  const {rule_visibility, ballot_type_selected, set_ballot_type_selected} = useContext(UrlStateContext);
 
   useEffect(() => {
     const [ballot_type_promise, ballot_type_abort_controller] = get_ballot_types();
