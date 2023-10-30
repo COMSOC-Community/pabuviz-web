@@ -25,8 +25,11 @@ function Main() {
 
     Promise.all([ballot_type_promise, rule_promise]).then(([ballot_type_response, rule_response]) => {
       const ballot_type_array = ballot_type_response.data;
-      const ballot_type_map = new Map(ballot_type_array.map(ballot_type => [ballot_type.name, ballot_type]));
-      set_ballot_types(ballot_type_map);
+      
+      if (ballot_type_array.some(bt => bt.name === "approval")){
+        const ballot_type_map = new Map(ballot_type_array.map(ballot_type => [ballot_type.name, ballot_type]));
+        set_ballot_types(ballot_type_map);
+      }
   
       set_rule_families(rule_response.data);
 
