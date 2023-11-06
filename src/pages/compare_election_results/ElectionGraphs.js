@@ -1,20 +1,16 @@
-import React, { useContext, useEffect, useMemo, useState } from 'react';
-import ElectionList from './ElectionList';
+import React, { useMemo, useState } from 'react';
 import SatisfactionHistogram from '../../components/charts/SatisfactionHistogram';
 import RulePropertyRadarChart from '../../components/charts/RulePropertyRadarChart';
 import CategoryProportion from '../../components/charts/CategoryProportions';
 import ElectionProjectsInfo from '../../components/elections/ElectionProjectsInfo';
 import ElectionData from '../../components/elections/ElectionData';
 import Collapsable from '../../components/reusables/Collapsable';
-import NetworkError from '../../components/reusables/NetworkError';
-import { UrlStateContext } from '../../UrlParamsContextProvider';
-import {useLocation, useOutletContext} from 'react-router-dom';
-import { get_rule_properties } from '../../utils/database_api';
 import { clone } from '../../utils/utils';
-import { radar_chart_single_election_property_short_names } from '../../constants/constants';
 import styles from './ElectionGraphs.module.css'
 
 
+// list of sections that should be displayed for a selection
+// each section has a name, width, height, default_visibility and render function
 const election_sections = [
   { 
     name: "Rule properties", 
@@ -91,7 +87,10 @@ const election_sections = [
   },
 ]
 
-
+/**
+ * component rendering all the charts and information that should be displayed for a selected election
+ * @returns {React.JSX.Element}
+ */
 export default function ElectionGraphs(props) {
   const { elections_selected_data, rules, rule_visibility, rule_properties } = props;
   
@@ -127,7 +126,6 @@ export default function ElectionGraphs(props) {
             <div key={section.name} className={styles.section_container}>
               <div
                 className={styles.section_title}
-                style={{}}
                 onClick={() => toggle_section_visibility(section_index)}
               >
                 {election_index === 0 ? 

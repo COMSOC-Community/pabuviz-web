@@ -5,7 +5,10 @@ import { UrlStateContext } from "../../UrlParamsContextProvider";
 import { capitalize_first_letter } from "../../utils/utils";
 import styles from './RulePicker.module.css'
 
-
+/**
+ * React Component for displaying the rule picker, i.e. collapsables for each rule family and a toggle button for each rule
+ * @returns {React.JSX.Element}
+ */
 export default function RulePicker(props) { 
 
   const {rule_families, auto_collapse} = props;

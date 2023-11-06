@@ -7,7 +7,7 @@ import NetworkError from '../../components/reusables/NetworkError';
 import { get_elections } from '../../utils/database_api';
 import styles from './DatabaseOverview.module.css'
 
-
+// short names of the election properties to be shown as a histogram
 const election_property_short_names = [
   "budget",
   "avg_ballot_len",
@@ -18,7 +18,10 @@ const election_property_short_names = [
   "avg_ballot_cost"
 ]
 
-
+/**
+ * this is the (sub-)page giving an overview over the elections saved in the database
+ * @returns {React.JSX.Element}
+ */
 export default function DatabaseOverview(props) { 
 
   const [initial_loading, set_initial_loading] = useState(true)
@@ -27,10 +30,17 @@ export default function DatabaseOverview(props) {
   const [ballot_type_visibility, set_ballot_type_visibility] = useState([])
   const [error, set_error] = useState(false);
 
-
+  // load election and ballot type data on initial load
   useEffect(() => {
     let [initial_data_promise, abort_controller] = get_elections();
-    initial_data_promise.then(set_initial_data).catch((error) => {set_error(true)});
+    initial_data_promise.then(response => {
+      if (response){
+        set_elections(response.data);
+        set_ballot_types(response.metadata.ballot_types)
+        set_ballot_type_visibility(response.metadata.ballot_types.map(() => true))
+        set_initial_loading(false);
+      }
+    }).catch((error) => {console.error(error); set_error(true)});
 
     return () => {
       abort_controller.abort();
@@ -38,16 +48,7 @@ export default function DatabaseOverview(props) {
   }, []);
 
   
-  const set_initial_data = (elections_response) => {
-    if (elections_response){
-      set_elections(elections_response.data);
-      set_ballot_types(elections_response.metadata.ballot_types)
-      set_ballot_type_visibility(elections_response.metadata.ballot_types.map(() => true))
-      set_initial_loading(false);
-    }
-  }
-
-
+  // method for rendering one of the election property histograms
   const render_election_property_histogram = (election_property_short_name, index) => {
     return (
       <div key={election_property_short_name}>
@@ -65,8 +66,8 @@ export default function DatabaseOverview(props) {
   }
 
 
+  // method for rendering the title and explanation of the page
   const render_title = () => {
-
     return (
       <>
         <div className={styles.title_text}>
@@ -79,9 +80,6 @@ export default function DatabaseOverview(props) {
     )
   }
 
-
-
-  
 
   return (
     <div className={styles.content_container}>
@@ -117,7 +115,6 @@ export default function DatabaseOverview(props) {
           )
         }
       </div>
-      {/* <button onClick={on_debug_button_click}>Click me!</button> */}
     </div>
   );
 }

@@ -1,21 +1,18 @@
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import ElectionList from './ElectionList';
-import SatisfactionHistogram from '../../components/charts/SatisfactionHistogram';
-import RulePropertyRadarChart from '../../components/charts/RulePropertyRadarChart';
-import CategoryProportion from '../../components/charts/CategoryProportions';
-import ElectionProjectsInfo from '../../components/elections/ElectionProjectsInfo';
-import ElectionData from '../../components/elections/ElectionData';
-import Collapsable from '../../components/reusables/Collapsable';
 import NetworkError from '../../components/reusables/NetworkError';
 import { UrlStateContext } from '../../UrlParamsContextProvider';
 import {useLocation, useOutletContext} from 'react-router-dom';
 import { get_rule_properties } from '../../utils/database_api';
-import { clone } from '../../utils/utils';
 import { radar_chart_single_election_property_short_names } from '../../constants/constants';
 import styles from './CompareElectionResults.module.css'
 import ElectionGraphs from './ElectionGraphs';
 
-
+/**
+ * (sub-)page that shows a list of all elections, allows the user to filter and search in it and select one or two elections.
+ * For the selected elections, different graphs and statistics are displayed
+ * @returns {React.JSX.Element}
+ */
 export default function CompareElectionResults(props) { 
   
   const location = useLocation();
@@ -26,7 +23,7 @@ export default function CompareElectionResults(props) {
   
   const [error, set_error] = useState(false);
 
-
+  // effect that requests election property information for the radar chart, depending on the ballot type selected
   useEffect(() => {
     let [rule_properties_promise, abort_controller] = get_rule_properties(
       radar_chart_single_election_property_short_names[ballot_type_selected]
@@ -40,6 +37,7 @@ export default function CompareElectionResults(props) {
     return () => abort_controller.abort();
   }, [ballot_type_selected]);
 
+  
   return (
     <div className={styles.content_container} >
       <div className={styles.elections_box}>

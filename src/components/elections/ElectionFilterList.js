@@ -13,7 +13,14 @@ import styles from './ElectionFilterList.module.css'
  * Each is expected to have entries for 'name', 'short_name', 'description',
  * 'inner_type', and 'referencable_objects' if 'inner_type' is set to "refernece"
  * @param {object} props.election_filters
- * the state object in which the current filters are stored
+ * the state object in which the current filters are stored using their short_name as key
+ * this corresponds to the format that the database api expects as the filters argument
+ * depending on the 'inner_type' of a filter property this will look different:
+ *    'int' and 'float':  an object with keys 'min' and/or 'max'
+ *    'bool':             a boolean
+ *    'string':           an object with key 'contains' or 'equals'
+ *    'reference':        a string containing the name of the referenced object
+ *    'date' is not supported yet
  * @param {(object)=>void} props.set_election_filters
  * the setter function of the election_filters
  * @returns {React.JSX.Element}

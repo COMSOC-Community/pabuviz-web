@@ -23,7 +23,6 @@ export default function ElectionFilterSelector(props) {
   const { initial_key_selected, set_election_filters, election_property, possible_values_map } = props;
   
   const [key_selected, set_key_selected] = useState(initial_key_selected);
-  // if box is checked set filter to true, if unchecked to undefined (i.e., no filter)
   const set_filter = (key) => {
     set_election_filters((old_election_filters) => {
       let new_election_filters = clone(old_election_filters);

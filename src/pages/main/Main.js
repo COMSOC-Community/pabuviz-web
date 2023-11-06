@@ -11,14 +11,18 @@ import { get_ballot_types, get_rules } from '../../utils/database_api';
 import { capitalize_first_letter, clone, get_ballot_type_color, get_rule_color } from '../../utils/utils';
 import styles from './Main.module.css'
 
-// this is the page that will always be shown with the router navigation and the outlet showing
-// different pages depending on the route
+/**
+ * this is the page that will always be shown with the router navigation and
+ * the outlet showing different subpages depending on the route
+ * @returns {React.JSX.Element}
+ */
 function Main() {
   const [ballot_types, set_ballot_types] =  useState(undefined)
   const [rule_families, set_rule_families] =  useState(undefined);
     
   const {rule_visibility, ballot_type_selected, set_ballot_type_selected} = useContext(UrlStateContext);
 
+  // request ballot types and rules from the database on first load
   useEffect(() => {
     const [ballot_type_promise, ballot_type_abort_controller] = get_ballot_types();
     let [rule_promise, rule_abort_controller] = get_rules();
@@ -44,8 +48,8 @@ function Main() {
     }
   }, []);
 
-  
-  const render_ballot_type_picker = () => {
+  // function rendering the ballot type selector
+  const render_ballot_type_selector = () => {
     return ballot_types && (
       <Selector
         items_map={ballot_types}
@@ -71,15 +75,14 @@ function Main() {
   }
 
 
+  // rule_families_filtered will save the rule families and rules that apply to the selected ballot type
+  // this code should be improved, it's messy because of the recursive structure of the rule families
   const rule_families_filtered = useMemo(() => {
     const filter_by_ballot_type_selected = array => array.filter(item => item.applies_to.includes(ballot_type_selected))
     const filter_non_empty = rule_families => rule_families.filter(rule_family => rule_family.elements.length > 0 || rule_family.sub_families.length > 0)
 
-
     if (rule_families && ballot_type_selected){
-      
       let new_rule_families = clone(rule_families);
-
       new_rule_families = filter_by_ballot_type_selected(new_rule_families);
 
       new_rule_families.forEach((rule_family, family_index) => {
@@ -88,40 +91,35 @@ function Main() {
 
         // assign colors here, this is still messy
         let rule_index = 0;
-
         rule_family.sub_families.forEach((rule_sub_family) => {
           rule_sub_family.elements = filter_by_ballot_type_selected(rule_sub_family.elements)
-
           rule_sub_family.color_from = get_rule_color(family_index, rule_index);
-          
           rule_sub_family.elements.forEach((rule) => {
             rule.color = get_rule_color(family_index, rule_index);
             rule_index += 1;
           });
-
           rule_sub_family.color_to = get_rule_color(family_index, rule_index-1);
         });
         
         rule_family.sub_families = filter_non_empty(rule_family.sub_families)
 
-
         rule_family.elements.forEach((rule) => {
           rule.color = get_rule_color(family_index, rule_index);
           rule_index += 1;
         });
+
         rule_family.color_from = get_rule_color(family_index, 0);
-        rule_family.color_to = get_rule_color(family_index, rule_index-1);
-        
+        rule_family.color_to = get_rule_color(family_index, rule_index-1);        
       })
 
       new_rule_families = filter_non_empty(new_rule_families);
-
       return new_rule_families;
     }
     return null;
   }, [rule_families, ballot_type_selected]);
   
 
+  // rule_list holds an array of the rules that apply to the selected ballot type
   const rule_list = useMemo(() => {
     if (rule_families_filtered){
       let new_rule_list = []
@@ -149,7 +147,7 @@ function Main() {
             <SideNavigation/>
           </div>
           <div className={styles.ballot_type_picker_container}>
-            {render_ballot_type_picker()}
+            {render_ballot_type_selector()}
           </div>
           <Tooltip
             id="main_tooltip"

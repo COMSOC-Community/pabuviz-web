@@ -1,6 +1,6 @@
 import { clone, format_number_string } from '../../utils/utils';
 import styles from './ElectionList.module.css'
-import { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { get_elections, get_election_properties, get_election_details } from '../../utils/database_api';
 import ActivityIndicator from '../../components/reusables/ActivityIndicator';
 import NetworkError from '../../components/reusables/NetworkError';
@@ -8,7 +8,7 @@ import HoverTooltip from '../../components/reusables/HoverTooltip';
 import ElectionData from '../../components/elections/ElectionData';
 import ElectionFilterList from '../../components/elections/ElectionFilterList';
 
-
+// the election properties that we want to allow the user to filter on
 const election_filter_properties_short_names = [
   'num_projects',
   'num_votes',
@@ -62,6 +62,29 @@ const sort_elections = (elections, sorting) => {
   });
 }
 
+/**
+ * component showing a scrollable list of all elections with details.
+ * Displays filters by which the elections can be filtered and a search bar.
+ * Allows selection of one or multiple elections
+ * 
+ * @param {object} props
+ * @param {string} props.ballot_type
+ * name of the currently selected ballot type
+ * @param {string[]} props.elections_selected
+ * array of the names of the currently selected elections
+ * @param {(string[]) => void} props.set_elections_selected
+ * setter function for the elections_selected state
+ * @param {object} props.elections_selected_data
+ * state storing the elctions with additional metadata of the selected elections, using their short_names as keys
+ * we need this extra state to allow the component to display the elections before all metadata is loaded
+ * @param {(object) => void} props.set_elections_selected_data
+ * setter function for the elections_selected_data state
+ * @param {int} props.max_selected
+ * maximum number of elections that can be selected at the same time
+ * @param {object} props.initial_election_filters
+ * initial election filters, see ElectionFilterList component for more detailed format
+ * @returns {React.JSX.Element}
+ */
 export default function ElectionList(props) { 
   const {
     ballot_type,
@@ -73,22 +96,33 @@ export default function ElectionList(props) {
     initial_election_filters
   } = props;
 
+  // state holding the elections received from the api.
+  // will be updated whenever the election_filters or the ballot type changes
   const [elections, set_elections] =  useState(undefined);
+  // state holding the elections together with all their metadata
+  // we need this extra state to allow the component to display the elections before all metadata is loaded
   const [election_details, set_election_details] =  useState(undefined);
+  // state holding the elections filtered by the search field.
+  // this is the only filtering that is done on the client side
   const [elections_filtered, set_elections_filtered] =  useState(new Map());
 
+  // state holding the information (names, descriptions, etc) of the election properties
   const [election_filter_properties, set_election_filter_properties] =  useState(undefined);
   const [election_filters, set_election_filters] = useState(initial_election_filters || {});
 
+  // state containing the user inputted search text
   const [search_text, set_search_text] =  useState("");
+  // state holding the sorting chosen by the user
+  // When the sorting changes, the old sorting is saved as secondary, resulting in more stable sorting
   const [sorting, set_sorting] =  useState({primary: {field_name: "date_begin", ascending: false}, secondary: {field_name: "name", ascending: true}});
-
-  const scroll_ref = useRef(undefined)
+  // the number of elections to be displayed, automatically increases when user hits the bottom of the list
   const [num_elections_rendered, set_num_elections_rendered] = useState(50);
-  
+
   const [error, set_error] = useState(false);
+  const scroll_ref = useRef(undefined)
 
-
+  // initial api request to load the election properties information
+  // and election details of elections that might be selected on load (through url parameters) 
   useEffect(() => {
     if (ballot_type){
       let [election_filter_properties_promise, election_filter_properties_abort_controller]
@@ -109,7 +143,6 @@ export default function ElectionList(props) {
         }
       }).catch(() => set_error(true));
   
-  
       return () => {
         election_filter_properties_abort_controller.abort();
         election_details_abort_controller.abort();
@@ -119,6 +152,7 @@ export default function ElectionList(props) {
   }, [ballot_type]);
 
 
+  // effect that requests all elections matching the current filters from the api
   useEffect(() => {
     reset_scroll();
     set_error(false);
@@ -136,6 +170,7 @@ export default function ElectionList(props) {
   }, [election_filters, ballot_type]);
 
 
+  // effect that updates the 'elections_filtered' state, when the search text or sorting changes
   useEffect(() => {
     reset_scroll();
     if (elections) {
@@ -157,6 +192,7 @@ export default function ElectionList(props) {
   }, [elections, search_text, sorting]);
 
 
+  // effect that updates the elections_selected_data state, when elections_selected changes
   useEffect(() => {
     set_elections_selected_data(old_elections_selected_data => {
       const new_elections_selected_data = new Map();
@@ -177,12 +213,11 @@ export default function ElectionList(props) {
   }, [elections, elections_selected, set_elections_selected_data])
 
 
-  const on_search_text_change = (new_search_text) => {
-    set_search_text(new_search_text);
-  }
-
+  // updates elections_selected when an election is clicked
   const on_election_click = (election_name) => {
     let new_elections_selected = clone(elections_selected);
+    console.log(elections_selected);
+    console.log(new_elections_selected);
     if (new_elections_selected.includes(election_name)){
       new_elections_selected = new_elections_selected.filter(name => name !== election_name);
     } else {
@@ -192,9 +227,11 @@ export default function ElectionList(props) {
         return;
       }
     }
+    console.log(new_elections_selected);
     set_elections_selected(new_elections_selected);
   }
 
+  // the sorting when a header is clicked
   const on_header_click = (field_name) => {
     let new_sorting = clone(sorting);
     if (new_sorting.primary.field_name === field_name){
@@ -212,6 +249,7 @@ export default function ElectionList(props) {
   }
 
 
+  // updates num_elections_rendered whenever the user scrolls to the bottom
   const on_scroll = () => {
     if (elections && elections.length > num_elections_rendered){
       const dist_to_bottom = scroll_ref.current.scrollHeight - (scroll_ref.current.scrollTop + scroll_ref.current.clientHeight);
@@ -221,6 +259,7 @@ export default function ElectionList(props) {
     }
   }
 
+  // resets the scroll
   const reset_scroll = () => {
     set_num_elections_rendered(50);
     scroll_ref.current.scrollTop = 0;
@@ -228,7 +267,6 @@ export default function ElectionList(props) {
 
 
   const render_election_headers = () => {
-    
     const render_election_header = (title, width, alignment, sort_field_name) => {
       let text = title;
       if (sorting.primary.field_name === sort_field_name){
@@ -267,7 +305,6 @@ export default function ElectionList(props) {
 
 
   const render_election = (election, index) => {
-    
     const render_election_item = (title, width, alignment) => (
       <p style={{width: width, textAlign: alignment}}>
         {title}
@@ -319,8 +356,6 @@ export default function ElectionList(props) {
     )
   }
 
-
-
   
   return (
     <div className={styles.wrapper}>
@@ -339,7 +374,7 @@ export default function ElectionList(props) {
             className={styles.search_text_input}
             value={search_text}
             placeholder={"Search election"}
-            onChange={(event) => on_search_text_change(event.target.value)}
+            onChange={(event) => set_search_text(event.target.value)}
           />
           <p className={styles.results_info_text}>
             {elections_filtered.length + " results"}
