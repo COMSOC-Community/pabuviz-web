@@ -14,7 +14,7 @@ export default function SideNavigation() {
   return (
     <>
       <div className={styles.nav_logo_container}>
-        <p className={styles.nav_title_text}>PB-viz</p>
+        <p className={styles.nav_title_text}>pabuviz</p>
       </div>
       <nav>
         <ul className={styles.nav_list}>

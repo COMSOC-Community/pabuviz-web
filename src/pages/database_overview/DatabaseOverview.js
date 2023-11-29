@@ -71,10 +71,10 @@ export default function DatabaseOverview(props) {
     return (
       <>
         <div className={styles.title_text}>
-          Welcome to PB-viz
+          Welcome to pabuviz
         </div>
         <div className={styles.info_text}>
-          PB-viz is an interactive computation and visualization tool for participatory budgeting.
+          Pabuviz is an interactive computation and visualization tool for participatory budgeting.
         </div>
       </>
     )

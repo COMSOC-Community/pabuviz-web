@@ -1,4 +1,4 @@
-# pb-vis
+# pabuviz
 
 ## Getting started
 - install [Node.js](https://nodejs.org/ "Node.js") and npm: `sudo apt install npm nodejs`

@@ -18,7 +18,7 @@ import styles from './ElectionData.module.css'
  * @param {object[]} [props.election_filter_properties]
  * array of election properties (serialized ElectionDataproperty object of the django db)
  * Each is expected to have entries for 'name', 'short_name', 'description',
- * 'inner_type', and 'referencable_objects' if 'inner_type' is set to "refernece"
+ * 'inner_type', and 'referencable_objects' if 'inner_type' is set to "reference"
  * @param {object} [props.election_details] 
  * object containing a value for each properties short_name in props.election_filter_properties
  * @param {string[]} [props.election_filter_properties_short_names]
