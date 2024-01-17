@@ -47,7 +47,7 @@ defaults.scales.logarithmic.title = {display: true};
 
 
 function UploadElection() {
-
+  return "Coming soon..."
   const [election, set_election] = useState(null);
 
   return (

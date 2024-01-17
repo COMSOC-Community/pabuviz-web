@@ -13,6 +13,20 @@ import styles from './ElectionGraphs.module.css'
 // each section has a name, width, height, default_visibility and render function
 const election_sections = [
   { 
+    name: "Satisfaction histogram",
+    width: "50%",
+    height: "300px",
+    default_visibility: true,
+    render: (election, rules, rule_visibility, rule_properties, election_filters, only_one_selected) => (
+      <SatisfactionHistogram
+        rules={rules}
+        election_filters={election_filters}
+        rule_visibility={rule_visibility}
+        hide_num_elections={true}
+      />
+    )
+  },
+  { 
     name: "Rule properties", 
     width: "50%",
     height: "300px",
@@ -21,20 +35,6 @@ const election_sections = [
       <RulePropertyRadarChart
         rules={rules}
         rule_properties={rule_properties}
-        election_filters={election_filters}
-        rule_visibility={rule_visibility}
-        hide_num_elections={true}
-      />
-    )
-  },
-  { 
-    name: "Satisfaction histogram",
-    width: "50%",
-    height: "300px",
-    default_visibility: true,
-    render: (election, rules, rule_visibility, rule_properties, election_filters, only_one_selected) => (
-      <SatisfactionHistogram
-        rules={rules}
         election_filters={election_filters}
         rule_visibility={rule_visibility}
         hide_num_elections={true}
