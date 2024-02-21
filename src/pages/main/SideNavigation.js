@@ -3,6 +3,8 @@ import { NavLink } from "react-router-dom";
 import { UrlStateContext } from '../../UrlParamsContextProvider';
 import styles from './SideNavigation.module.css'
 
+import logo from "assets/pabuviz_logo.svg";
+
 /**
  * React Component for displaying the navigation menu
  * @returns {React.JSX.Element}
@@ -14,7 +16,7 @@ export default function SideNavigation() {
   return (
     <>
       <div className={styles.nav_logo_container}>
-        <p className={styles.nav_title_text}>pabuviz</p>
+        <img src={logo} alt="" className={styles.nav_logo}/>
       </div>
       <nav>
         <ul className={styles.nav_list}>

@@ -71,7 +71,7 @@ export default function DatabaseOverview(props) {
     return (
       <>
         <div className={styles.title_text}>
-          Welcome to pabuviz
+          Welcome to Pabuviz
         </div>
         <div className={styles.info_text}>
           Pabuviz is an interactive computation and visualization tool for participatory budgeting.

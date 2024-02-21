@@ -1,61 +1,66 @@
 .nav_logo_container {
-    margin: auto;
-    width: fit-content;
-    margin-bottom: 140px;
-    margin-top: 50px;
-  }
-  
-  .nav_title_text {
-    font-size: xx-large;
-  }
-  
-  .nav_list {
-    list-style: none;
-    position: relative;
-    padding: 0 15px 0 15px;
-  }
+  margin: auto;
+  width: fit-content;
+  margin-bottom: 120px;
+  margin-top: 30px;
+}
 
-  .nav_list li {
-    padding: 2px 0;
-  }
-  
-  .nav_link {
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    color: black;
-    border-radius: 5px;
-  }
+.nav_logo {
+  height: 100px;
+  width: auto;
+}
 
-  .nav_link:hover {
-    background-color: #fff2;
-  }
+.nav_title_text {
+  font-size: xx-large;
+}
 
-  .nav_link_text{
-    margin: 15px 20px;
-    font-size: larger;
-  }
+.nav_list {
+  list-style: none;
+  position: relative;
+  padding: 0 15px 0 15px;
+}
 
-  .nav_link_active {
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    color: black;
-    border-radius: 5px;
-    background-color: #fff4;
-  }
-  
-  .nav_item {
-    box-sizing: border-box;
-    padding: 10pt;
-    border-radius: 10px;
-    background-color: white;
-    color: black;
-    border: 0px solid var(--primary-color);
-    transition-duration: 0.4s;
-  }
-  
-  .nav_item:hover {
-    background-color: var(--primary-color);
-    color: white;
-  }
+.nav_list li {
+  padding: 2px 0;
+}
+
+.nav_link {
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  color: black;
+  border-radius: 5px;
+}
+
+.nav_link:hover {
+  background-color: #fff2;
+}
+
+.nav_link_text{
+  margin: 15px 20px;
+  font-size: larger;
+}
+
+.nav_link_active {
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  color: black;
+  border-radius: 5px;
+  background-color: #fff4;
+}
+
+.nav_item {
+  box-sizing: border-box;
+  padding: 10pt;
+  border-radius: 10px;
+  background-color: white;
+  color: black;
+  border: 0px solid var(--primary-color);
+  transition-duration: 0.4s;
+}
+
+.nav_item:hover {
+  background-color: var(--primary-color);
+  color: white;
+}

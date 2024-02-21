@@ -46,7 +46,6 @@ export default function ElectionData(props) {
 
   useEffect(() => {
     set_error(false);
-
     if (!election_details || !election_filter_properties){
       let [election_details_promise, election_details_abort_controller] = get_election_details(
         election_filter_properties_short_names || null,  // cant pass undefined to api/json
