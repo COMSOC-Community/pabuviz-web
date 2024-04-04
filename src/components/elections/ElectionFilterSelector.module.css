@@ -10,8 +10,9 @@
 }
 
 .filter_title {
-  text-align: center;
-  /* font-size: large; */
+  text-decoration: underline dotted #666A;
+  text-underline-offset: 4pt;
+  cursor: default;
 }
 
 /* .selector_container { */

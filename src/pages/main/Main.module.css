@@ -8,6 +8,7 @@
   background-color: var(--background-color-secondary);
   /* padding: 10px; */
   align-items: center;
+  font-size: 0.85vw;
 }
 
 .horizontal_layout {
@@ -20,7 +21,7 @@
 }
 
 .content_and_rule_picker_container {
-  flex: 4;
+  flex: 40;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -63,7 +64,7 @@
 .side_menu {
   left: 0;
   top: 0;
-  width: 350px;
+  flex: 8;
   height: 100%;
   background-color: var(--background-color-secondary);
   display: flex;
@@ -99,6 +100,8 @@
 }
 
 .ballot_type_option_text{
-  font-size: large;
+  font-size: 0.92vw;
+  text-decoration: underline dotted #666A;
+  text-underline-offset: 4pt;
 }
 

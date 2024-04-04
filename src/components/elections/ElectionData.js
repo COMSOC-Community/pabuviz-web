@@ -51,6 +51,7 @@ export default function ElectionData(props) {
         election_filter_properties_short_names || null,  // cant pass undefined to api/json
         election.ballot_type,
         {name: {equals: election.name}},
+        election.user_submitted
       );
       
       election_details_promise.then(response => {

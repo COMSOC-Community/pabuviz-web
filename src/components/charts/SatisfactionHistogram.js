@@ -148,7 +148,9 @@ const generate_export_data = (api_response, parent_props_constant, parent_props_
 const api_request = (props_constant) => {
   let [rule_satisfaction_histogram_promise, abort_controller] = get_rule_satisfaction_histogram(
     props_constant.rules.map(rule => rule.abbreviation),
-    props_constant.election_filters
+    props_constant.election_filters,
+    props_constant.user_submitted,
+    props_constant.single_election
   );
   return {
     promise: rule_satisfaction_histogram_promise,
@@ -168,13 +170,13 @@ const generate_corner_info = (api_response, props_constant, props_variable, grap
 
 export default function SatisfactionHistogram(props) { 
 
-  const {rules, election_filters, rule_visibility, hide_num_elections} = props;
+  const {rules, election_filters, rule_visibility, single_election, user_submitted} = props;
     
   const props_constant = useMemo(
     () => {
-      return rules && election_filters ? {rules, election_filters} : null;
+      return rules && election_filters ? {rules, election_filters, user_submitted, single_election} : null;
     },
-    [rules, election_filters]
+    [rules, election_filters, user_submitted, single_election]
   );
 
   const props_variable = useMemo(
@@ -190,7 +192,7 @@ export default function SatisfactionHistogram(props) {
       chart_id={"satisfaction_histogram"}
       compute_graph_data={compute_graph_data}
       update_graph_data={update_graph_data}
-      generate_corner_info={hide_num_elections ? null : generate_corner_info}
+      generate_corner_info={single_election ? null : generate_corner_info}
       generate_tooltip_info={() => satisfaction_histogram_explanation}
       api_request={api_request}
       parent_props_constant={props_constant}

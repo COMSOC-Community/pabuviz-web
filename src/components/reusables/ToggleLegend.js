@@ -1,6 +1,7 @@
 import LegendItem from "./LegendItem";
 import { capitalize_first_letter, get_ballot_type_color } from "../../utils/utils";
 import styles from './ToggleLegend.module.css'
+import HoverTooltip from "./HoverTooltip";
 
 /**
  * React Component showing a list of toggleable legend items (see LegendItem)
@@ -36,11 +37,11 @@ export default function ToggleLegend(props) {
         style={{opacity: visibility[index] ? 1 : 0.4}}
         key={item.name}
         onClick={() => on_item_click(index)}
+        data-tooltip-id={tooltip_id}
+        data-tooltip-content={capitalize_first_letter(item.description)}
       >
         <LegendItem
           color={get_ballot_type_color(index)}
-          tooltip_text={capitalize_first_letter(item.description)}
-          tooltip_id={tooltip_id}
         >
           <div className={styles.legend_text}>
             {capitalize_first_letter(item.name)}

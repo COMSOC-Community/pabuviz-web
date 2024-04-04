@@ -70,11 +70,15 @@ export default function DatabaseOverview(props) {
   const render_title = () => {
     return (
       <>
-        <div className={styles.title_text}>
+        <h1 className={styles.title_text}>
           Welcome to Pabuviz
-        </div>
+        </h1>
         <div className={styles.info_text}>
-          Pabuviz is an interactive computation and visualization tool for participatory budgeting.
+          <p>pabuviz is an interactive computation and visualization tool for participatory budgeting. It provides intuitive and visually appealing comparison tools based on real life data.</p>
+          <p>If you don't know what participatory budgeting (PB or pabu) is, the <a href="https://en.wikipedia.org/wiki/Participatory_budgeting">Wikipedia page</a> provides extensive details, but in short, PB is a democratic tool through which ordinary citizens decide how to allocate a given amount of money across several projects.</p>
+          <p>Many PB are based on a voting process in which citizens <em>vote</em> to decide the final allocation of the budget. In these cases, choosing the voting rule&mdash;the rule (or procedure) through which the final budget allocation is decided based on the ballots that have been cast&mdash;can be difficult since there are numerous possibilities.</p>
+          <p>With pabuviz you can, in a blink of an eye, compare different voting rules for PB based on many criteria and discover the most suitable one for your needs!</p>
+          <p>Below, you can see an overview of the elections in our database.</p>
         </div>
       </>
     )
@@ -82,38 +86,40 @@ export default function DatabaseOverview(props) {
 
 
   return (
-    <div className={styles.content_container}>
-      <div className={styles.title_container}>
-        {render_title()}
-      </div>
-      <div className={styles.graphs_box}>
-        { error ? 
-          <NetworkError/> :
-          ( initial_loading ?
-            <ActivityIndicator/> : 
-            <>
-              <ToggleLegend
-                items={ballot_types}
-                visibility={ballot_type_visibility}
-                set_visibility={set_ballot_type_visibility}
-                horizontal={true}
-                tooltip_id="main_tooltip"
-              />
-              <div className={styles.graphs_container}>
-                <div className={styles.graph_container}>
-                  <ElectionSizePlot 
-                    elections={elections} 
-                    ballot_type_visibility={ballot_type_visibility}
-                    ballot_types={ballot_types}
-                  />
-                </div>
-                <div className={styles.histograms_container}>
-                  {election_property_short_names.map(render_election_property_histogram)}
+    <div className={styles.page_container}>
+      <div className={styles.content_container}>
+        <div className={styles.title_container}>
+          {render_title()}
+        </div>
+        <div className={styles.graphs_box}>
+          { error ? 
+            <NetworkError/> :
+            ( initial_loading ?
+              <ActivityIndicator/> : 
+              <div className={styles.graphs_and_legend_container}>
+                <ToggleLegend
+                  items={ballot_types}
+                  visibility={ballot_type_visibility}
+                  set_visibility={set_ballot_type_visibility}
+                  horizontal={true}
+                  tooltip_id="main_tooltip"
+                />
+                <div className={styles.graphs_container}>
+                  <div className={styles.graph_container}>
+                    <ElectionSizePlot 
+                      elections={elections} 
+                      ballot_type_visibility={ballot_type_visibility}
+                      ballot_types={ballot_types}
+                    />
+                  </div>
+                  <div className={styles.histograms_container}>
+                    {election_property_short_names.map(render_election_property_histogram)}
+                  </div>
                 </div>
               </div>
-            </>
-          )
-        }
+            )
+          }
+        </div>
       </div>
     </div>
   );

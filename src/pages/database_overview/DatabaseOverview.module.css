@@ -1,9 +1,17 @@
 @import '../../constants/constants.css';
 
+.page_container {
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 15px;
+  /* background-color: #ff00ff; */
+  overflow: scroll;
+}
+
 .content_container {
   height: 100%;
   width: 100%;
-  display: flex;
   box-sizing: border-box;
   padding: 10px;
   justify-content: space-evenly;
@@ -14,7 +22,7 @@
 
 .title_container {
   width: 100%;
-  height: 30%;
+  height: 550px;
   display: flex;
   justify-content: center;
   flex-direction: column;
@@ -25,17 +33,24 @@
 }
 
 .title_text {
-  font-size: x-large;
+  font-size: 1.3vw;
   padding: 30pt;
 }
 
 .info_text {
-  font-size: large;
+  font-size: 0.92vw;
 }
 
 .graphs_box {
-  width: 100%;
-  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+.graphs_and_legend_container {
+  width: 97%;
+  height: 80vh;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -55,19 +70,21 @@
   /* background-color: #ffffff33; */
   border-radius: 7px;
   overflow: hidden;
+  position: relative;
 }
 
 .graph_container {
   /* height: 50%; */
   /* width: 80%; */
   box-sizing: border-box;
-  flex: 3;
+  width: 70%;
   height: 100%;
   overflow: hidden;
 }
 
 .histograms_container {
-  flex: 1;
+  width: 30%;
+  /* min-width: ; */
   height: 100%;
   justify-content: space-evenly;
   box-sizing: border-box;

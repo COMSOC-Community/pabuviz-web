@@ -32,7 +32,7 @@ const filter_elections_by_search_text = (elections, search_text) => {
       let found = false;
       if (text.length === 0)
         continue;
-      for (const key of ['country', 'unit', 'subunit']){
+      for (const key of ['country', 'unit', 'subunit', 'instance']){
         if (election[key].toLowerCase().includes(text)){
           found = true;
           break;
@@ -92,6 +92,7 @@ export default function ElectionList(props) {
     set_elections_selected,
     elections_selected_data,
     set_elections_selected_data,
+    user_elections,
     max_selected,
     initial_election_filters
   } = props;
@@ -196,38 +197,37 @@ export default function ElectionList(props) {
   useEffect(() => {
     set_elections_selected_data(old_elections_selected_data => {
       const new_elections_selected_data = new Map();
-      elections_selected.forEach(name => {
-        if (old_elections_selected_data.has(name)){
-          new_elections_selected_data.set(name, old_elections_selected_data.get(name));
+      elections_selected.forEach(e => {
+        if (old_elections_selected_data.has(e.name)){
+          new_elections_selected_data.set(e.name, old_elections_selected_data.get(e.name));
+        } else if (user_elections.has(e.name)) {
+          new_elections_selected_data.set(e.name, user_elections.get(e.name));
         } else {
           if (elections){
-            const election = elections.find(election => election.name === name)
+            const election = elections.find(election => election.name === e.name)
             if (election){
-              new_elections_selected_data.set(name, election);
+              new_elections_selected_data.set(e.name, election);
             }
           }
         }
       });
       return new_elections_selected_data;
     })
-  }, [elections, elections_selected, set_elections_selected_data])
+  }, [elections, elections_selected, set_elections_selected_data, user_elections])
 
 
   // updates elections_selected when an election is clicked
-  const on_election_click = (election_name) => {
+  const on_election_click = (election) => {
     let new_elections_selected = clone(elections_selected);
-    console.log(elections_selected);
-    console.log(new_elections_selected);
-    if (new_elections_selected.includes(election_name)){
-      new_elections_selected = new_elections_selected.filter(name => name !== election_name);
+    if (new_elections_selected.some((e) => (e.name === election.name))){
+      new_elections_selected = new_elections_selected.filter(e => e.name !== election.name);
     } else {
       if (!max_selected || new_elections_selected.length < max_selected){
-        new_elections_selected.push(election_name);
+        new_elections_selected.push({name: election.name, user_submitted: election.user_submitted});
       } else {
         return;
       }
     }
-    console.log(new_elections_selected);
     set_elections_selected(new_elections_selected);
   }
 
@@ -321,18 +321,18 @@ export default function ElectionList(props) {
       <div 
         className={styles.election_container}
         key={election.name}
-        onClick={() => on_election_click(election.name)}
+        onClick={() => on_election_click(election)}
         style={{borderTopWidth: index && "1px"}}
       >
         <input 
           type="checkbox"
-          checked={elections_selected.includes(election.name)}
+          checked={elections_selected.some((e) => (e.name === election.name))}
           readOnly={true}
           className={styles.check_box}
         />
         {render_election_item(election.country, "8em",  "center")}
         {render_election_item(election.unit,    "9em",  "center")}
-        {render_election_item(election.subunit, "18em", "center")}
+        {render_election_item(election.subunit || election.instance, "18em", "center")}
         {render_election_item(year_text,        "3em",  "center")}
         {render_election_item(format_number_string(election.num_projects), "6em", "right")}
         {render_election_item(format_number_string(election.num_votes),    "5em", "right")}
@@ -359,14 +359,16 @@ export default function ElectionList(props) {
   
   return (
     <div className={styles.wrapper}>
-      { error ?
-        <NetworkError/> :
-        <ElectionFilterList 
-          election_filter_properties={election_filter_properties}
-          election_filters={election_filters}
-          set_election_filters={set_election_filters}
-        />
-      }
+      <div className={styles.filter_container}>
+        { error ?
+          <NetworkError/> :
+          <ElectionFilterList 
+            election_filter_properties={election_filter_properties}
+            election_filters={election_filters}
+            set_election_filters={set_election_filters}
+          />
+        }
+      </div>
       <div className={styles.vertical_separator}/>
       <div className={styles.search_list_container}>
         <div className={styles.search_container}>
@@ -392,9 +394,9 @@ export default function ElectionList(props) {
               )
             }
           </div>
-          {elections_selected.length === 0 || <div className={styles.horizontal_separator}/>}
+          {(elections_selected.length === 0 && user_elections.size === 0)|| <div className={styles.horizontal_separator}/>}
           <div className={styles.selected_list_container}>
-            {Array.from(elections_selected_data).map(([name, election], index) => election && render_election(election, index))}
+            {Array.from(new Map([...elections_selected_data, ...user_elections])).map(([name, election], index) => election && render_election(election, index))}
           </div>
         </div>
       </div>

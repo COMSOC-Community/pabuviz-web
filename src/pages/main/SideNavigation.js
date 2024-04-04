@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { NavLink } from "react-router-dom";
-import { UrlStateContext } from '../../UrlParamsContextProvider';
 import styles from './SideNavigation.module.css'
+import { UrlStateContext } from 'contexts';
 
 import logo from "assets/pabuviz_logo.svg";
 
@@ -57,6 +57,16 @@ export default function SideNavigation() {
             >
               <p className={styles.nav_link_text}>
                 {"Upload Election"}
+              </p>
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to={get_url_navigation_string("about")}
+              className={({isActive}) => isActive ? styles.nav_link_active : styles.nav_link}
+            >
+              <p className={styles.nav_link_text}>
+                {"About pabuviz"}
               </p>
             </NavLink>
           </li>

@@ -17,20 +17,25 @@ export default function FileUpload(props) {
 
   const [file, set_file] = useState(undefined);
   const [upload_state, set_upload_state] = useState(null);
+  const [error_text, set_error_text] = useState("");
 
   const handle_file_change = (event) => {
     if (event.target.files) {
       set_file(event.target.files[0]);
-      console.log(event.target.files[0])
     }
   };
 
   const handle_click = () => {
-    if (file) {
+    if (file && upload_state !== "uploading") {
       set_upload_state("uploading");
       api_request(file).then((response) => {
         set_upload_state("success");
-        on_successful_upload(response);
+        if (response) {
+          on_successful_upload(response);
+        }
+      }).catch(e => {
+        set_upload_state("error");
+        set_error_text("Error: " + e);
       });
     }
   };
@@ -43,18 +48,23 @@ export default function FileUpload(props) {
         className={styles.input}
         onChange={handle_file_change}
       />
-      {file && 
+      { file &&
         <div className={styles.upload_button} onClick={handle_click}>
-          Upload
+          {upload_state === "uploading" ? 
+            <ActivityIndicator scale={0.8}/> :
+            "Upload"
+          }
         </div>
-      }
-      {
-        upload_state === "uploading" &&
-        <ActivityIndicator/>
       }
       {
         upload_state === "success" &&
         "Successfully uploaded"
+      }
+      {
+        upload_state === "error" &&
+        <div className={styles.error_text}>
+          {error_text}
+        </div>
       }
     </div>
   )

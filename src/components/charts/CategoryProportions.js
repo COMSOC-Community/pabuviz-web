@@ -84,6 +84,7 @@ const api_request = (props_constant) => {
   let [category_proportions_promise, abort_controller] = get_category_proportions(
     props_constant.election_name,
     props_constant.rules.map(rule => rule.abbreviation),
+    props_constant.user_submitted
   );
   
   return {
@@ -111,13 +112,13 @@ const generate_export_data = (api_response, parent_props_constant, parent_props_
 
 
 export default function CategoryProportion(props) { 
-  const {election_name, rules, rule_visibility, render_delay} = props;
+  const {election_name, rules, rule_visibility, render_delay, user_submitted} = props;
   
   const props_constant = useMemo(
     () => {
-      return election_name && rules ? {election_name, rules} : null;
+      return election_name && rules ? {election_name, rules, user_submitted} : null;
     },
-    [election_name, rules]
+    [election_name, rules, user_submitted]
   );  
 
   const props_variable = useMemo(

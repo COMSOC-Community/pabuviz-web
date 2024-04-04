@@ -1,7 +1,7 @@
-import React, { createContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { createSearchParams, useSearchParams } from "react-router-dom";
 import { default_rules_visible } from './constants/constants';
-
+import { UrlStateContext } from 'contexts';
 
 /**
  * Here, we define all states that should be synchronized with the URL search parameters
@@ -12,7 +12,7 @@ import { default_rules_visible } from './constants/constants';
  *  dependencies: names of other URL parameters that this state depends on
  *                whenever any of them is changed, this state will be reset to default
  *  default: default/initial value of the state
- *           can also be passed a function taking as parameter the dependencies array and returning the deafult state
+ *           can also be passed a function taking as parameter the dependencies array and returning the default state
  */
 export const search_param_states_options = new Map([
   ["ballot_type_selected", {
@@ -34,8 +34,6 @@ export const search_param_states_options = new Map([
     global: false
   }]
 ]);
-
-export const UrlStateContext = createContext();
 
 /**
  * Component managing the states that should be synchronized with the URL search parameters.
@@ -101,7 +99,7 @@ export default function UrlParamsContextProvider(props) {
     set_search_params(get_updated_search_params(search_params, new_search_params_obj));
   }
   
-  // returns an url string to the gien local path with the new search parameters given in the object
+  // returns an url string to the given local path with the new search parameters given in the object
   // use this for any navigation to make sure the search params update properly 
   const get_url_navigation_string = (route_name, new_search_params_obj = {}) => {
     let new_search_params = new URLSearchParams(search_params);

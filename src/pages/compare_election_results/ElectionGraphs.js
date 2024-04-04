@@ -22,7 +22,8 @@ const election_sections = [
         rules={rules}
         election_filters={election_filters}
         rule_visibility={rule_visibility}
-        hide_num_elections={true}
+        single_election={true}
+        user_submitted={election.user_submitted}
       />
     )
   },
@@ -37,7 +38,8 @@ const election_sections = [
         rule_properties={rule_properties}
         election_filters={election_filters}
         rule_visibility={rule_visibility}
-        hide_num_elections={true}
+        single_election={true}
+        user_submitted={election.user_submitted}
       />
     )
   },
@@ -51,6 +53,7 @@ const election_sections = [
         election_name={election.name}
         rules={rules}
         rule_visibility={rule_visibility}
+        user_submitted={election.user_submitted}
       />
     )
   },
@@ -93,7 +96,6 @@ const election_sections = [
  */
 export default function ElectionGraphs(props) {
   const { elections_selected_data, rules, rule_visibility, rule_properties } = props;
-  
   const [section_visibility, set_section_visibility] = useState(
     election_sections.map((section) => section.default_visibility) 
   );
@@ -118,7 +120,7 @@ export default function ElectionGraphs(props) {
       <div className={styles.election_container} key={name}>
         <div className={styles.election_title}>
           <p>
-            {election.unit + (election.subunit ? ", " + election.subunit : "") + ". " + new Date(election.date_begin).getFullYear()}
+            {election.unit + ((election.subunit || election.instance) ? ", " + (election.subunit || election.instance) : "") + ". " + new Date(election.date_begin).getFullYear()}
           </p>
         </div>
         <div className={styles.election_body}>
@@ -153,7 +155,14 @@ export default function ElectionGraphs(props) {
                       width: only_one_selected ? section.width : "100%",
                       height: section.height
                     }}>
-                    {section.render(election, rules, rule_visibility, rule_properties, election_filters[election_index], only_one_selected)}
+                    {section.render(
+                      election,
+                      rules,
+                      rule_visibility,
+                      rule_properties,
+                      election_filters[election_index],
+                      only_one_selected
+                    )}
                   </div>
                 </div>
               </Collapsable>

@@ -1,0 +1,9 @@
+@import '../../constants/constants.css';
+
+.content {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin: 30px;
+}

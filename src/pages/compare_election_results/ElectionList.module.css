@@ -26,7 +26,7 @@
 }
 
 .filter_title {
-  font-size: large;
+  font-size: 0.92vw;
   font-weight: bold;
   /* background-color: aliceblue; */
   margin: 10px;
@@ -44,17 +44,13 @@
 }
 
 .filter_container {
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  box-sizing: border-box;
+  height: 100%;
+  flex: 4.5;
   /* background-color: orangered; */
 }
 
 .search_list_container {
-  flex: 1;
+  flex: 10;
   height: 100%;
   /* margin: 0 5px 0 5px; */
   display: flex;
@@ -82,7 +78,7 @@
   background-color: #fff1;
   border: 2px solid #0008; 
   border-radius: 5px;
-  font-size: medium;
+  font-size: 0.85vw;
 }
 
 .results_info_text {
@@ -90,7 +86,7 @@
   padding: 5px;
   box-sizing: border-box;
   color: #333; 
-  font-size: medium;
+  font-size: 0.85vw;
   text-align: right;
 }
 

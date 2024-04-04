@@ -5,9 +5,9 @@ import RulePicker from './RulePicker';
 import Selector from '../../components/reusables/Selector';
 import LegendItem from '../../components/reusables/LegendItem';
 import ActivityIndicator from '../../components/reusables/ActivityIndicator';
+import { UrlStateContext, UserDataContext } from 'contexts';
 import { Tooltip } from 'react-tooltip';
-import { UrlStateContext } from '../../UrlParamsContextProvider';
-import { get_ballot_types, get_rules } from '../../utils/database_api';
+import { get_ballot_types, get_election_details, get_rules } from '../../utils/database_api';
 import { capitalize_first_letter, clone, get_ballot_type_color, get_rule_color } from '../../utils/utils';
 import styles from './Main.module.css'
 
@@ -19,8 +19,9 @@ import styles from './Main.module.css'
 function Main() {
   const [ballot_types, set_ballot_types] =  useState(undefined)
   const [rule_families, set_rule_families] =  useState(undefined);
+  const [user_elections, set_user_elections] =  useState(new Map());
     
-  const {rule_visibility, ballot_type_selected, set_ballot_type_selected} = useContext(UrlStateContext);
+  const {rule_visibility, ballot_type_selected, set_ballot_type_selected, elections_selected} = useContext(UrlStateContext);
 
   // request ballot types and rules from the database on first load
   useEffect(() => {
@@ -48,6 +49,31 @@ function Main() {
     }
   }, []);
 
+  // if an election is selected that is not yet saved in user_elections (either through an upload a URL), it gets added here
+  useEffect(() => {
+    if (elections_selected){
+      elections_selected.forEach(election => {
+        if (election.user_submitted && ![...user_elections.values()].some(e => (e.name === election.name))) {
+          let [election_details_promise, election_details_abort_controller] = get_election_details(
+            null,
+            null,
+            {name: {equals: election.name}},
+            true
+          );
+          election_details_promise.then(response => {
+            if (response["data"][election.name]){
+              console.log(response)
+              const new_user_elections = new Map(user_elections);
+              new_user_elections.set(election.name, response["data"][election.name]);
+              set_user_elections(new_user_elections);
+            }
+          })
+        }
+      })
+    }
+  }, [elections_selected, user_elections, set_user_elections])
+
+
   // function rendering the ballot type selector
   const render_ballot_type_selector = () => {
     return ballot_types && (
@@ -58,11 +84,14 @@ function Main() {
         invert={true}
         render_item={(ballot_type_name, ballot_type, index) => {
           return (
-            <div key={ballot_type_name} className={styles.ballot_type_option_container}>
+            <div
+              key={ballot_type_name}
+              className={styles.ballot_type_option_container}
+              data-tooltip-id={"main_tooltip"}
+              data-tooltip-content={capitalize_first_letter(ballot_type.description)}
+            >
               <LegendItem
                 color={get_ballot_type_color(index)}
-                tooltip_text={capitalize_first_letter(ballot_type.description)}
-                tooltip_id={"main_tooltip"}
               >
                 <div className={styles.ballot_type_option_text}>
                   {capitalize_first_letter(ballot_type_name) + " ballots"}
@@ -140,49 +169,51 @@ function Main() {
 
 
   return (
-    <main className={styles.main}>
-      <div className={styles.horizontal_layout}>
-        <div className={styles.side_menu}>
-          <div className={styles.nav_container}>
-            <SideNavigation/>
+    <UserDataContext.Provider value={{user_elections, set_user_elections}}>
+      <main className={styles.main}>
+        <div className={styles.horizontal_layout}>
+          <div className={styles.side_menu}>
+            <div className={styles.nav_container}>
+              <SideNavigation/>
+            </div>
+            <div className={styles.ballot_type_picker_container}>
+              {render_ballot_type_selector()}
+            </div>
+            <Tooltip
+              id="main_tooltip"
+              delayShow={500}
+              style={{maxWidth: "750px"}}
+            />
           </div>
-          <div className={styles.ballot_type_picker_container}>
-            {render_ballot_type_selector()}
-          </div>
-          <Tooltip
-            id="main_tooltip"
-            delayShow={500}
-            style={{maxWidth: "750px"}}
-          />
-        </div>
-        <div className={styles.content_and_rule_picker_container}>
-          <div className={styles.content_container}> 
-            { ballot_type_selected && rule_list && rule_visibility ?
-              <Outlet context={{
-                rule_list: rule_list,
-              }}/> :
-              <ActivityIndicator/>
-            }
-          </div>
-          <div className={styles.rule_picker_container} key={ballot_type_selected}>
-            <div className={styles.rule_picker}>
-              {rule_families_filtered && rule_visibility ? 
-                <RulePicker
-                  rule_families={rule_families_filtered}
-                  horizontal
-                /> :
+          <div className={styles.content_and_rule_picker_container}>
+            <div className={styles.content_container}> 
+              { ballot_type_selected && rule_list && rule_visibility ?
+                <Outlet context={{
+                  rule_list: rule_list,
+                }}/> :
                 <ActivityIndicator/>
               }
             </div>
+            <div className={styles.rule_picker_container} key={ballot_type_selected}>
+              <div className={styles.rule_picker}>
+                {rule_families_filtered && rule_visibility ? 
+                  <RulePicker
+                    rule_families={rule_families_filtered}
+                    horizontal
+                  /> :
+                  <ActivityIndicator/>
+                }
+              </div>
+            </div>
+            <Tooltip
+              id="main_tooltip"
+              delayShow={500}
+              style={{maxWidth: "750px", zIndex: 2}}
+            />
           </div>
-          <Tooltip
-            id="main_tooltip"
-            delayShow={500}
-            style={{maxWidth: "750px", zIndex: 2}}
-          />
         </div>
-      </div>
-    </main>
+      </main>
+    </UserDataContext.Provider>
     );
   }
   

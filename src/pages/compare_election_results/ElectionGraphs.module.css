@@ -28,7 +28,7 @@
 .election_title p{
   height: 18px;
   /* margin: 10px; */
-  font-size: medium;
+  font-size: 0.85vw;
   font-weight: bold;
   text-align: center;
   word-wrap: break-word;
