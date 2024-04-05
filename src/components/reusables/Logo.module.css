@@ -2,6 +2,8 @@
 
 .logo {
     font-weight: bold;
+    max-width: 7.5ch;
+    display: inline-block;
 }
 
 .logo_checkmark {
