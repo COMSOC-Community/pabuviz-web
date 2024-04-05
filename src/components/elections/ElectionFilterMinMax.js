@@ -36,7 +36,8 @@ export default function ElectionFilterMinMax(props) {
       <p
         className={styles.filter_title}
         data-tooltip-id="main_tooltip"
-        data-tooltip-content={capitalize_first_letter(election_property.description || election_property.name)}
+        data-tooltip-content={capitalize_first_letter(election_property.description)}
+        style={{textDecoration: election_property.description ? null : "none"}}
       >
         {capitalize_first_letter(election_property.name)}
       </p>

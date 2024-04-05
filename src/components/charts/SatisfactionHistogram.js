@@ -154,7 +154,7 @@ const api_request = (props_constant) => {
   );
   return {
     promise: rule_satisfaction_histogram_promise,
-    abort_func: () => {abort_controller.abort()}
+    abort_func: () => {abort_controller.abort();}
   }
 }
 

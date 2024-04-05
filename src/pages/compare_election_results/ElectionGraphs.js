@@ -79,7 +79,7 @@ const election_sections = [
   },
   { 
     name: "Election details",
-    width: "70%",
+    width: "60%",
     height: "fit content",
     default_visibility: true,
     render: (election, rules, rule_visibility, rule_properties, election_filters, only_one_selected) => (

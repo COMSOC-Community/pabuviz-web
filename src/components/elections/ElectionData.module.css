@@ -4,6 +4,9 @@
 
 .property_title {
     font-weight: normal;
+    text-decoration: underline dotted #666A;
+    text-underline-offset: 4pt;
+    cursor: default;
 }
 
 .table {

@@ -104,10 +104,13 @@ export default function ElectionData(props) {
                 <tr key={property.short_name} className={styles.row}>
                   <td
                     className={styles.title_column}
-                    data-tooltip-id={"main_tooltip"}
-                    data-tooltip-content={capitalize_first_letter(property.description)}
                   >
-                    <div className={styles.property_title}>
+                    <div 
+                      className={styles.property_title}
+                      data-tooltip-id={"main_tooltip"}
+                      data-tooltip-content={capitalize_first_letter(property.description)}
+                      style={{textDecoration: property.description ? null : "none"}}
+                    >
                       {capitalize_first_letter(property.name) + ": "}
                     </div>
                   </td>
