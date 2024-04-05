@@ -3,6 +3,7 @@ import ToggleLegend from '../../components/reusables/ToggleLegend';
 import ElectionSizePlot from '../../components/charts/ElectionSizePlot'
 import ElectionPropertyHistogram from '../../components/charts/ElectionPropertyHistogram';
 import ActivityIndicator from '../../components/reusables/ActivityIndicator'
+import Logo from '../../components/reusables/Logo'
 import NetworkError from '../../components/reusables/NetworkError';
 import { get_elections } from '../../utils/database_api';
 import styles from './DatabaseOverview.module.css'
@@ -71,10 +72,10 @@ export default function DatabaseOverview(props) {
     return (
       <>
         <h1 className={styles.title_text}>
-          Welcome to Pabuviz
+          Welcome to <Logo/>
         </h1>
         <div className={styles.info_text}>
-          <p>pabuviz is an interactive computation and visualization tool for participatory budgeting. It provides intuitive and visually appealing comparison tools based on real life data.</p>
+          <p><Logo/> is an interactive computation and visualization tool for participatory budgeting. It provides intuitive and visually appealing comparison tools based on real life data.</p>
           <p>If you don't know what participatory budgeting (PB or pabu) is, the <a href="https://en.wikipedia.org/wiki/Participatory_budgeting">Wikipedia page</a> provides extensive details, but in short, PB is a democratic tool through which ordinary citizens decide how to allocate a given amount of money across several projects.</p>
           <p>Many PB are based on a voting process in which citizens <em>vote</em> to decide the final allocation of the budget. In these cases, choosing the voting rule&mdash;the rule (or procedure) through which the final budget allocation is decided based on the ballots that have been cast&mdash;can be difficult since there are numerous possibilities.</p>
           <p>With pabuviz you can, in a blink of an eye, compare different voting rules for PB based on many criteria and discover the most suitable one for your needs!</p>
