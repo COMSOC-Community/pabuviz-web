@@ -195,15 +195,15 @@ function Main() {
               }
             </div>
             <div className={styles.rule_picker_container} key={ballot_type_selected}>
-              <div className={styles.rule_picker}>
-                {rule_families_filtered && rule_visibility ? 
+              {rule_families_filtered && rule_visibility ? 
+                <div className={styles.rule_picker}>
                   <RulePicker
                     rule_families={rule_families_filtered}
                     horizontal
-                  /> :
-                  <ActivityIndicator/>
+                  />
+                </div> :
+                <ActivityIndicator scale={0.7}/>
                 }
-              </div>
             </div>
             <Tooltip
               id="main_tooltip"
