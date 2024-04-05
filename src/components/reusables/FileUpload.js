@@ -51,15 +51,15 @@ export default function FileUpload(props) {
       { file &&
         <div className={styles.upload_button} onClick={handle_click}>
           {upload_state === "uploading" ? 
-            <ActivityIndicator scale={0.8}/> :
+            <ActivityIndicator scale={0.6}/> :
             "Upload"
           }
         </div>
       }
-      {
+      {/* {
         upload_state === "success" &&
         "Successfully uploaded"
-      }
+      } */}
       {
         upload_state === "error" &&
         <div className={styles.error_text}>

@@ -68,61 +68,64 @@ export default function ElectionData(props) {
   }, [election, election_details, election_filter_properties, election_filter_properties_short_names]);
 
   return (
-    error ?
-    <NetworkError/> :
-    ( !state.election_details || !state.election_filter_properties ?
-      <ActivityIndicator/> :
-      <table className={styles.table}>
-        <tbody className={styles.tbody}>
-          {state.election_filter_properties.map(property => {
-            const property_value = state.election_details[property.short_name];
-            let property_value_render;
-            let property_tooltip_text = "";
-            if (property_value != null){
-              if (property.inner_type === "int" || property.inner_type === "float"){
-                property_value_render = format_number_string(property_value.toFixed(2));
-              } else if (property.inner_type === "bool"){
-                property_value_render = <Boolean boolean_value={property_value} no_colors />;
-              } else if (property.inner_type === "str"){
-                property_value_render = property_value;
-                property_tooltip_text = property_value;
-              } else if (property.inner_type === "date"){
-                property_value_render = property_value;
-              } else if (property.inner_type === "reference"){
-                if (property.referencable_objects && property.referencable_objects[property_value]){
-                  property_value_render = capitalize_first_letter(property.referencable_objects[property_value].name);
-                  property_tooltip_text = capitalize_first_letter(property.referencable_objects[property_value].description);
+    <div className={styles.container}>
+      {error ?
+      <NetworkError/> :
+      ( !state.election_details || !state.election_filter_properties ?
+        
+        <div style={{height: "100px", width: "100%"}}><ActivityIndicator/></div> :
+        <table className={styles.table}>
+          <tbody className={styles.tbody}>
+            {state.election_filter_properties.map(property => {
+              const property_value = state.election_details[property.short_name];
+              let property_value_render;
+              let property_tooltip_text = "";
+              if (property_value != null){
+                if (property.inner_type === "int" || property.inner_type === "float"){
+                  property_value_render = format_number_string(property_value.toFixed(2));
+                } else if (property.inner_type === "bool"){
+                  property_value_render = <Boolean boolean_value={property_value} no_colors />;
+                } else if (property.inner_type === "str"){
+                  property_value_render = property_value;
+                  property_tooltip_text = property_value;
+                } else if (property.inner_type === "date"){
+                  property_value_render = property_value;
+                } else if (property.inner_type === "reference"){
+                  if (property.referencable_objects && property.referencable_objects[property_value]){
+                    property_value_render = capitalize_first_letter(property.referencable_objects[property_value].name);
+                    property_tooltip_text = capitalize_first_letter(property.referencable_objects[property_value].description);
+                  }
+                } else {
+                  console.warn("Election data property type '" + property.inner_type + "' not supported");
+                  return null;
                 }
-              } else {
-                console.warn("Election data property type '" + property.inner_type + "' not supported");
-                return null;
               }
-            }
-            return (
-              <tr key={property.short_name} className={styles.row}>
-                <td
-                  className={styles.title_column}
-                  data-tooltip-id={"main_tooltip"}
-                  data-tooltip-content={capitalize_first_letter(property.description)}
-                >
-                  <div className={styles.property_title}>
-                    {capitalize_first_letter(property.name) + ": "}
-                  </div>
-                </td>
-                <td className={styles.value_column}>
-                  <div
-                    className={styles.value_container}
+              return (
+                <tr key={property.short_name} className={styles.row}>
+                  <td
+                    className={styles.title_column}
                     data-tooltip-id={"main_tooltip"}
-                    data-tooltip-content={property_tooltip_text}
+                    data-tooltip-content={capitalize_first_letter(property.description)}
                   >
-                    {property_value_render}
-                  </div>  
-                </td>
-              </tr>
-            )
-          })}
-        </tbody>
-      </table> 
-    )
+                    <div className={styles.property_title}>
+                      {capitalize_first_letter(property.name) + ": "}
+                    </div>
+                  </td>
+                  <td className={styles.value_column}>
+                    <div
+                      className={styles.value_container}
+                      data-tooltip-id={"main_tooltip"}
+                      data-tooltip-content={property_tooltip_text}
+                    >
+                      {property_value_render}
+                    </div>  
+                  </td>
+                </tr>
+              )
+            })}
+          </tbody>
+        </table> 
+      )}
+    </div>
   )
 }

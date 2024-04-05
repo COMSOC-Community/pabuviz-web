@@ -7,7 +7,6 @@ import pb_svg from "assets/PB.svg";
  */
 export default function ActivityIndicator(props) { 
   const {simple, scale} = props;
-  console.log(scale || 1)
   if (simple){
     return (
       <div className={styles.center_box} style={{transform: `scale(${scale || 1}` }}>

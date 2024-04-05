@@ -75,7 +75,7 @@ export default function ElectionFilterList(props) {
       <div className={styles.filters_container}>
         { election_filter_properties ? 
           election_filter_properties.map(render_filter):
-          <ActivityIndicator/>
+          <div style={{height: "100px", width: "100%"}}><ActivityIndicator/></div>
         }
       </div>
     </div>

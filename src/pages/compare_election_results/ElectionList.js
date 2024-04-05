@@ -49,6 +49,7 @@ const filter_elections_by_search_text = (elections, search_text) => {
   return filtered_elections;
 }
 
+
 const sort_elections = (elections, sorting) => {
   const {primary, secondary} = sorting;
 
@@ -396,7 +397,9 @@ export default function ElectionList(props) {
           </div>
           {(elections_selected.length === 0 && user_elections.size === 0)|| <div className={styles.horizontal_separator}/>}
           <div className={styles.selected_list_container}>
-            {Array.from(new Map([...elections_selected_data, ...user_elections])).map(([name, election], index) => election && render_election(election, index))}
+            {Array.from(new Map([...elections_selected_data, ...user_elections])).map(
+              ([name, election], index) => election && render_election(election, index)
+            )}
           </div>
         </div>
       </div>

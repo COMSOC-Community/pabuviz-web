@@ -1,20 +1,68 @@
 @import '../../constants/constants.css';
 
-.columns {
+.page_container {
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    /* background-color: #ff00ff; */
+}
+
+
+.header_box {
+    width: 100%;
+    padding: 15px;
+}
+
+.title_text {
+    font-size: 1.3vw;
+    padding: 30pt 0;
+}
+
+.info_text {
+    font-size: 0.92vw;
+}
+
+.upload_container {
+    flex: 1;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.data_container {
+    flex: 3;
+    box-sizing: border-box;
+    padding: 20px;
+    /* background-color: #ff00ff; */
+    align-items: start;
+}
+
+.elections_container {
+    margin-top: 20px;
+}
+
+.election_container {
+    padding: 6px;
     display: flex;
     flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    margin: 30px;
+    justify-content: start;
+    align-items: start;
+    cursor: pointer;
 }
 
-.column {
-    width: 45%;
-}
+.election_container:hover {
+    background-color: #ffffff22;
+  }
 
-
-.explanation {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.election_property_container {
+    font-size: 0.92vw;
+    margin-right: 25px;
 }

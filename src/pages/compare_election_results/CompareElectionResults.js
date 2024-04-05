@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { UrlStateContext, UserDataContext } from 'contexts';
 import ElectionList from './ElectionList';
 import NetworkError from '../../components/reusables/NetworkError';
@@ -38,6 +38,13 @@ export default function CompareElectionResults(props) {
     return () => abort_controller.abort();
   }, [ballot_type_selected]);
 
+  // filters user elections by selected ballot type
+  const user_elections_filtered = useMemo(() => {
+    return new Map(
+      [...user_elections].filter(([name, election]) => election.ballot_type === ballot_type_selected )
+    );
+  }, [user_elections, ballot_type_selected])
+
   
   return (
     <div className={styles.content_container} >
@@ -52,7 +59,6 @@ export default function CompareElectionResults(props) {
           </p>
         </div>
       </div>
-
       <div className={styles.elections_box}>
         <ElectionList
           ballot_type={ballot_type_selected}
@@ -60,7 +66,7 @@ export default function CompareElectionResults(props) {
           set_elections_selected={set_elections_selected} 
           elections_selected_data={elections_selected_data}
           set_elections_selected_data={set_elections_selected_data}
-          user_elections={user_elections}
+          user_elections={user_elections_filtered}
           max_selected={2}
           initial_election_filters={location.state && location.state.election_filters ? location.state.election_filters : {}}
         /> 

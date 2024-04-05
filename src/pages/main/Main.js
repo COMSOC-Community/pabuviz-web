@@ -62,7 +62,6 @@ function Main() {
           );
           election_details_promise.then(response => {
             if (response["data"][election.name]){
-              console.log(response)
               const new_user_elections = new Map(user_elections);
               new_user_elections.set(election.name, response["data"][election.name]);
               set_user_elections(new_user_elections);
