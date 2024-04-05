@@ -20,7 +20,7 @@ import HoverTooltip from "./HoverTooltip";
  */
 export default function ToggleLegend(props) { 
 
-  const {items, visibility, set_visibility, horizontal, tooltip_id} = props;
+  const {items, visibility, set_visibility, horizontal, tooltip_id, name_suffix = ''} = props;
 
 
   const on_item_click = (index) => {
@@ -44,7 +44,7 @@ export default function ToggleLegend(props) {
           color={get_ballot_type_color(index)}
         >
           <div className={styles.legend_text}>
-            {capitalize_first_letter(item.name)}
+            {capitalize_first_letter(item.name) + ' ' + name_suffix}
           </div>
         </LegendItem>
       </div>

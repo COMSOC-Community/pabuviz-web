@@ -1,9 +1,12 @@
 # pabuviz
 
 ## Getting started
+
+### Local development
 - install [Node.js](https://nodejs.org/ "Node.js") and npm: `sudo apt install npm nodejs`
 - install yarn: `npm install --global yarn`
 - install dependencies: `yarn install`
+- run the Django server for the database (need to be on port 8000, see the file `.env.development`)
 - run: `yarn start`
 
 
