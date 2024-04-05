@@ -4,6 +4,7 @@ import { capitalize_first_letter, format_number_string, transparentize } from '.
 import { get_rule_result_properties } from '../../utils/database_api';
 import GeneralChart from './GeneralChart';
 import { rule_property_radar_chart_explanation } from '../../constants/chart_explanations';
+import styles from "../../pages/compare_election_results/ElectionGraphs.module.css";
 
 
 export const get_graph_options = (api_response, parent_props_constant, parent_props_variable, graph_data) => ({
@@ -197,7 +198,7 @@ export default function RulePropertyRadarChart(props) {
 
 
   return (
-    <>
+    <div className={styles.graph_info_text_container}>
       <GeneralChart 
         chart_id={"rule_property_radar_chart"}
         initial_graph_data={initial_graph_data}
@@ -212,7 +213,10 @@ export default function RulePropertyRadarChart(props) {
         get_graph_options={get_graph_options}
         chart_component={Radar}
       />
-    </>
-
+      <p className={styles.graph_info_text}>
+        Fox each axis the position only presents the ranking of the rules and not the
+        actual magnitude of the difference.
+      </p>
+    </div>
   );
 }

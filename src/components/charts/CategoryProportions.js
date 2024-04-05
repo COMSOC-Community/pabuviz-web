@@ -16,6 +16,9 @@ export const get_graph_options = (api_response) => {
         beginAtZero: true,
         min: 0,
         max: 100,
+        title: {
+          text: 'Percentage of the budget spent on each category.'
+        },
       },
       y: {
         stacked: true,

@@ -191,8 +191,8 @@ export default function ElectionProjectsInfo(props) {
                           <div
                             className={styles.legend_item_container}
                             onClick={() => set_new_sorting(rule.abbreviation, false)}
-                            // data-tooltip-id={"main_tooltip"}
-                            // data-tooltip-content={capitalize_first_letter(rule.description)}
+                            data-tooltip-id={"main_tooltip"}
+                            data-tooltip-content={capitalize_first_letter(rule.description)}
                           >
                             <LegendItem color={rule.color}>
                               {render_project_header_text(capitalize_first_letter(rule.name), rule.abbreviation)}

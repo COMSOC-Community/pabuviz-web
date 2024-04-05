@@ -65,7 +65,7 @@ export default function SideNavigation() {
               className={({isActive}) => isActive ? styles.nav_link_active : styles.nav_link}
             >
               <p className={styles.nav_link_text}>
-                {"About pabuviz"}
+                {"About"}
               </p>
             </NavLink>
           </li>
