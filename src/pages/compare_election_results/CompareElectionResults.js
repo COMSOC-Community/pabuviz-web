@@ -52,12 +52,6 @@ export default function CompareElectionResults(props) {
         <h1 className={styles.title_text}>
           Compare Elections
         </h1>
-        <div className={styles.info_text}>
-          <p>
-            On this page you can see the details of each election and to compare it with another one.<br/>
-            Use the controls in the bottom to choose the ballot type and the rules you want to see.
-          </p>
-        </div>
       </div>
       <div className={styles.elections_box}>
         <ElectionList

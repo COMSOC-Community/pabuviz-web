@@ -223,10 +223,13 @@ export default function ElectionList(props) {
     if (new_elections_selected.some((e) => (e.name === election.name))){
       new_elections_selected = new_elections_selected.filter(e => e.name !== election.name);
     } else {
-      if (!max_selected || new_elections_selected.length < max_selected){
+      if (!max_selected) {
+        return;
+      }
+      if (new_elections_selected.length < max_selected){
         new_elections_selected.push({name: election.name, user_submitted: election.user_submitted});
       } else {
-        return;
+        alert("You can select at most " + max_selected + " elections.")
       }
     }
     set_elections_selected(new_elections_selected);
@@ -372,6 +375,10 @@ export default function ElectionList(props) {
       </div>
       <div className={styles.vertical_separator}/>
       <div className={styles.search_list_container}>
+        <p className={styles.search_list_info_text}>
+          Select up to <strong>{max_selected}</strong> elections from the list to see the
+          details and compare them.
+        </p>
         <div className={styles.search_container}>
           <input 
             className={styles.search_text_input}
