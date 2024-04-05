@@ -81,6 +81,19 @@
   align-items: center;
 }
 
+.graph_info_text_container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.graph_info_text {
+  font-size: 0.8rem;
+  color: #555;
+}
+
 .election_data_container {
   width: 100%;
   display: flex;

@@ -15,7 +15,7 @@ const election_sections = [
   { 
     name: "Satisfaction histogram",
     width: "50%",
-    height: "300px",
+    height: "400px",
     default_visibility: true,
     render: (election, rules, rule_visibility, rule_properties, election_filters, only_one_selected) => (
       <SatisfactionHistogram
@@ -30,7 +30,7 @@ const election_sections = [
   { 
     name: "Rule properties", 
     width: "50%",
-    height: "300px",
+    height: "400px",
     default_visibility: true,
     render: (election, rules, rule_visibility, rule_properties, election_filters, only_one_selected) => (
       <RulePropertyRadarChart
@@ -46,15 +46,21 @@ const election_sections = [
   { 
     name: "Categories",
     width: "50%",
-    height: "300px",
+    height: "400px",
     default_visibility: true,
     render: (election, rules, rule_visibility, rule_properties, election_filters, only_one_selected) => (
-      <CategoryProportion
-        election_name={election.name}
-        rules={rules}
-        rule_visibility={rule_visibility}
-        user_submitted={election.user_submitted}
-      />
+      <div className={styles.graph_info_text_container}>
+        <CategoryProportion
+          election_name={election.name}
+          rules={rules}
+          rule_visibility={rule_visibility}
+          user_submitted={election.user_submitted}
+        />
+        <p className={styles.graph_info_text}>
+          The vote share represents the way categories are represented in the ballots. This is to be
+          compared to the outcome of the different rules.
+        </p>
+      </div>
     )
   },
   { 
@@ -119,9 +125,9 @@ export default function ElectionGraphs(props) {
     election && (
       <div className={styles.election_container} key={name}>
         <div className={styles.election_title}>
-          <p>
+          <h2>
             {election.unit + ((election.subunit || election.instance) ? ", " + (election.subunit || election.instance) : "") + ". " + new Date(election.date_begin).getFullYear()}
-          </p>
+          </h2>
         </div>
         <div className={styles.election_body}>
           {election_sections.map((section, section_index) => (

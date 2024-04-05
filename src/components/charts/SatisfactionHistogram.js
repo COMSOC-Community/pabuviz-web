@@ -5,6 +5,7 @@ import { clone, transparentize } from '../../utils/utils';
 import { get_rule_satisfaction_histogram } from '../../utils/database_api';
 import GeneralChart from './GeneralChart';
 import { satisfaction_histogram_explanation } from '../../constants/chart_explanations';
+import styles from "../../pages/compare_election_results/ElectionGraphs.module.css";
 
 
 export const get_graph_options = (api_response, parent_props_constant, parent_props_variable, graph_data) => {
@@ -45,7 +46,7 @@ export const get_graph_options = (api_response, parent_props_constant, parent_pr
       x: {
         type: 'linear',
         title: {
-          text: 'Percentage of budget spent on approved projects' 
+          text: 'Percentage of budget spent on approved projects'
         },
         min: 0,
         max: 100,
@@ -188,18 +189,25 @@ export default function SatisfactionHistogram(props) {
   
 
   return (
-    <GeneralChart 
-      chart_id={"satisfaction_histogram"}
-      compute_graph_data={compute_graph_data}
-      update_graph_data={update_graph_data}
-      generate_corner_info={single_election ? null : generate_corner_info}
-      generate_tooltip_info={() => satisfaction_histogram_explanation}
-      api_request={api_request}
-      parent_props_constant={props_constant}
-      parent_props_variable={props_variable}
-      generate_export_data={generate_export_data}
-      get_graph_options={get_graph_options}
-      chart_component={Line}
-    />
+    <div className={styles.graph_info_text_container}>
+      <GeneralChart
+        chart_id={"satisfaction_histogram"}
+        compute_graph_data={compute_graph_data}
+        update_graph_data={update_graph_data}
+        generate_corner_info={single_election ? null : generate_corner_info}
+        generate_tooltip_info={() => satisfaction_histogram_explanation}
+        api_request={api_request}
+        parent_props_constant={props_constant}
+        parent_props_variable={props_variable}
+        generate_export_data={generate_export_data}
+        get_graph_options={get_graph_options}
+        chart_component={Line}
+      />
+      <p className={styles.graph_info_text}>
+        A point at coordinates (x, y) reads as: exactly y% of the voters are such that x% of the
+        budget has been spent on projects that they individually approved of (see the info box
+        for more details).
+      </p>
+    </div>
   );
 }
