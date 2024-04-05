@@ -60,6 +60,10 @@
   /* background-color: green; */
 }
 
+.search_list_info_text {
+  margin-top: 0
+}
+
 .search_container {
   width: 100%;
   height: 40px;

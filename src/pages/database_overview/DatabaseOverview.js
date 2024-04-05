@@ -114,7 +114,7 @@ export default function DatabaseOverview(props) {
                       ballot_types={ballot_types}
                     />
                     <p className={styles.graph_info_text}>
-                      Click on a dot to see the details of the election.
+                      Click on a dot to be explore the details of the corresponding election.
                       The election data is taken from <a href="https://pabulib.org/">pabulib.org</a>,
                       the reference platform for participatory budgeting data.
                     </p>
