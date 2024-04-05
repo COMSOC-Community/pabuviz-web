@@ -12,7 +12,10 @@ const api_get = (url_suffix, parameters = {}) => {
       try { // TODO: proper error handling
         var response = await fetch(
           process.env.REACT_APP_API_URL + url_suffix + '/?' + parameter_search_query.toString(),
-          {cache: "default"} 
+          {
+            cache: "default",
+            signal: abort_controller.signal
+          } 
         );
 
         // response = await fetch(
