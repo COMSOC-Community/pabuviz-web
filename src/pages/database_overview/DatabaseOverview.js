@@ -104,7 +104,7 @@ export default function DatabaseOverview(props) {
                   set_visibility={set_ballot_type_visibility}
                   horizontal={true}
                   tooltip_id="main_tooltip"
-                  name_prefix={"ballots"}
+                  name_suffix={"ballots"}
                 />
                 <div className={styles.graphs_container}>
                   <div className={styles.overview_graph_container}>
