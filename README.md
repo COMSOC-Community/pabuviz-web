@@ -9,6 +9,9 @@
 - run the Django server for the database (need to be on port 8000, see the file `.env.development`)
 - run: `yarn start`
 
+### Build for the server
+- run: `npm run build`
+- scp the content of the build folder to the folder on the server
 
 ## Source file structure
 ```
