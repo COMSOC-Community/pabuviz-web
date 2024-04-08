@@ -25,10 +25,10 @@
   overflow: hidden;
 }
 
-.election_title p{
-  height: 18px;
+.election_title h2{
+  height: 25px;
   /* margin: 10px; */
-  font-size: 0.85vw;
+  font-size: 0.95vw;
   font-weight: bold;
   text-align: center;
   word-wrap: break-word;

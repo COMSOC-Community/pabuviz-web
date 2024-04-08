@@ -8,7 +8,7 @@ export default function About() {
     <div className={styles.page_container}>
       <div className={styles.header_box}>
         <h1 className={styles.title_text}>
-          Compare Rules Across Several Elections
+          About <Logo/>
         </h1>
       </div>
       <div className={styles.content_container}>
