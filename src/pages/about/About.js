@@ -16,7 +16,7 @@ export default function About() {
 
         <p>
           Through the development of <Logo/>, our aim is to provide tools that can be used to make
-          more informed decisions when it comes to the organisation of the democratic process.
+          better informed decisions when it comes to the organisation of the democratic process.
           We are dedicated to providing an accessible and engaging platform to present scientific
           insights to a general audience.
         </p>
@@ -29,9 +29,9 @@ export default function About() {
         <h2>The Team</h2>
 
         <p>
-          <Logo/> is project that came to life at
+          <Logo/> is a project that came to life at
           the <a href="https://www.illc.uva.nl/">Institute for Logic, Language and Computation of the University of Amsterdam</a> in
-          the computational social choice of <a href="https://staff.science.uva.nl/u.endriss/">Ulle Endriss</a>.
+          the Computational Social Choice Group lead by <a href="https://staff.science.uva.nl/u.endriss/">Ulle Endriss</a>.
         </p>
 
         <p>
@@ -40,7 +40,7 @@ export default function About() {
         </p>
 
         <p>
-          Please get in touch with either Markus or Simon if you have any thought you would
+          Please get in touch with either Markus or Simon if you have any thoughts you would
           like to share!
         </p>
       </div>
