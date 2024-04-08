@@ -75,10 +75,10 @@ export default function DatabaseOverview(props) {
           Welcome to <Logo/>
         </h1>
         <div className={styles.info_text}>
-          <p><Logo/> (read pabuviz and pronounced pabooviz) is an interactive computation and visualization tool for participatory budgeting. It provides intuitive and visually appealing comparison tools based on real life data.</p>
-          <p>If you don't know what participatory budgeting (PB or pabu) is, the <a href="https://en.wikipedia.org/wiki/Participatory_budgeting">Wikipedia page</a> provides extensive details, but in short, PB is a democratic tool through which ordinary citizens decide how to allocate a given amount of money across several projects.</p>
-          <p>Many PB are based on a voting process in which citizens <em>vote</em> to decide the final allocation of the budget. In these cases, choosing the voting rule&mdash;the rule (or procedure) through which the final budget allocation is decided based on the ballots that have been cast&mdash;can be difficult since there are numerous possibilities.</p>
-          <p>With <Logo/> you can, in a blink of an eye, compare different voting rules for PB based on many criteria and discover the most suitable one for your needs!</p>
+          <p><Logo/> (read pabuviz, and pronounced pabooviz) is an interactive computation and visualisation tool for participatory budgeting. It provides intuitive and visually appealing comparison tools based on real-life data.</p>
+          <p>If you don't yet know what participatory budgeting (PB or pabu) is, the <a href="https://en.wikipedia.org/wiki/Participatory_budgeting">Wikipedia page</a> provides extensive information. But in a nutshell, PB is a democratic tool by means of which ordinary citizens can decide how to allocate a given amount of money across several projects.</p>
+          <p>In most cases, citizens <em>vote</em> to decide the final allocation of the budget. But choosing the right voting rule&mdash;the rule (or procedure) used to select the final budget allocation in view of the ballots cast&mdash;can be difficult since there are numerous possibilities for how to tally the votes submitted.</p>
+          <p>With <Logo/> you can, in a blink of an eye, compare different voting rules for PB based on a host of criteria, and discover the rule that is most suitable for your specific needs!</p>
         </div>
       </>
     )
