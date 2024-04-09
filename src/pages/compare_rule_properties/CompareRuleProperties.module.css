@@ -10,6 +10,15 @@
   overflow: scroll;
 }
 
+.page_container {
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 15px;
+  /* background-color: #ff00ff; */
+  overflow: scroll;
+}
+
 .header_box {
   width: 100%;
   display: flex;
@@ -18,13 +27,13 @@
   align-items: center;
   box-sizing: border-box;
   padding: 0 50px;
-  margin: 50px 0 30px;
+  margin: 50px 0 -50px;
 }
 
 .title_text {
   font-size: 2rem;
   padding: 0;
-  margin: 0;
+  margin-bottom: 40px;
 }
 
 .info_text {

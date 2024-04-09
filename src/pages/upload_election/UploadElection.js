@@ -1,9 +1,8 @@
 import styles from './UploadElection.module.css'
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { get_election_details, submit_pb_file } from "utils/database_api";
 import FileUpload from "components/reusables/FileUpload";
 import { UrlStateContext, UserDataContext } from "contexts";
-import { clone } from "utils/utils";
 import { useNavigate } from "react-router-dom";
 
 
@@ -69,10 +68,9 @@ export default function UploadElection() {
             Upload Election
           </h1>
           <div className={styles.info_text}>
-            <p>
-              You can upload your own .pb file here. <br/><br/>
-              We will try to compute some rules and properties and show them to you on the 'Compare Elections' page.
-            </p>
+            <p>You can upload your own .pb file here. </p>
+            <p>We will try to compute some rules and properties and visualize them on the 'Compare Elections' page.</p>
+            {/* <p>Computations can take some time.</p> */}
           </div>
         </div>
         <div className={styles.upload_container}>
