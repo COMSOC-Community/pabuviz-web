@@ -31,7 +31,7 @@ export default function About() {
         <p>
           <Logo/> is a project that came to life at
           the <a href="https://www.illc.uva.nl/">Institute for Logic, Language and Computation of the University of Amsterdam</a> in
-          the Computational Social Choice Group lead by <a href="https://staff.science.uva.nl/u.endriss/">Ulle Endriss</a>.
+          the Computational Social Choice Group led by <a href="https://staff.science.uva.nl/u.endriss/">Ulle Endriss</a>.
         </p>
 
         <p>
