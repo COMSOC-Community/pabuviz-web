@@ -70,12 +70,12 @@ export default function ElectionFilterList(props) {
   return (
     <div className={styles.filters_wrapper}>
       <p className={styles.filter_title}>
-        Filter
+        Filters
       </p>
       <div className={styles.filters_container}>
         { election_filter_properties ? 
           election_filter_properties.map(render_filter):
-          <ActivityIndicator/>
+          <div style={{height: "100px", width: "100%"}}><ActivityIndicator/></div>
         }
       </div>
     </div>

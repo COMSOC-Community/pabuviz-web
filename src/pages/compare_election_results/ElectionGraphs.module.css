@@ -25,10 +25,10 @@
   overflow: hidden;
 }
 
-.election_title p{
-  height: 18px;
+.election_title h2{
+  height: 25px;
   /* margin: 10px; */
-  font-size: medium;
+  font-size: 0.95vw;
   font-weight: bold;
   text-align: center;
   word-wrap: break-word;
@@ -79,6 +79,19 @@
   /* background-color: var(--background-color-box); */
   justify-content: center;
   align-items: center;
+}
+
+.graph_info_text_container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.graph_info_text {
+  font-size: 0.8rem;
+  color: #555;
 }
 
 .election_data_container {

@@ -9,8 +9,6 @@ import styles from './LegendItem.module.css'
  * hex string, secondary color of the box
  * if given the box will have a linear gradient from color to secondary_color
  * @param {React.JSX.Element[]} props.children elements to be contained next to the colored box
- * @param {string} props.tooltip_text text content of the tooltip
- * @param {string} props.tooltip_id id of the react tooltip Tooltip component
  * @returns {React.JSX.Element}
  */
 export default function LegendItem(props) { 
@@ -22,8 +20,6 @@ export default function LegendItem(props) {
     <>
       <div
         className={styles.container}
-        data-tooltip-id={tooltip_id}
-        data-tooltip-content={tooltip_text}
       >
         <div
           className={styles.color_box_frame}

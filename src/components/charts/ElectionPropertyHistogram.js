@@ -4,9 +4,8 @@ import { Bar } from 'react-chartjs-2';
 import { get_election_property_histogram } from '../../utils/database_api';
 import { capitalize_first_letter, shorten_high_magnitude_number, transparentize, clone, get_ballot_type_color } from '../../utils/utils';
 import GeneralChart from './GeneralChart';
-import { createSearchParams, useNavigate } from "react-router-dom";
-import { UrlStateContext } from '../../UrlParamsContextProvider';
-
+import { useNavigate } from "react-router-dom";
+import { UrlStateContext } from 'contexts';
 
 export const get_graph_options = (api_response) => {
   return {

@@ -27,7 +27,7 @@
 }
 
 .indicator {
-    font-size: larger;
+    font-size: large;
     padding: 0 6pt 5pt 6pt;
     transition: 0.1s rotate ease-in-out;
     user-select: none;

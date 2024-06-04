@@ -20,7 +20,7 @@
 }
 
 .content_and_rule_picker_container {
-  flex: 4;
+  flex: 40;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -44,6 +44,7 @@
 
 .rule_picker_container {
   width: 100%;
+  min-height: 65px;
   position: sticky;
   padding: 15px;
   box-sizing: border-box;
@@ -51,7 +52,7 @@
 }
 
 .rule_picker {
-  min-height: 40px;
+  
   display: flex;
   flex-direction: row;
   justify-content: space-around;
@@ -63,7 +64,7 @@
 .side_menu {
   left: 0;
   top: 0;
-  width: 350px;
+  flex: 8;
   height: 100%;
   background-color: var(--background-color-secondary);
   display: flex;
@@ -74,6 +75,7 @@
 .nav_container {
   /* position: fixed; */
   height: 70%;
+  overflow-y: scroll;
 }
 
 .ballot_type_picker_container {
@@ -99,6 +101,8 @@
 }
 
 .ballot_type_option_text{
-  font-size: large;
+  font-size: 0.92vw;
+  text-decoration: underline dotted #666A;
+  text-underline-offset: 4pt;
 }
 

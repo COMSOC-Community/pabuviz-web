@@ -3,15 +3,7 @@
   width: fit-content;
   margin-bottom: 120px;
   margin-top: 30px;
-}
-
-.nav_logo {
-  height: 100px;
-  width: auto;
-}
-
-.nav_title_text {
-  font-size: xx-large;
+  font-size: 2.5rem;
 }
 
 .nav_list {
@@ -38,7 +30,7 @@
 
 .nav_link_text{
   margin: 15px 20px;
-  font-size: larger;
+  font-size: 0.92vw;
 }
 
 .nav_link_active {

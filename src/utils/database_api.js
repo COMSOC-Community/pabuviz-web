@@ -12,7 +12,10 @@ const api_get = (url_suffix, parameters = {}) => {
       try { // TODO: proper error handling
         var response = await fetch(
           process.env.REACT_APP_API_URL + url_suffix + '/?' + parameter_search_query.toString(),
-          {cache: "default"} 
+          {
+            cache: "default",
+            signal: abort_controller.signal
+          } 
         );
 
         // response = await fetch(
@@ -78,25 +81,38 @@ export const get_projects = (election_name, user_submitted = false) => {
   return api_get('projects', {election_name, user_submitted});
 }
 
-export const get_rule_result_properties = (rule_abbr_list, property_short_names, election_filters = {}, user_submitted = false) => {
+export const get_rule_result_properties = (
+  rule_abbr_list,
+  property_short_names,
+  election_filters = {},
+  user_submitted = false,
+  include_incomplete_elections = false,
+) => {
   return api_get(
     'avg_rule_property',
     {
       rule_abbr_list,
       property_short_names,
       election_filters,
-      user_submitted
+      user_submitted,
+      include_incomplete_elections
     }
   );
 }
 
-export const get_rule_satisfaction_histogram = (rule_abbr_list, election_filters = {}, user_submitted = false) => {
+export const get_rule_satisfaction_histogram = (
+  rule_abbr_list,
+  election_filters = {},
+  user_submitted = false,
+  include_incomplete_elections = false
+) => {
   return api_get(
     'rule_voter_satisfaction_histogram',
     {
       rule_abbr_list,
       election_filters,
-      user_submitted
+      user_submitted,
+      include_incomplete_elections
     }
   );
 }
@@ -130,19 +146,19 @@ export const submit_pb_file = async (pb_file) => {
   const formData = new FormData();
   formData.append("pb_file", pb_file);
 
-  try {
-    const response = await fetch(
-      process.env.REACT_APP_API_URL + "submit_pb_file/",
-      {
-        method: "POST",
-        body: formData,
-      }
-    );
+  const response = await fetch(
+    process.env.REACT_APP_API_URL + "submit_pb_file/",
+    {
+      method: "POST",
+      body: formData,
+    }
+  );
 
+  if (response.status === 200){
     const data = await response.json();
-
-    console.log(data);
-  } catch (error) {
-    console.error(error);
+    return data;
+  } else {
+    const data = await response.json();
+    throw (data.detail)
   }
 }

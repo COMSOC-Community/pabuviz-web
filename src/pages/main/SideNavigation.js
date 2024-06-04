@@ -1,9 +1,8 @@
 import React, { useContext } from 'react';
 import { NavLink } from "react-router-dom";
-import { UrlStateContext } from '../../UrlParamsContextProvider';
 import styles from './SideNavigation.module.css'
-
-import logo from "assets/pabuviz_logo.svg";
+import { UrlStateContext } from 'contexts';
+import Logo from '../../components/reusables/Logo'
 
 /**
  * React Component for displaying the navigation menu
@@ -16,7 +15,7 @@ export default function SideNavigation() {
   return (
     <>
       <div className={styles.nav_logo_container}>
-        <img src={logo} alt="" className={styles.nav_logo}/>
+        <Logo/>
       </div>
       <nav>
         <ul className={styles.nav_list}>
@@ -57,6 +56,16 @@ export default function SideNavigation() {
             >
               <p className={styles.nav_link_text}>
                 {"Upload Election"}
+              </p>
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to={get_url_navigation_string("about")}
+              className={({isActive}) => isActive ? styles.nav_link_active : styles.nav_link}
+            >
+              <p className={styles.nav_link_text}>
+                {"About"}
               </p>
             </NavLink>
           </li>

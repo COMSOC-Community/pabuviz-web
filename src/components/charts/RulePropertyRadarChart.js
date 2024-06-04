@@ -4,6 +4,7 @@ import { capitalize_first_letter, format_number_string, transparentize } from '.
 import { get_rule_result_properties } from '../../utils/database_api';
 import GeneralChart from './GeneralChart';
 import { rule_property_radar_chart_explanation } from '../../constants/chart_explanations';
+import styles from "../../pages/compare_election_results/ElectionGraphs.module.css";
 
 
 export const get_graph_options = (api_response, parent_props_constant, parent_props_variable, graph_data) => ({
@@ -16,6 +17,7 @@ export const get_graph_options = (api_response, parent_props_constant, parent_pr
       },
     }
   },
+  spanGaps: false,
   plugins: {
     title: {
       display: false
@@ -82,11 +84,15 @@ const update_graph_data = (api_response, props_constant, props_variable, old_gra
   // normalize data
   datasets.forEach((dataset, rule_index) => {
     dataset.raw_data.forEach((value, rule_property_index) => {
-      let max_scaling = 0.01; // does not do much for big values, could be adapted to be multiplicative
-      if (max_visible_value[rule_property_index] - min_visible_value[rule_property_index] > max_scaling){
-        dataset.data.push((value - min_visible_value[rule_property_index]) / (max_visible_value[rule_property_index] - min_visible_value[rule_property_index]));
+      if (value){
+        let max_scaling = 0.01; // does not do much for big values, could be adapted to be multiplicative
+        if (max_visible_value[rule_property_index] - min_visible_value[rule_property_index] > max_scaling){
+          dataset.data.push((value - min_visible_value[rule_property_index]) / (max_visible_value[rule_property_index] - min_visible_value[rule_property_index]));
+        } else {
+          dataset.data.push((value - 0.5 * (min_visible_value[rule_property_index] + max_visible_value[rule_property_index])) / max_scaling + .5);
+        }
       } else {
-        dataset.data.push((value - 0.5 * (min_visible_value[rule_property_index] + max_visible_value[rule_property_index])) / max_scaling + .5) ;
+        dataset.data.push(null);
       }
     })
   });
@@ -160,7 +166,9 @@ const api_request = (props_constant) => {
   let [rule_result_property_promise, abort_controller] = get_rule_result_properties(
     props_constant.rules.map(rule => rule.abbreviation),
     props_constant.rule_properties.map(property => property.short_name),
-    props_constant.election_filters
+    props_constant.election_filters,
+    props_constant.user_submitted,
+    props_constant.single_election
   )
   
   return {
@@ -172,13 +180,13 @@ const api_request = (props_constant) => {
 
 export default function RulePropertyRadarChart(props) { 
     
-  const {rules, rule_properties, election_filters, rule_visibility, hide_num_elections} = props;
+  const {rules, rule_properties, election_filters, rule_visibility, single_election, user_submitted} = props;
     
   const props_constant = useMemo(
     () => {
-      return rules && rule_properties && election_filters ? {rules, rule_properties, election_filters} : null;
+      return rules && rule_properties && election_filters ? {rules, rule_properties, election_filters, user_submitted, single_election} : null;
     },
-    [rules, rule_properties, election_filters]
+    [rules, rule_properties, election_filters, user_submitted, single_election]
   );
 
   const props_variable = useMemo(
@@ -190,13 +198,13 @@ export default function RulePropertyRadarChart(props) {
 
 
   return (
-    <>
+    <div className={styles.graph_info_text_container}>
       <GeneralChart 
         chart_id={"rule_property_radar_chart"}
         initial_graph_data={initial_graph_data}
         // compute_graph_data={compute_graph_data}
         update_graph_data={update_graph_data}
-        generate_corner_info={hide_num_elections ? null : generate_corner_info}
+        generate_corner_info={single_election ? null : generate_corner_info}
         generate_tooltip_info={generate_tooltip_info}
         generate_export_data={generate_export_data}
         api_request={api_request}
@@ -205,7 +213,10 @@ export default function RulePropertyRadarChart(props) {
         get_graph_options={get_graph_options}
         chart_component={Radar}
       />
-    </>
-
+      <p className={styles.graph_info_text}>
+        Fox each axis the position only presents the ranking of the rules and not the
+        actual magnitude of the difference.
+      </p>
+    </div>
   );
 }

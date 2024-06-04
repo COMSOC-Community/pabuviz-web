@@ -15,21 +15,22 @@ const election_sections = [
   { 
     name: "Satisfaction histogram",
     width: "50%",
-    height: "300px",
+    height: "400px",
     default_visibility: true,
     render: (election, rules, rule_visibility, rule_properties, election_filters, only_one_selected) => (
       <SatisfactionHistogram
         rules={rules}
         election_filters={election_filters}
         rule_visibility={rule_visibility}
-        hide_num_elections={true}
+        single_election={true}
+        user_submitted={election.user_submitted}
       />
     )
   },
   { 
     name: "Rule properties", 
     width: "50%",
-    height: "300px",
+    height: "400px",
     default_visibility: true,
     render: (election, rules, rule_visibility, rule_properties, election_filters, only_one_selected) => (
       <RulePropertyRadarChart
@@ -37,21 +38,29 @@ const election_sections = [
         rule_properties={rule_properties}
         election_filters={election_filters}
         rule_visibility={rule_visibility}
-        hide_num_elections={true}
+        single_election={true}
+        user_submitted={election.user_submitted}
       />
     )
   },
   { 
     name: "Categories",
     width: "50%",
-    height: "300px",
+    height: "400px",
     default_visibility: true,
     render: (election, rules, rule_visibility, rule_properties, election_filters, only_one_selected) => (
-      <CategoryProportion
-        election_name={election.name}
-        rules={rules}
-        rule_visibility={rule_visibility}
-      />
+      <div className={styles.graph_info_text_container}>
+        <CategoryProportion
+          election_name={election.name}
+          rules={rules}
+          rule_visibility={rule_visibility}
+          user_submitted={election.user_submitted}
+        />
+        <p className={styles.graph_info_text}>
+          The vote share represents the way categories are represented in the ballots. This is to be
+          compared to the outcome of the different rules.
+        </p>
+      </div>
     )
   },
   { 
@@ -76,7 +85,7 @@ const election_sections = [
   },
   { 
     name: "Election details",
-    width: "70%",
+    width: "60%",
     height: "fit content",
     default_visibility: true,
     render: (election, rules, rule_visibility, rule_properties, election_filters, only_one_selected) => (
@@ -93,7 +102,6 @@ const election_sections = [
  */
 export default function ElectionGraphs(props) {
   const { elections_selected_data, rules, rule_visibility, rule_properties } = props;
-  
   const [section_visibility, set_section_visibility] = useState(
     election_sections.map((section) => section.default_visibility) 
   );
@@ -117,9 +125,9 @@ export default function ElectionGraphs(props) {
     election && (
       <div className={styles.election_container} key={name}>
         <div className={styles.election_title}>
-          <p>
-            {election.unit + (election.subunit ? ", " + election.subunit : "") + ". " + new Date(election.date_begin).getFullYear()}
-          </p>
+          <h2>
+            {election.unit + ((election.subunit || election.instance) ? ", " + (election.subunit || election.instance) : "") + ". " + new Date(election.date_begin).getFullYear()}
+          </h2>
         </div>
         <div className={styles.election_body}>
           {election_sections.map((section, section_index) => (
@@ -153,7 +161,14 @@ export default function ElectionGraphs(props) {
                       width: only_one_selected ? section.width : "100%",
                       height: section.height
                     }}>
-                    {section.render(election, rules, rule_visibility, rule_properties, election_filters[election_index], only_one_selected)}
+                    {section.render(
+                      election,
+                      rules,
+                      rule_visibility,
+                      rule_properties,
+                      election_filters[election_index],
+                      only_one_selected
+                    )}
                   </div>
                 </div>
               </Collapsable>

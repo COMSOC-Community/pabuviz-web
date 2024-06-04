@@ -1,7 +1,7 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
+import { UrlStateContext, UserDataContext } from 'contexts';
 import ElectionList from './ElectionList';
 import NetworkError from '../../components/reusables/NetworkError';
-import { UrlStateContext } from '../../UrlParamsContextProvider';
 import {useLocation, useOutletContext} from 'react-router-dom';
 import { get_rule_properties } from '../../utils/database_api';
 import { radar_chart_single_election_property_short_names } from '../../constants/constants';
@@ -20,7 +20,8 @@ export default function CompareElectionResults(props) {
   const {ballot_type_selected, rule_visibility, elections_selected, set_elections_selected} = useContext(UrlStateContext);
   const [elections_selected_data, set_elections_selected_data] = useState(new Map());
   const [rule_properties, set_rule_properties] = useState(undefined);
-  
+  const {user_elections, set_user_elections} = useContext(UserDataContext);
+
   const [error, set_error] = useState(false);
 
   // effect that requests election property information for the radar chart, depending on the ballot type selected
@@ -37,9 +38,21 @@ export default function CompareElectionResults(props) {
     return () => abort_controller.abort();
   }, [ballot_type_selected]);
 
+  // filters user elections by selected ballot type
+  const user_elections_filtered = useMemo(() => {
+    return new Map(
+      [...user_elections].filter(([name, election]) => election.ballot_type === ballot_type_selected )
+    );
+  }, [user_elections, ballot_type_selected])
+
   
   return (
     <div className={styles.content_container} >
+      <div className={styles.header_box}>
+        <h1 className={styles.title_text}>
+          Compare Elections
+        </h1>
+      </div>
       <div className={styles.elections_box}>
         <ElectionList
           ballot_type={ballot_type_selected}
@@ -47,6 +60,7 @@ export default function CompareElectionResults(props) {
           set_elections_selected={set_elections_selected} 
           elections_selected_data={elections_selected_data}
           set_elections_selected_data={set_elections_selected_data}
+          user_elections={user_elections_filtered}
           max_selected={2}
           initial_election_filters={location.state && location.state.election_filters ? location.state.election_filters : {}}
         /> 
@@ -64,12 +78,12 @@ export default function CompareElectionResults(props) {
               projects_visible={elections_selected_data.size === 1}
             />
           </div> :
-          <pre className={styles.no_election_selected_text}>
+          <div className={styles.no_election_selected_text}>
             {"↑  Select up to two elections  ↑"}
-          </pre>
+          </div>
         }
       </div>
-      {/* <button onClick={on_debug_button_click}>Click me!</button> */}
+    {/* <button onClick={on_debug_button_click}>Click me!</button> */}
     </div>
   );
 }

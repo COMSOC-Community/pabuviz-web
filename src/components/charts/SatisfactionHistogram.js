@@ -5,6 +5,7 @@ import { clone, transparentize } from '../../utils/utils';
 import { get_rule_satisfaction_histogram } from '../../utils/database_api';
 import GeneralChart from './GeneralChart';
 import { satisfaction_histogram_explanation } from '../../constants/chart_explanations';
+import styles from "../../pages/compare_election_results/ElectionGraphs.module.css";
 
 
 export const get_graph_options = (api_response, parent_props_constant, parent_props_variable, graph_data) => {
@@ -45,7 +46,7 @@ export const get_graph_options = (api_response, parent_props_constant, parent_pr
       x: {
         type: 'linear',
         title: {
-          text: 'Percentage of budget spent on approved projects' 
+          text: 'Percentage of budget spent on approved projects'
         },
         min: 0,
         max: 100,
@@ -148,11 +149,13 @@ const generate_export_data = (api_response, parent_props_constant, parent_props_
 const api_request = (props_constant) => {
   let [rule_satisfaction_histogram_promise, abort_controller] = get_rule_satisfaction_histogram(
     props_constant.rules.map(rule => rule.abbreviation),
-    props_constant.election_filters
+    props_constant.election_filters,
+    props_constant.user_submitted,
+    props_constant.single_election
   );
   return {
     promise: rule_satisfaction_histogram_promise,
-    abort_func: () => {abort_controller.abort()}
+    abort_func: () => {abort_controller.abort();}
   }
 }
 
@@ -168,13 +171,13 @@ const generate_corner_info = (api_response, props_constant, props_variable, grap
 
 export default function SatisfactionHistogram(props) { 
 
-  const {rules, election_filters, rule_visibility, hide_num_elections} = props;
+  const {rules, election_filters, rule_visibility, single_election, user_submitted} = props;
     
   const props_constant = useMemo(
     () => {
-      return rules && election_filters ? {rules, election_filters} : null;
+      return rules && election_filters ? {rules, election_filters, user_submitted, single_election} : null;
     },
-    [rules, election_filters]
+    [rules, election_filters, user_submitted, single_election]
   );
 
   const props_variable = useMemo(
@@ -186,18 +189,25 @@ export default function SatisfactionHistogram(props) {
   
 
   return (
-    <GeneralChart 
-      chart_id={"satisfaction_histogram"}
-      compute_graph_data={compute_graph_data}
-      update_graph_data={update_graph_data}
-      generate_corner_info={hide_num_elections ? null : generate_corner_info}
-      generate_tooltip_info={() => satisfaction_histogram_explanation}
-      api_request={api_request}
-      parent_props_constant={props_constant}
-      parent_props_variable={props_variable}
-      generate_export_data={generate_export_data}
-      get_graph_options={get_graph_options}
-      chart_component={Line}
-    />
+    <div className={styles.graph_info_text_container}>
+      <GeneralChart
+        chart_id={"satisfaction_histogram"}
+        compute_graph_data={compute_graph_data}
+        update_graph_data={update_graph_data}
+        generate_corner_info={single_election ? null : generate_corner_info}
+        generate_tooltip_info={() => satisfaction_histogram_explanation}
+        api_request={api_request}
+        parent_props_constant={props_constant}
+        parent_props_variable={props_variable}
+        generate_export_data={generate_export_data}
+        get_graph_options={get_graph_options}
+        chart_component={Line}
+      />
+      <p className={styles.graph_info_text}>
+        A point at coordinates (x, y) reads as: exactly y% of the voters are such that x% of the
+        budget has been spent on projects that they individually approved of (see the info box
+        for more details).
+      </p>
+    </div>
   );
 }

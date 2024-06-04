@@ -206,7 +206,7 @@ export default function GeneralChart(props) {
                 });
               }
             }
-          }).catch(e => {console.log(e); set_error("API error")});
+          }).catch(e => {console.warn(e); set_error("API error")});
     
           // abort last api request, when new one is started
           return request.abort_func;

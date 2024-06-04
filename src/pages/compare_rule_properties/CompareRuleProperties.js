@@ -4,7 +4,7 @@ import RulePropertyRadarChart from '../../components/charts/RulePropertyRadarCha
 import SatisfactionHistogram from '../../components/charts/SatisfactionHistogram';
 import NetworkError from '../../components/reusables/NetworkError';
 import { useOutletContext } from 'react-router-dom';
-import { UrlStateContext } from '../../UrlParamsContextProvider';
+import { UrlStateContext } from 'contexts';
 import { get_rule_properties, get_election_properties } from '../../utils/database_api';
 import { radar_chart_multiple_elections_property_short_names } from '../../constants/constants';
 import styles from './CompareRuleProperties.module.css'
@@ -67,34 +67,46 @@ export default function CompareRuleProperties(props) {
 
 
   return (
-    <div className={styles.content_container}>
-      <div className={styles.options_container}>
-        { error ? 
-          <NetworkError/> :
-          <ElectionFilterList 
-            election_filter_properties={election_filter_properties}
-            election_filters={election_filters}
-            set_election_filters={set_election_filters}
-          />
-        }
-      </div>
-      <div className={styles.graphs_container}>
-        <div className={styles.graph_container}>
-          <RulePropertyRadarChart
-            key={ballot_type_selected}
-            rules={rule_list}
-            rule_properties={rule_properties}
-            election_filters={election_filters}
-            rule_visibility={rule_visibility}
-            />
+    
+    <div className={styles.page_container}>
+      <div className={styles.header_box}>
+        <h1 className={styles.title_text}>
+          Compare Rules Across Several Elections
+        </h1>
+        <div className={styles.info_text}>
+          <p>Compare different rule metrics aggregated over all elections in our database. Use the filters on the left to restrict the set of elections and the rule menu at the bottom to choose the rules you want to compare.</p>
+          <p>Computations can take some time.</p>
         </div>
-        <div className={styles.graph_container}>
-          <SatisfactionHistogram
-            key={ballot_type_selected}
-            rules={rule_list}
-            election_filters={election_filters}
-            rule_visibility={rule_visibility}
+      </div>
+      <div className={styles.content_container}>
+        <div className={styles.options_container}>
+          { error ? 
+            <NetworkError/> :
+            <ElectionFilterList 
+              election_filter_properties={election_filter_properties}
+              election_filters={election_filters}
+              set_election_filters={set_election_filters}
             />
+          }
+        </div>
+        <div className={styles.graphs_container}>
+          <div className={styles.graph_container}>
+            <RulePropertyRadarChart
+              key={ballot_type_selected}
+              rules={rule_list}
+              rule_properties={rule_properties}
+              election_filters={election_filters}
+              rule_visibility={rule_visibility}
+              />
+          </div>
+          <div className={styles.graph_container}>
+            <SatisfactionHistogram
+              key={ballot_type_selected}
+              rules={rule_list}
+              election_filters={election_filters}
+              rule_visibility={rule_visibility}
+              />
+          </div>
         </div>
       </div>
     </div>

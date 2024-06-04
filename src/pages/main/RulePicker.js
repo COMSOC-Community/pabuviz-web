@@ -1,7 +1,7 @@
 import { useContext } from "react";
+import { UrlStateContext } from "contexts";
 import CollapsableList from "../../components/reusables/CollapsableList";
 import LegendItem from "../../components/reusables/LegendItem";
-import { UrlStateContext } from "../../UrlParamsContextProvider";
 import { capitalize_first_letter } from "../../utils/utils";
 import styles from './RulePicker.module.css'
 
@@ -27,6 +27,8 @@ export default function RulePicker(props) {
     return (
       <div
         key={rule_family.name}
+        data-tooltip-id={"main_tooltip"}
+        data-tooltip-content={capitalize_first_letter(rule_family.description)}
       >
         <div
           className={styles.legend_header}
@@ -36,8 +38,7 @@ export default function RulePicker(props) {
           <LegendItem
             color={rule_family.color_from}
             color_secondary={rule_family.color_to}
-            tooltip_text={capitalize_first_letter(rule_family.description)}
-            tooltip_id={"main_tooltip"}
+            hide_info_icon
           >
             <div className={styles.legend_text}>
               {capitalize_first_letter(rule_family.name)}
@@ -53,6 +54,8 @@ export default function RulePicker(props) {
     return (
       <div
         key={rule.name}
+        data-tooltip-id={"main_tooltip"}
+        data-tooltip-content={capitalize_first_letter(rule.description)}
       >
         <div
           className={styles.legend_item}
@@ -61,8 +64,7 @@ export default function RulePicker(props) {
         >
           <LegendItem
             color={rule.color}
-            tooltip_text={capitalize_first_letter(rule.description)}
-            tooltip_id={"main_tooltip"}
+            hide_info_icon
           >
             <div className={styles.legend_text}>
               {capitalize_first_letter(rule.name)}

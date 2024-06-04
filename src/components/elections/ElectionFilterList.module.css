@@ -3,7 +3,7 @@
 
 .filters_wrapper {
   height: 100%;
-  width: 450px;
+  width: 100%;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -14,7 +14,7 @@
 }
 
 .filter_title {
-  font-size: large;
+  font-size: 1.0vw;
   font-weight: bold;
   /* background-color: aliceblue; */
   margin: 10px;

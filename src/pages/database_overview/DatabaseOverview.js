@@ -3,6 +3,7 @@ import ToggleLegend from '../../components/reusables/ToggleLegend';
 import ElectionSizePlot from '../../components/charts/ElectionSizePlot'
 import ElectionPropertyHistogram from '../../components/charts/ElectionPropertyHistogram';
 import ActivityIndicator from '../../components/reusables/ActivityIndicator'
+import Logo from '../../components/reusables/Logo'
 import NetworkError from '../../components/reusables/NetworkError';
 import { get_elections } from '../../utils/database_api';
 import styles from './DatabaseOverview.module.css'
@@ -70,11 +71,14 @@ export default function DatabaseOverview(props) {
   const render_title = () => {
     return (
       <>
-        <div className={styles.title_text}>
-          Welcome to Pabuviz
-        </div>
+        <h1 className={styles.title_text}>
+          Welcome to <Logo/>
+        </h1>
         <div className={styles.info_text}>
-          Pabuviz is an interactive computation and visualization tool for participatory budgeting.
+          <p><Logo/> (read pabuviz, and pronounced pabooviz) is an interactive computation and visualisation tool for participatory budgeting. It provides intuitive and visually appealing comparison tools based on real-life data.</p>
+          <p>If you don't yet know what participatory budgeting (PB or pabu) is, the <a href="https://en.wikipedia.org/wiki/Participatory_budgeting">Wikipedia page</a> provides extensive information. But in a nutshell, PB is a democratic tool by means of which ordinary citizens can decide how to allocate a given amount of money across several projects.</p>
+          <p>In most cases, citizens <em>vote</em> to decide the final allocation of the budget. But choosing the right voting rule&mdash;the rule (or procedure) used to select the final budget allocation in view of the ballots cast&mdash;can be difficult since there are numerous possibilities for how to tally the votes submitted.</p>
+          <p>With <Logo/> you can, in a blink of an eye, compare different voting rules for PB based on a host of criteria, and discover the rule that is most suitable for your specific needs!</p>
         </div>
       </>
     )
@@ -82,38 +86,47 @@ export default function DatabaseOverview(props) {
 
 
   return (
-    <div className={styles.content_container}>
-      <div className={styles.title_container}>
-        {render_title()}
-      </div>
-      <div className={styles.graphs_box}>
-        { error ? 
-          <NetworkError/> :
-          ( initial_loading ?
-            <ActivityIndicator/> : 
-            <>
-              <ToggleLegend
-                items={ballot_types}
-                visibility={ballot_type_visibility}
-                set_visibility={set_ballot_type_visibility}
-                horizontal={true}
-                tooltip_id="main_tooltip"
-              />
-              <div className={styles.graphs_container}>
-                <div className={styles.graph_container}>
-                  <ElectionSizePlot 
-                    elections={elections} 
-                    ballot_type_visibility={ballot_type_visibility}
-                    ballot_types={ballot_types}
-                  />
-                </div>
-                <div className={styles.histograms_container}>
-                  {election_property_short_names.map(render_election_property_histogram)}
+    <div className={styles.page_container}>
+      <div className={styles.content_container}>
+        <div className={styles.title_container}>
+          {render_title()}
+        </div>
+        <div className={styles.graphs_box}>
+          { error ? 
+            <NetworkError/> :
+            ( initial_loading ?
+              <ActivityIndicator/> :
+              <div className={styles.graphs_and_legend_container}>
+                <h2 className={styles.graph_title}>Overview of the Elections in the Database</h2>
+                <ToggleLegend
+                  items={ballot_types}
+                  visibility={ballot_type_visibility}
+                  set_visibility={set_ballot_type_visibility}
+                  horizontal={true}
+                  tooltip_id="main_tooltip"
+                  name_suffix={"ballots"}
+                />
+                <div className={styles.graphs_container}>
+                  <div className={styles.overview_graph_container}>
+                    <ElectionSizePlot 
+                      elections={elections} 
+                      ballot_type_visibility={ballot_type_visibility}
+                      ballot_types={ballot_types}
+                    />
+                    <p className={styles.graph_info_text}>
+                      Click on a dot to explore the details of the corresponding election.
+                      The election data is taken from <a href="https://pabulib.org/">pabulib.org</a>,
+                      the reference platform for participatory budgeting data.
+                    </p>
+                  </div>
+                  <div className={styles.histograms_container}>
+                    {election_property_short_names.map(render_election_property_histogram)}
+                  </div>
                 </div>
               </div>
-            </>
-          )
-        }
+            )
+          }
+        </div>
       </div>
     </div>
   );

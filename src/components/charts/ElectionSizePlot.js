@@ -2,8 +2,8 @@ import React, { useContext, useMemo } from 'react';
 import { Scatter } from 'react-chartjs-2';
 import { transparentize, clone, get_ballot_type_color } from '../../utils/utils';
 import GeneralChart from './GeneralChart';
-import { createSearchParams, useNavigate } from 'react-router-dom';
-import { UrlStateContext } from '../../UrlParamsContextProvider';
+import { useNavigate } from 'react-router-dom';
+import { UrlStateContext } from 'contexts';
 
 
 export const graph_options = {
@@ -121,7 +121,7 @@ export default function ElectionSizePlot(props) {
     let election = graph_data.datasets[element.datasetIndex].data[element.index].election;
     navigate(get_url_navigation_string('compare_elections', {
       ballot_type_selected: election.ballot_type,
-      elections_selected: [election.name]
+      elections_selected: [{name: election.name, user_submitted: election.user_submitted}]
     }));
   }
 
