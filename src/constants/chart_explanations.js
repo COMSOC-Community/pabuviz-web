@@ -9,10 +9,10 @@ For each satisfaction interval of 5% we plot the percentage of voters with that 
 The average satisfaction is given as a vertical bar.`;
 
 export const rule_property_radar_chart_explanation =
-`Properties of the election results chosen by different rules.`;
+`Properties of the election results chosen by different rules (only elections for which all these metrics can be computed are considered).`;
 
 export const category_proportions_explanation = 
 `Comparison of the share of project categories in the ballots vs the share of the budget spent on these categories under different rules.`;
 
 export const election_size_plot_explanation = 
-`Bumber of projects over number of voters of all elections in the database, grouped by ballot type.`;
+`Number of projects over number of voters of all elections in the database, grouped by ballot type.`;

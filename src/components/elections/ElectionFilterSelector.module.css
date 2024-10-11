@@ -10,6 +10,10 @@
 }
 
 .filter_title {
+  cursor: default;
+}
+
+.filter_title_tooltip {
   text-decoration: underline dotted #666A;
   text-underline-offset: 4pt;
   cursor: default;

@@ -1,6 +1,7 @@
 import ElectionFilterCheckbox from "./ElectionFilterCheckbox"
 import ElectionFilterMinMax from "./ElectionFilterMinMax"
 import ElectionFilterSelector from './ElectionFilterSelector';
+import ElectionFilterCity from './ElectionFilterCity';
 import ActivityIndicator from '../reusables/ActivityIndicator';
 import styles from './ElectionFilterList.module.css'
 
@@ -58,6 +59,15 @@ export default function ElectionFilterList(props) {
             initial_value={election_filters[election_property.short_name]}
             set_election_filters={set_election_filters}
             possible_values_map={new Map(Object.entries(election_property.referencable_objects))}
+          />
+        </div>
+      )
+    } else if (election_property.short_name === 'unit'){
+      return (
+        <div className={styles.filter_container} key={election_property.short_name}>
+          <ElectionFilterCity
+            election_property={election_property}
+            set_election_filters={set_election_filters}
           />
         </div>
       )

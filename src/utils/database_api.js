@@ -60,7 +60,10 @@ export const get_election_details = (property_short_names, ballot_type = null, f
   return api_get('election_details', {property_short_names, ballot_type, filters, user_submitted});
 }
 
-// get the rules and add their colors. This way we don't always need to pass the families as well 
+export const get_election_property_values_list = (property_short_name, ballot_type = null, user_submitted = false) => {
+  return api_get('election_property_values_list', {property_short_name, ballot_type, user_submitted});
+}
+
 export const get_rules = () => {
   return api_get('rules'); 
 }
