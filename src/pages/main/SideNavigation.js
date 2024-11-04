@@ -35,7 +35,7 @@ export default function SideNavigation() {
               className={({isActive}) => isActive ? styles.nav_link_active : styles.nav_link}
             >
               <p className={styles.nav_link_text}>
-                {"Compare Elections"}
+                {"Election Level"}
               </p>
             </NavLink>
           </li>
@@ -45,7 +45,7 @@ export default function SideNavigation() {
               className={({isActive}) => isActive ? styles.nav_link_active : styles.nav_link}
             >
               <p className={styles.nav_link_text}>
-                {"Compare Rules"}
+                {"Aggregated Level"}
               </p>
             </NavLink>
           </li>
