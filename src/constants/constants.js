@@ -86,7 +86,7 @@ export const radar_chart_multiple_elections_property_short_names = {
     "avg_nrmcost_sat",
     "avg_relcard_sat",
     "avg_relcost_sat",
-    "category_prop",
+    // "category_prop",
     "inverted_cost_gini",
     "prop_pos_sat",
   ],
