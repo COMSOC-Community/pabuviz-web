@@ -14,6 +14,7 @@ const election_filter_properties_short_names = [
   'num_projects',
   'num_votes',
   'avg_ballot_len',
+  'unit'
   // 'has_categories'
 ]
 

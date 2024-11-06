@@ -16,7 +16,7 @@ import styles from './Selector.module.css'
  */
 export default function Selector(props) { 
 
-  const {items_map, item_selected_key, set_item_selected_key, render_item, allow_deselect, invert} = props;
+  const {items_map, item_selected_key, set_item_selected_key, render_item, allow_deselect, invert, max_height} = props;
 
 
   const [open, set_open] = useState(false);
@@ -83,7 +83,7 @@ export default function Selector(props) {
     <div className={styles.container} ref={ref}>
       <div
         className={styles.items_container}
-        style={{position: 'absolute', bottom: invert ? "100%" : null, top: invert ? null : "100%"}}
+        style={{position: 'absolute', bottom: invert ? "100%" : null, top: invert ? null : "100%", maxHeight: max_height, overflow: "scroll"}}
       >
         <Collapsable collapsed={!open} animation_duration={200}>
           {invert && items_map && Array.from(items_map.entries()).map(render_list_item)}

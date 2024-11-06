@@ -50,7 +50,7 @@ export default function CompareElectionResults(props) {
     <div className={styles.content_container} >
       <div className={styles.header_box}>
         <h1 className={styles.title_text}>
-          Compare Elections
+          Compare Rules on Different Elections
         </h1>
       </div>
       <div className={styles.elections_box}>

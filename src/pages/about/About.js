@@ -35,7 +35,7 @@ export default function About() {
         </p>
 
         <p>
-          <a href="https://research.tue.nl/en/persons/markus-utke">Markus Utke</a> has been the
+          <a href="https://markus-utke.github.io/">Markus Utke</a> has been the
           main developer for the project, helped (marginally) by <a href="https://simonrey.fr">Simon Rey</a>.
         </p>
 

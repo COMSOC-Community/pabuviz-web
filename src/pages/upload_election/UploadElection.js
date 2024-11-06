@@ -69,7 +69,7 @@ export default function UploadElection() {
           </h1>
           <div className={styles.info_text}>
             <p>You can upload your own .pb file here. </p>
-            <p>We will try to compute some rules and properties and visualize them on the 'Compare Elections' page.</p>
+            <p>We will try to compute some rules and properties and visualize them on the 'Election Level' page.</p>
             {/* <p>Computations can take some time.</p> */}
           </div>
         </div>
