@@ -1,0 +1,59 @@
+name: Build and Release
+
+on:
+  release:
+    types:
+      - created
+
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Check out the repository
+      - name: Check out the code
+        uses: actions/checkout@v3
+
+      # Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'  # Use the Node.js version your project requires
+
+      # Install dependencies
+      - name: Install dependencies
+        run: |
+          npm install --global yarn
+          yarn install
+
+      # Build the project
+      - name: Build the project
+        run: npm run build
+
+      # Zip the project
+      - name: Build the project
+        run: zip -r build.zip build/
+
+      # Remove existing release assets
+      - name: Remove existing release assets
+        run: |
+          # Get the list of assets for the release
+          assets=$(curl -s -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/repos/COMSOC-Community/pabuviz-web/releases/tags/v1.0 | jq -r '.assets[] | .id')
+         
+          # Loop through each asset ID and delete it
+          for asset_id in $assets; do
+            curl -X DELETE -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/repos/COMSOC-Community/pabuviz-web/releases/assets/$asset_id
+          done
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Set up the GitHub CLI
+      - name: Install GitHub CLI
+        run: sudo apt-get install gh
+
+      # Upload files to release
+      - name: Upload ZIP file to Release
+        run: gh release upload "${{ github.event.release.tag_name }}" "build.zip" --clobber
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
