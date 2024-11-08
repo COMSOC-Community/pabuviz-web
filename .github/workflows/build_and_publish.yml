@@ -35,19 +35,6 @@ jobs:
       - name: Build the project
         run: zip -r build.zip build/
 
-      # Remove existing release assets
-      - name: Remove existing release assets
-        run: |
-          # Get the list of assets for the release
-          assets=$(curl -s -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/repos/COMSOC-Community/pabuviz-web/releases/tags/v1.0 | jq -r '.assets[] | .id')
-         
-          # Loop through each asset ID and delete it
-          for asset_id in $assets; do
-            curl -X DELETE -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/repos/COMSOC-Community/pabuviz-web/releases/assets/$asset_id
-          done
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       # Set up the GitHub CLI
       - name: Install GitHub CLI
         run: sudo apt-get install gh
