@@ -46,3 +46,23 @@ jobs:
         run: gh release upload "${{ github.event.release.tag_name }}" "build.zip" --clobber
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Set up SSH KEY
+      - name: Set up SSH key
+        run: |
+          echo "${{ secrets.SSH_KEY }}" > ssh_key
+          chmod 600 ssh_key
+
+      # Add the server to known hosts to avoid prompt
+      - name: Add server to known_hosts
+        run: |
+          ssh-keyscan -H "${{ secrets.SERVER_HOST }}" >> ~/.ssh/known_hosts
+
+      # SSH into the server and run commands
+      - name: SSH and Execute Script
+        env:
+          SSH_KEY: ${{ secrets.SSH_KEY }}
+          SERVER_USER: ${{ secrets.SERVER_USER }}
+          SERVER_HOST: ${{ secrets.SERVER_HOST }}
+        run: |
+          scp -i ssh_key -o StrictHostKeyChecking=no build.zip $SERVER_USER@$SERVER_HOST:~/latest_build.zip
