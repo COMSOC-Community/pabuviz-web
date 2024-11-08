@@ -50,7 +50,7 @@ jobs:
       # Set up SSH KEY
       - name: Set up SSH key
         run: |
-          mkdir -p ~ /.ssh
+          mkdir -p ~/.ssh
           echo "${{ secrets.SSH_KEY }}" > ssh_key
           chmod 600 ssh_key
 
