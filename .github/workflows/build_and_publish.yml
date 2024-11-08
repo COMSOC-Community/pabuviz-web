@@ -51,8 +51,8 @@ jobs:
       - name: Set up SSH key
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_KEY }}" > ssh_key
-          chmod 600 ssh_key
+          echo "${{ secrets.SSH_KEY }}" >  ~/.ssh/ssh_key
+          chmod 600 ~/.ssh/ssh_key
 
       # Add the server to known hosts to avoid prompt
       - name: Add server to known_hosts
@@ -62,7 +62,6 @@ jobs:
       # SSH into the server and run commands
       - name: SSH and Execute Script
         env:
-          SSH_KEY: ${{ secrets.SSH_KEY }}
           SERVER_USER: ${{ secrets.SSH_USERNAME }}
           SERVER_HOST: ${{ secrets.SSH_HOST }}
         run: |
