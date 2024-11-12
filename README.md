@@ -5,26 +5,26 @@ It provides intuitive and visually appealing comparison tools based on real-life
 elections. It can be used as a helper tool when discussing possible voting rules for PB.
 
 This repository contains the React application for the website. It works hand-in-hand with the
-[pabuviz-db](https://github.com/COMSOC-Community/pabuviz-db) repository, which contains the Django project implementing the database for [pabuviz.org](https://pabuviz.org).
+[pabuviz-db](https://github.com/COMSOC-Community/pabuviz-db) repository, which contains the Django 
+project implementing the database for [pabuviz.org](https://pabuviz.org).
 
-## Getting Started
+## Development
 
-### Local Development
+The website is implemented as a standard [React](https://react.dev/) application. We provide
+below some details of the implementation if you want to develop it further.
+
+### Getting Started for Local Development
+
 - Install [Node.js](https://nodejs.org/ "Node.js") and npm: `sudo apt install npm nodejs`
 - Install yarn: `npm install --global yarn`
 - Install dependencies: `yarn install`
 - Run the Django server for the database (must be on port 8000; see `.env.development` for configuration)
 - Start the application: `yarn start`
 
-### Build for the Server
-To update the server, you can do it manually like this:
+### Source File Structure
 
-- Run the build: `npm run build`
-- Copy the contents of the `build` folder to the web folder on the server
+Here is a little map of the repository for you to know what is defined where.
 
-You can also use the GitHub workflow described below ([here](#github-workflow)).
-
-## Source file structure
 ```
 src
 └── components
@@ -40,7 +40,20 @@ src
 │   └── compare_election_results   Page for comparing rule properties averaged over multiple elections.
 ```
 
-## GitHub Workflow
+### Server Deployment
+
+To deploy to the server you can either do it manually or use the GitHub workflows.
+
+#### Manual Deployment
+
+To update the server, you can do it manually like this:
+
+- Run the build: `npm run build`
+- Copy the contents of the `build` folder to the web folder on the server
+
+You can also use the GitHub workflow described below ([here](#github-workflow)).
+
+#### GitHub Workflow
 
 When changes have been pushed to the repository, you can update the server directly by publishing a release.
 
@@ -58,4 +71,3 @@ After the action completes, the website at [pabuviz.org](https://pabuviz.org) sh
 Instead of this process, we could also simply check out the repository from the server 
 and build directly there. However, using the release mechanism means we don't have to install npm
 and other packages on the server, reducing setup complexity on the server side.
-
