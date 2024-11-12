@@ -56,31 +56,4 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |
-            echo "Downloading build.zip from the latest release..."
-            curl -L -o build.zip https://github.com/COMSOC-Community/pabuviz-web/releases/latest/download/build.zip
-            
-            # Verify if the download succeeded
-            if [ ! -f build.zip ]; then
-              echo "Error: build.zip was not downloaded. Check the release URL or network."
-              exit 1
-            fi
-
-            # Ensure the web_old and web directories exist
-            mkdir -p web_old
-            mkdir -p web
-
-            # Move existing files to backup folder only if files exist
-            if [ "$(ls -A web)" ]; then
-              echo "Moving existing files to web_old..."
-              rm -rf web_old/*
-              mv web/* web_old/
-            else
-              echo "No existing files in web to backup."
-            fi
-
-            # Move and unzip the new build.zip in web directory
-            echo "Deploying new build.zip..."
-            mv build.zip web/
-            cd web/
-            unzip build.zip && rm build.zip
+          script: ./update_web_from_release.sh
