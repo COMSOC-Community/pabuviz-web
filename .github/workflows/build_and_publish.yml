@@ -57,8 +57,8 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            echo "Downloading build.zip from the latest release with tag $RELEASE_TAG..."
-            curl -L -o build.zip https://github.com/COMSOC-Community/pabuviz-web/releases/download/$RELEASE_TAG/build.zip
+            echo "Downloading build.zip from the latest release..."
+            curl -L -o build.zip https://github.com/COMSOC-Community/pabuviz-web/releases/latest/download/build.zip
             
             # Verify if the download succeeded
             if [ ! -f build.zip ]; then
