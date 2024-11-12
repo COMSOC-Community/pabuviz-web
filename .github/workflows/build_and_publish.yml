@@ -48,17 +48,39 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # Send to the server
-      - name: multiple command
+      - name: Update the Server Side
         uses: appleboy/ssh-action@v1.1.0
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            curl -L -o build.zip https://github.com/COMSOC-Community/pabuviz-web/releases/download/${{ github.event.release.tag_name }}/build.zip
-            rm -rf web_old/*
-            mv web/* web_old/
+            echo "Downloading build.zip from the latest release with tag $RELEASE_TAG..."
+            curl -L -o build.zip https://github.com/COMSOC-Community/pabuviz-web/releases/download/$RELEASE_TAG/build.zip
+            
+            # Verify if the download succeeded
+            if [ ! -f build.zip ]; then
+              echo "Error: build.zip was not downloaded. Check the release URL or network."
+              exit 1
+            fi
+
+            # Ensure the web_old and web directories exist
+            mkdir -p web_old
+            mkdir -p web
+
+            # Move existing files to backup folder only if files exist
+            if [ "$(ls -A web)" ]; then
+              echo "Moving existing files to web_old..."
+              rm -rf web_old/*
+              mv web/* web_old/
+            else
+              echo "No existing files in web to backup."
+            fi
+
+            # Move and unzip the new build.zip in web directory
+            echo "Deploying new build.zip..."
             mv build.zip web/
             cd web/
-            unzip build.zip
-            rm build.zip
+            unzip build.zip && rm build.zip
