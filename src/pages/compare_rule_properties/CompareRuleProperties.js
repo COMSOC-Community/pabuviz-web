@@ -72,7 +72,7 @@ export default function CompareRuleProperties(props) {
     <div className={styles.page_container}>
       <div className={styles.header_box}>
         <h1 className={styles.title_text}>
-          Compare Rules Across Several Elections
+          Comparison of Voting Rules at the Aggregate Level
         </h1>
         <div className={styles.info_text}>
           <p>Compare different rule metrics aggregated over all elections in our database. Use the filters on the left to restrict the set of elections and the rule menu at the bottom to choose the rules you want to compare.</p>
