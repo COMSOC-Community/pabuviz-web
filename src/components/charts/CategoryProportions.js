@@ -134,7 +134,7 @@ export default function CategoryProportion(props) {
 
     return (
       <GeneralChart 
-        chart_id={"category_proportions"}
+        chart_id={"category_proportions" + election_name}
         api_request={api_request}
         // compute_graph_data={compute_graph_data}
         update_graph_data={update_graph_data}

@@ -200,7 +200,7 @@ export default function RulePropertyRadarChart(props) {
   return (
     <div className={styles.graph_info_text_container}>
       <GeneralChart 
-        chart_id={"rule_property_radar_chart"}
+        chart_id={"rule_property_radar_chart" + JSON.stringify(election_filters)}
         initial_graph_data={initial_graph_data}
         // compute_graph_data={compute_graph_data}
         update_graph_data={update_graph_data}

@@ -191,7 +191,7 @@ export default function SatisfactionHistogram(props) {
   return (
     <div className={styles.graph_info_text_container}>
       <GeneralChart
-        chart_id={"satisfaction_histogram"}
+        chart_id={"satisfaction_histogram" + JSON.stringify(election_filters)}
         compute_graph_data={compute_graph_data}
         update_graph_data={update_graph_data}
         generate_corner_info={single_election ? null : generate_corner_info}

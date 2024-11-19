@@ -160,15 +160,16 @@ export default function ElectionGraphs(props) {
                     style={{
                       width: only_one_selected ? section.width : "100%",
                       height: section.height
-                    }}>
-                    {section.render(
-                      election,
-                      rules,
-                      rule_visibility,
-                      rule_properties,
-                      election_filters[election_index],
-                      only_one_selected
-                    )}
+                    }}
+                  >
+                  {section.render(
+                    election,
+                    rules,
+                    rule_visibility,
+                    rule_properties,
+                    election_filters[election_index],
+                    only_one_selected
+                  )}
                   </div>
                 </div>
               </Collapsable>

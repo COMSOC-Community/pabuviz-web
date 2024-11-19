@@ -53,12 +53,12 @@ export const default_rules_visible = {
 
 export const radar_chart_single_election_property_short_names = {
   approval: [
+    "prop_pos_sat",
+    "inverted_cost_gini",
     "avg_card_sat",
     "avg_relcard_sat",
     "avg_cost_sat",
     "avg_relcost_sat",
-    "inverted_cost_gini",
-    "prop_pos_sat",
   ],
   ordinal: [
     "avg_borda_sat",
